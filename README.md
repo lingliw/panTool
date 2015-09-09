@@ -4,7 +4,7 @@
 ### Usage Sample:
 * Put **directory name** which contains markdown file in **dir.txt**  
   `virtual-machines`
-2. Put markdown file list to be converted in **file.txt**  
+* Put markdown file list to be converted in **file.txt**  
 ```python
   virtual-machines-a8-a9-a10-a11-specs.md
   virtual-machines-about.md
@@ -12,8 +12,8 @@
   virtual-machines-arm-deployment.md
   virtual-machines-azure-resource-manager-architecture.md
 ```
-3. Run the command `python padocTool.py`, and the converted **docx** file will be in the same directory with markdown files.  
-4. Error message will be printed to the console, you can find which file has converted failed.  
+* Run the command `python padocTool.py`, and the converted **docx** file will be in the same directory with markdown files.  
+* Error message will be printed to the console, you can find which file has converted failed.  
 ```python
   get directory **virtual-machines**  
   Change dir to *azure-content-mooncake-prrticles*  
