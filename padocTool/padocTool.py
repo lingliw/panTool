@@ -9,7 +9,8 @@ class PanTool(object):
     def reader(self):
         with open(self.filePath, 'r') as source:
             for fileName in source:
-                self.fileList.append(fileName.strip())
+                if fileName.strip() != '':
+                    self.fileList.append(fileName.strip())
 
         # return self.fileList
 
