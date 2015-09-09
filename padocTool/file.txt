@@ -1,0 +1,3 @@
+xplat-cli-connect.md
+xplat-cli-install.md
+xplat-cli-rbac.md
