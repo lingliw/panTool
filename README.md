@@ -2,9 +2,9 @@
 **panTool** can convert multi markdown file to docx at same time.
 
 ### Usage Sample:
-1. put **directory name** which contains markdown file in **dir.txt**  
+1. Put **directory name** which contains markdown file in **dir.txt**  
   `virtual-machines`
-2. put markdown file list to be converted in **file.txt**  
+2. Put markdown file list to be converted in **file.txt**  
 ```python
   virtual-machines-a8-a9-a10-a11-specs.md
   virtual-machines-about.md
@@ -12,8 +12,8 @@
   virtual-machines-arm-deployment.md
   virtual-machines-azure-resource-manager-architecture.md
 ```
-3. run the command `python padocTool.py`, and the converted **docx** file will be in the same directory with markdown files.  
-4. error message will be printed to the console, you can find which file has converted failed.  
+3. Run the command `python padocTool.py`, and the converted **docx** file will be in the same directory with markdown files.  
+4. Error message will be printed to the console, you can find which file has converted failed.  
 ```python
   get directory **virtual-machines**  
   Change dir to *azure-content-mooncake-prrticles*  
