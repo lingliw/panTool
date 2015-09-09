@@ -2,7 +2,7 @@
 **panTool** can convert multi markdown file to docx at same time.
 
 ### Usage Sample:
-1. Put **directory name** which contains markdown file in **dir.txt**  
+* Put **directory name** which contains markdown file in **dir.txt**  
   `virtual-machines`
 2. Put markdown file list to be converted in **file.txt**  
 ```python
