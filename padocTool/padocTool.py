@@ -15,14 +15,11 @@ class PanTool(object):
         # return self.fileList
 
     def convert(self, dir):
-        os.chdir(r'C:\Users\Administrator\Documents\GitHub\azure-content-mooncake-pr\articles')
-        print ('Change dir to *azure-content-mooncake-pr\articles*')
         errmsg = '\nError files:\n'
         oldmsg = errmsg
         # change to destionation
-        if dir != '.':
-            os.chdir(dir)
-            print ('Change dir to *azure-content-mooncake-pr\articles' + dir + '*')
+        os.chdir(dir)
+        print ('Change dir to *' + dir + '*')
         # convert file
         for file in self.fileList:
             real = os.path.splitext(file)
