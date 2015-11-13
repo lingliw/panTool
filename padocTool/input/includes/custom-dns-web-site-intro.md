@@ -1,0 +1,1 @@
+When you create a web app, Windows Azure provides a friendly subdomain on the chinacloudsites.cn domain so your users can access your web app using a URL like http://&lt;mywebapp&gt;.chinacloudsites.cn. You can also associate a custom domain name, such as contoso.com, with your web app in order to provide a more recognizable domain name for your users.

@@ -981,3 +981,8 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\Micro
 2015-09-09T14:08:21: Saving group "C:\Users\Administrator\Documents\GitHub\panTool\padocTool\env\Lib\site-packages\_markerlib"
 2015-09-09T14:08:21: End of group "C:\Users\Administrator\Documents\GitHub\panTool\padocTool\env\Lib\site-packages\_markerlib"
 2015-09-09T14:08:21: Deleting 0 files
+
+2015-10-27T13:50:36: Start analysis
+2015-10-27T13:50:36: [WARNING] Library was set explicitly - skipping path detection
+2015-10-27T13:50:36: IncludeModulesFromModulePath = win32com
+2015-10-27T13:50:37: Deleting 0 files

@@ -1,0 +1,5 @@
+- [What it is](/documentation/articles/active-directory-reporting-what-it-is)
+- [How it works](/documentation/articles/active-directory-reporting-how-it-works)
+- [Getting started](/documentation/articles/active-directory-reporting-getting-started)
+- [Next steps](/documentation/articles/active-directory-reporting-next-steps)
+- [Learn more](/documentation/articles/active-directory-reporting-learn-more)

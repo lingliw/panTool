@@ -1,0 +1,4 @@
+automation-managing-data.md
+automation-runbook-gallery.md
+automation-testing-runbook.md
+automation-first-runbook-textual.md

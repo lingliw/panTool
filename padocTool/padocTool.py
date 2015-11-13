@@ -1,5 +1,7 @@
 ﻿import subprocess
 import os
+from docPreProcessing import replaceInclude
+service_folders = ["app-service-web","automation","HDInsight","media-services","redis-cache","traffic-manager","virtual-network"]
 
 class PanTool(object):
     def __init__(self, filePath):
@@ -17,14 +19,13 @@ class PanTool(object):
     def convert(self, dir):
         errmsg = '\nError files:\n'
         oldmsg = errmsg
-        # change to destionation
-        os.chdir(dir)
-        print ('Change dir to *' + dir + '*')
         # convert file
+        os.chdir("input/"+dir)
         for file in self.fileList:
             real = os.path.splitext(file)
             # convert our files now
-            ret = subprocess.call(["pandoc","-s", "-S", file, "-o", real[0]+'.docx'], shell=True)
+            replaceInclude(dir,file)
+            ret = subprocess.call(["pandoc","-s", "-S", file, "-o", "../../../output/"+dir+"/"+real[0]+'.docx'], shell=True)
             if ret == 0:
                 continue
             else:
@@ -37,9 +38,10 @@ class PanTool(object):
 
 if __name__ == '__main__':
     # open dir.txt to get directory
-    file =  open('dir.txt','r')
-    directory = file.readline().strip()
-    print('get directory %s\n' %(directory))
-    pan = PanTool('file.txt')
-    pan.reader()
-    pan.convert(directory)
+    for folder in service_folders:
+        current_dir = os.getcwd()
+        print('get directory %s\n' %(folder))
+        pan = PanTool(folder+'.txt')
+        pan.reader()
+        pan.convert("articles/"+folder)
+        os.chdir(current_dir)

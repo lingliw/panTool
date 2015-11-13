@@ -1,0 +1,1 @@
+If you do not already have a Traffic Manager profile, use the information in [Create a Traffic Manager profile using Quick Create](/documentation/articles/traffic-manager-manage-profiles) to create one. Note the **.trafficmanager.cn** domain name associated with your Traffic Manager profile, as this will be used later by later steps in this document.
