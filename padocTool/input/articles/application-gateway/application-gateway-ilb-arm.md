@@ -1,282 +1,237 @@
-<properties 
-   pageTitle="Create and Configure an Application Gateway with Internal Load Balancer (ILB) using Azure Resource Manager | Windows Azure"
-   description="This page provides instructions to create, configure, start, and delete an Azure Application Gateway with Internal Load balancer (ILB) for Azure resource manager"
+<properties
+   pageTitle="使用 Azure 资源管理器创建和配置具有内部负载平衡器 (ILB) 的应用程序网关 | Azure"
+   description="本页提供有关使用 Azure 资源管理器创建、配置、启动和删除具有内部负载平衡器 (ILB) 的 Azure 应用程序网关的说明"
    documentationCenter="na"
    services="application-gateway"
    authors="joaoma"
-   manager="jdial"
+   manager="carmonm"
    editor="tysonn"/>
-<tags 
+<tags
    ms.service="application-gateway"
-   ms.date="08/07/2015"
-   wacn.date=""/>
+   ms.date="04/05/2016"
+   wacn.date="04/20/2016"/>
 
 
-# Create an Application Gateway with an Internal Load Balancer (ILB) using Azure Resource Manager
+# 使用 Azure 资源管理器创建具有内部负载平衡器 (ILB) 的应用程序网关
 
 > [AZURE.SELECTOR]
-- [Azure classic steps](/documentation/articles/application-gateway-ilb)
-- [Resource Manager Powershell steps](/documentation/articles/application-gateway-ilb-arm)
+- [Azure 经典步骤](/documentation/articles/application-gateway-ilb)
+- [资源管理器 PowerShell 步骤](/documentation/articles/application-gateway-ilb-arm)
 
-Application Gateway can be configured with an internet facing VIP or with an internal end-point not exposed to the internet, also known as Internal Load Balancer (ILB) endpoint. Configuring the gateway with an ILB is useful for internal line of business applications not exposed to internet. It's also useful for services/tiers within a multi-tier application which sit in a security boundary not exposed to internet, but still require round robin load distribution, session stickiness, or SSL termination. This article will walk you through the steps to configure an application gateway with an ILB.
+可以配置使用面向 Internet 的 VIP 或不向 Internet 公开的内部终结点（也称为内部负载平衡器 (ILB) 终结点）的 Azure 应用程序网关。配置使用 ILB 的网关适用于不向 Internet 公开的内部业务线应用程序。对于位于不向 Internet 公开的安全边界内的多层应用程序中的服务和层也很有用，但仍需要执行循环负载分散、会话粘性或安全套接字层 (SSL) 终止。
 
-## Before you begin
+本文将引导你配置具有 ILB 的应用程序网关。
 
-1. Install latest version of the Azure PowerShell cmdlets using the Web Platform Installer. You can download and install the latest version from the **Windows PowerShell** section of the [Download page](/downloads/).
-2. You will create a virtual network and subnet for Application Gateway. Make sure no Virtual machines or cloud deployments are using the subnet. Application gateway must be by itself in a virtual network subnet.
-3. The servers which you will configure to use the Application gateway must exist or have their endpoints created either in the virtual network, or with a public IP/VIP assigned.
+## 开始之前
 
-## What is required to create an Application Gateway?
- 
+1. 使用 Web 平台安装程序安装最新版本的 Azure PowerShell cmdlet。可以从[下载页面](/downloads)的“Windows PowerShell”部分下载并安装最新版本。
+2. 你将为应用程序网关创建虚拟网络和子网。请确保没有虚拟机或云部署正在使用子网。应用程序网关必须单独位于虚拟网络子网中。
+3. 要配置为使用应用程序网关的服务器必须存在，或者在虚拟网络中为其创建终结点，或者为其分配公共 IP/VIP。
 
-- **Back end server pool:** The list of IP addresses of the back end servers. The IP addresses listed should either belong to the virtual network subnet, or should be a public IP/VIP. 
-- **Back end server pool settings:** Every pool has settings like port, protocol, and cookie based affinity. These settings are tied to a pool and are applied to all servers within the pool.
-- **Front end Port:** This port is the public port opened on the application gateway. Traffic hits this port, and then gets redirected to one of the back end servers.
-- **Listener:** The listener has a frontend port, a protocol (Http or Https, these are case-sensitive), and the SSL certificate name (if configuring SSL offload). 
-- **Rule:** The rule binds the listener and the back end server pool and defines which back end server pool the traffic should be directed to when it hits a particular listener. Currently, only the *basic* rule is supported. The *basic* rule is round-robin load distribution.
+## 创建应用程序网关需要什么？
 
 
- 
-## Create a new Application Gateway
+- **后端服务器池：**后端服务器的 IP 地址列表。列出的 IP 地址应属于虚拟网络子网但位于应用程序网关的不同子网中，或者是公共 IP/VIP。
+- **后端服务器池设置：**每个池都有一些设置，例如端口、协议和基于 Cookie 的关联性。这些设置绑定到池，并会应用到池中的所有服务器。
+- **前端端口：**此端口是应用程序网关上打开的公共端口。流量将抵达此端口，然后重定向到后端服务器之一。
+- **侦听器：**侦听器具有前端端口、协议（Http 或 Https，区分大小写）和 SSL 证书名称（如果要配置 SSL 卸载）。
+- **规则：**规则将会绑定侦听器和后端服务器池，并定义当流量抵达特定侦听器时应定向到的后端服务器池。目前仅支持基本规则。基本规则是一种轮循负载分发模式。
 
-The difference between using Azure Classic and Azure Resource Manager will be the order you will create the application gateway and items needed to be configured.
-With Resource manager, all items which will make an Application Gateway will be configured individually and then put together to create the Application Gateway resource.
 
 
-Here follows the steps needed to create an Application Gateway:
+## 创建新的应用程序网关
 
-1. Create a resource group for Resource Manager
-2. Create virtual network, subnet for Application Gateway
-3. Create an Application Gateway configuration object
-4. Create Application Gateway resource
+使用 Azure 经典管理门户和 Azure 资源管理器的差别在于创建应用程序网关的顺序和需要配置的项。
+使用资源管理器，组成应用程序网关的所有项都将分开配置，然后放在一起创建应用程序网关资源。
 
 
-## Create a resource group for Resource Manager
+以下是创建应用程序网关所需执行的步骤：
 
-Make sure you switch PowerShell mode to use the ARM cmdlets. More info is available at Using [Windows Powershell with Resource Manager](/documentation/articles/powershell-azure-resource-manager).
+1. 创建资源管理器的资源组
+2. 为应用程序网关创建虚拟网络和子网
+3. 创建应用程序网关配置对象
+4. 创建应用程序网关资源
 
-### Step 1
 
-    Switch-AzureMode -Name AzureResourceManager
+## 创建资源管理器的资源组
 
-### Step 2
+确保切换 PowerShell 模式，以便使用 Azure 资源管理器 cmdlet。[将 Windows PowerShell 与资源管理器配合使用](/documentation/articles/powershell-azure-resource-manager)中提供了详细信息。
 
-Log in to your Azure account.
+### 步骤 1
 
+		PS C:\> Login-AzureRmAccount -EnvironmentName AzureChinaCloud
 
-    Add-AzureAccount
+### 步骤 2
 
-You will be prompted to Authenticate with your credentials.
+检查该帐户的订阅。
 
+		PS C:\> get-AzureRmSubscription
 
-### Step 3
+系统将提示你使用凭据进行身份验证。<BR>
 
-Choose which of your Azure subscriptions to use. 
+### 步骤 3
 
-    Select-AzureSubscription -SubscriptionName "MySubscription"
+选择要使用的 Azure 订阅。<BR>
 
-To see a list of available subscriptions, use the ‘Get-AzureSubscription’ cmdlet.
 
+		PS C:\> Select-AzureRmSubscription -Subscriptionid "GUID of subscription"
 
-### Step 4
 
-Create a new resource group (skip this step if using an existing resource group)
+### 步骤 4
 
-    New-AzureResourceGroup -Name appgw-rg -location "China North"
+创建新的资源组（如果要使用现有的资源组，请跳过此步骤）。
 
-Azure Resource Manager requires that all resource groups specify a location. This is used as the default location for resources in that resource group. Make sure all commands to create an Application Gateway will use the same resource group.
+    New-AzureRmResourceGroup -Name appgw-rg -location "China North"
 
-In the example above we created a resource group called "appgw-rg" and location "China North". 
+Azure 资源管理器要求所有资源组指定一个位置。此位置将用作该资源组中的资源的默认位置。请确保用于创建应用程序网关的所有命令都使用相同的资源组。
 
-## Create virtual network, subnet for Application Gateway
+在上面的示例中，我们在位置“中国北部”创建了名为“appgw-rg”的资源组。
 
-The following example shows how to create a virtual network using Resource manager: 
+## 为应用程序网关创建虚拟网络和子网
 
-### Step 1	
-	
-	$subnet = New-AzureVirtualNetworkSubnetConfig -Name subnet01 -AddressPrefix 10.0.0.0/24
+以下示例演示如何使用资源管理器创建虚拟网络：
 
-Assigns the Address range 10.0.0.0/24 to subnet variable to be used to create a virtual network
+### 步骤 1
 
-### Step 2
-	
-	$vnet = New-AzurevirtualNetwork -Name appgwvnet -ResourceGroupName appgw-rg -Location "China North" -AddressPrefix 10.0.0.0/16 -Subnet $subnet
+	$subnetconfig = New-AzureRmVirtualNetworkSubnetConfig -Name subnet01 -AddressPrefix 10.0.0.0/24
 
-Creates a virtual network named "appgwvnet" in resource group "appw-rg" for the China North region using the prefix 10.0.0.0/16 with subnet 10.0.0.0/24	
-	
+将地址范围 10.0.0.0/24 分配给用于创建虚拟网络的子网变量。
 
-## Create an Application Gateway configuration object
+### 步骤 2
 
-### Step 1
+	$vnet = New-AzureRmVirtualNetwork -Name appgwvnet -ResourceGroupName appgw-rg -Location "China North" -AddressPrefix 10.0.0.0/16 -Subnet $subnetconfig
 
-	$gipconfig = New-AzureApplicationGatewayIPConfiguration -Name gatewayIP01 -Subnet $subnet
+使用前缀 10.0.0.0/16 和子网 10.0.0.0/24，在中国北部区域的“appgw-rg”资源组中创建名为“appgwvnet”的虚拟网络。
 
-Creates a Application Gateway IP configuration named "gatewayIP01". When Application Gateway starts, it will pick up an IP address from the subnet configured and route network traffic to the IP addresses in the backend IP pool. Keep in mind each instance will take one IP address.
- 
-### Step 2
+### 步骤 3
 
-	$pool = New-AzureApplicationGatewayBackendAddressPool -Name pool01 -BackendIPAddresses 10.0.0.10,10.0.0.11,10.0.0.12
+	$subnet=$vnet.subnets[0]
 
-This step will configure the back end IP address pool named "pool01" with IP addresses "10.0.0.10,10.0.0.11, 10.0.0.12". Those will be the IP addresses receiving the network traffic coming from the front end IP endpoint.You will replace the IP addresses above to add your own application IP address endpoints.
+将子网对象分配到变量 $subnet 以完成后续步骤。
 
-### Step 3
+## 创建应用程序网关配置对象
 
-	$poolSetting = New-AzureApplicationGatewayBackendHttpSettings -Name poolsetting01 -Port 80 -Protocol Http -CookieBasedAffinity Disabled
+### 步骤 1
 
-Configures Application Gateway settings "poolsetting01" for the load balanced network traffic in the backend pool.
+	$gipconfig = New-AzureRmApplicationGatewayIPConfiguration -Name gatewayIP01 -Subnet $subnet
 
-### Step 4
+创建名为“gatewayIP01”的应用程序网关 IP 配置。当应用程序网关启动时，它会从配置的子网获取 IP 地址，再将网络流量路由到后端 IP 池中的 IP 地址。请记住，每个实例需要一个 IP 地址。
 
-	$fp = New-AzureApplicationGatewayFrontendPort -Name frontendport01  -Port 80
 
-Configures the front end IP port named "frontendport01" for the ILB.
+### 步骤 2
 
-### Step 5
+	$pool = New-AzureRmApplicationGatewayBackendAddressPool -Name pool01 -BackendIPAddresses 134.170.185.46, 134.170.188.221,134.170.185.50
 
-	$fipconfig = New-AzureApplicationGatewayFrontendIPConfig -Name fipconfig01 -Subnet $subnet
+配置名为“pool01”的后端 IP 地址池，其 IP 地址为“134.170.185.46, 134.170.188.221,134.170.185.50”。这些 IP 地址将接收来自前端 IP 终结点的网络流量。你要替换上述 IP 地址，添加你自己的应用程序 IP 地址终结点。
 
-Creates the front end IP configuration called "fipconfig01" and associates with a private IP from the current virtual network subnet.
+### 步骤 3
 
-### Step 6
+	$poolSetting = New-AzureRmApplicationGatewayBackendHttpSettings -Name poolsetting01 -Port 80 -Protocol Http -CookieBasedAffinity Disabled
 
-	$listener = New-AzureApplicationGatewayHttpListener -Name listener01  -Protocol Http -FrontendIPConfiguration $fipconfig -FrontendPort $fp
+为后端池中进行了负载平衡的网络流量配置应用程序网关设置“poolsetting01”。
 
-Creates the listener called "listener01" and associates the front end port to the frontend IP configuration.
+### 步骤 4
 
-### Step 7 
+	$fp = New-AzureRmApplicationGatewayFrontendPort -Name frontendport01  -Port 80
 
-	$rule = New-AzureApplicationGatewayRequestRoutingRule -Name rule01 -RuleType Basic -BackendHttpSettings $poolSetting -HttpListener $listener -BackendAddressPool $pool
+为 ILB 配置名为“frontendport01”的前端 IP 端口。
 
-Creates the load balancer routing rule called "rule01", configuring the load balancer behavior.
+### 步骤 5
 
-### Step 8
+	$fipconfig = New-AzureRmApplicationGatewayFrontendIPConfig -Name fipconfig01 -Subnet $subnet
 
-	$sku = New-AzureApplicationGatewaySku -Name Standard_Small -Tier Standard -Capacity 2
+创建名为“fipconfig01”的前端 IP 配置，并将其与当前虚拟网络子网中的某个专用 IP 相关联。
 
-Configures the instance size of the Application Gateway
+### 步骤 6
 
->[AZURE.NOTE]  The default value for *InstanceCount* is 2, with a maximum value of 10. The default value for *GatewaySize* is Medium. You can choose between Standard_Small, Standard_Medium and Standard_Large.
+	$listener = New-AzureRmApplicationGatewayHttpListener -Name listener01  -Protocol Http -FrontendIPConfiguration $fipconfig -FrontendPort $fp
 
-## Create Application Gateway using New-AzureApplicationGateway
+创建名为“listener01”的侦听器，并将前端端口与前端 IP 配置相关联。
 
-	$appgw = New-AzureApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg -Location "China North" -BackendAddressPools $pool -BackendHttpSettingsCollection $poolSetting -FrontendIpConfigurations $fipconfig  -GatewayIpConfigurations $gipconfig -FrontendPorts $fp -HttpListeners $listener -RequestRoutingRules $rule -Sku $sku
+### 步骤 7
 
-Creates an Application Gateway will all configuration items from the steps above. In the example the Application Gateway is called "appgwtest". 
+	$rule = New-AzureRmApplicationGatewayRequestRoutingRule -Name rule01 -RuleType Basic -BackendHttpSettings $poolSetting -HttpListener $listener -BackendAddressPool $pool
 
+创建名为“rule01”的负载平衡器路由规则，并配置负载平衡器的行为。
 
+### 步骤 8
 
+	$sku = New-AzureRmApplicationGatewaySku -Name Standard_Small -Tier Standard -Capacity 2
 
-## Start the gateway
+配置应用程序网关的实例大小。
 
-Once the gateway has been configured, use the `Start-AzureApplicationGateway` cmdlet to start the gateway. Billing for an application gateway begins after the gateway has been successfully started. 
+>[AZURE.NOTE]  InstanceCount 的默认值为 2，最大值为 10。GatewaySize 的默认值为 Medium。你可以在 Standard\_Small、Standard\_Medium 和 Standard\_Large 之间进行选择。
 
+## 使用 New-AzureApplicationGateway 创建应用程序网关
 
-**Note:** The `Start-AzureApplicationGateway` cmdlet might take up to 15-20 minutes to complete. 
+创建包含上述步骤中所有配置项的应用程序网关。示例中的应用程序网关名为“appgwtest”。
 
-For the example below, the Application Gateway is called "appgwtest" and the resource group is "appgw-rg":
 
+	$appgw = New-AzureRmApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg -Location "China North" -BackendAddressPools $pool -BackendHttpSettingsCollection $poolSetting -FrontendIpConfigurations $fipconfig  -GatewayIpConfigurations $gipconfig -FrontendPorts $fp -HttpListeners $listener -RequestRoutingRules $rule -Sku $sku
 
-### Step 1
+创建包含上述步骤中所有配置项的应用程序网关。示例中的应用程序网关名为“appgwtest”。
 
-Get the Application Gateway object and associate to a variable "$getgw":
- 
-	$getgw =  Get-AzureApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg
 
-### Step 2
-	 
-Use `Start-AzureApplicationGateway` to start the Application Gateway:
+## 删除应用程序网关
 
-	PS C:\> Start-AzureApplicationGateway -ApplicationGateway $getgw  
+若要删除应用程序网关，需要按顺序执行以下操作：
 
-	PS C:\> Start-AzureApplicationGateway AppGwTest 
+1. 使用 **Stop-AzureRmApplicationGateway** cmdlet 停止网关。
+2. 使用 **Remove-AzureRmApplicationGateway** cmdlet 删除网关。
+3. 验证是否已使用 **Get-AzureApplicationGateway** cmdlet 删除网关。
 
-	VERBOSE: 7:59:16 PM - Begin Operation: Start-AzureApplicationGateway 
-	VERBOSE: 8:05:52 PM - Completed Operation: Start-AzureApplicationGateway
-	Name       HTTP Status Code     Operation ID                             Error 
-	----       ----------------     ------------                             ----
-	Successful OK                   fc592db8-4c58-2c8e-9a1d-1c97880f0b9b
 
-## Verify the Application Gateway status
+### 步骤 1
 
-Use the `Get-AzureApplicationGateway` cmdlet to check the status of gateway. If *Start-AzureApplicationGateway* succeeded in the previous step, the State should be *Running*, and the Vip and DnsName should have valid entries. 
+获取应用程序网关对象，并将其关联到变量“$getgw”。
 
-This sample shows an application gateway that is up, running, and is ready to take traffic destined to `http://<generated-dns-name>.cloudapp.net`. 
+	$getgw =  Get-AzureRmApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg
 
-	PS C:\> Get-AzureApplicationGateway -Name appgwtest -ResourceGroupName app-rg
+### 步骤 2
 
-	VERBOSE: 8:09:28 PM - Begin Operation: Get-AzureApplicationGateway 
-	VERBOSE: 8:09:30 PM - Completed Operation: Get-AzureApplicationGateway
-	Name          : AppGwTest 
-	Description   : 
-	VnetName      : appgwvnet 
-	Subnets       : {Subnet01} 
-	InstanceCount : 2 
-	GatewaySize   : Medium 
-	State         : Running 
-	Vip           : 138.91.170.26 
-	DnsName       : appgw-1b8402e8-3e0d-428d-b661-289c16c82101.cloudapp.net
+使用 **Stop-AzureRmApplicationGateway** 停止应用程序网关。此示例在第一行显示 **Stop-AzureRmApplicationGateway** cmdlet，接着显示输出。
 
+	PS C:\> Stop-AzureRmApplicationGateway -ApplicationGateway $getgw  
 
-## Delete an Application Gateway
-
-To delete an application gateway, you'll need to do the following in order:
-
-1. Use the `Stop-AzureApplicationGateway` cmdlet to stop the gateway. 
-2. Use the `Remove-AzureApplicationGateway` cmdlet to remove the gateway.
-3. Verify the gateway has been removed by using the `Get-AzureApplicationGateway` cmdlet.
-
-This sample shows the `Stop-AzureApplicationGateway` cmdlet on the first line, followed by the output. 
-
-### Step 1
-
-Get the Application Gateway object and associate to a variable "$getgw":
- 
-	$getgw =  Get-AzureApplicationGateway -Name appgwtest -ResourceGroupName app-rg
-
-### Step 2
-	 
-Use `Stop-AzureApplicationGateway` to stop the Application Gateway:
-
-	PS C:\> Stop-AzureApplicationGateway -ApplicationGateway $getgw  
-
-	VERBOSE: 9:49:34 PM - Begin Operation: Stop-AzureApplicationGateway 
+	VERBOSE: 9:49:34 PM - Begin Operation: Stop-AzureApplicationGateway
 	VERBOSE: 10:10:06 PM - Completed Operation: Stop-AzureApplicationGateway
-	Name       HTTP Status Code     Operation ID                             Error 
+	Name       HTTP Status Code     Operation ID                             Error
 	----       ----------------     ------------                             ----
 	Successful OK                   ce6c6c95-77b4-2118-9d65-e29defadffb8
 
-Once the application gateway is in a Stopped state, use the `Remove-AzureApplicationGateway` cmdlet to remove the service.
+应用程序网关进入停止状态后，请使用 **Remove-AzureRmApplicationGateway** cmdlet 删除该服务。
 
 
-	PS C:\> Remove-AzureApplicationGateway -Name $appgwName -ResourceGroupName $rgname -Force
+	PS C:\> Remove-AzureRmApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg -Force
 
-	VERBOSE: 10:49:34 PM - Begin Operation: Remove-AzureApplicationGateway 
+	VERBOSE: 10:49:34 PM - Begin Operation: Remove-AzureApplicationGateway
 	VERBOSE: 10:50:36 PM - Completed Operation: Remove-AzureApplicationGateway
-	Name       HTTP Status Code     Operation ID                             Error 
+	Name       HTTP Status Code     Operation ID                             Error
 	----       ----------------     ------------                             ----
 	Successful OK                   055f3a96-8681-2094-a304-8d9a11ad8301
 
->[AZURE.NOTE] The "-force" switch can be used to suppress the remove confirmation message
->
-
-To verify that the service has been removed, you can use the `Get-AzureApplicationGateway` cmdlet. This step is not required.
+>[AZURE.NOTE] 可以使用 **-force** 开关来禁止显示该删除的确认消息。
 
 
-	PS C:\>Get-AzureApplicationGateway -Name appgwtest-ResourceGroupName app-rg
+若要验证是否已删除服务，可以使用 **Get-AzureRmApplicationGateway** cmdlet。此步骤不是必需的。
 
-	VERBOSE: 10:52:46 PM - Begin Operation: Get-AzureApplicationGateway 
 
-	Get-AzureApplicationGateway : ResourceNotFound: The gateway does not exist. 
+	PS C:\>Get-AzureRmApplicationGateway -Name appgwtest -ResourceGroupName appgw-rg
+
+	VERBOSE: 10:52:46 PM - Begin Operation: Get-AzureApplicationGateway
+
+	Get-AzureApplicationGateway : ResourceNotFound: The gateway does not exist.
 	.....
 
-## Next Steps
+## 后续步骤
 
-If you want to configure SSL offload, see [Configure Application Gateway for SSL offload](/documentation/articles/application-gateway-ssl).
+如果你要配置 SSL 卸载，请参阅[配置应用程序网关以进行 SSL 卸载](/documentation/articles/application-gateway-ssl)。
 
-If you want to configure an application gateway to use with ILB, see [Create an Application Gateway with an Internal Load Balancer (ILB)](/documentation/articles/application-gateway-ilb).
+如果你想要将应用程序网关配置为与 ILB 配合使用，请参阅[创建具有内部负载平衡器 (ILB) 的应用程序网关](/documentation/articles/application-gateway-ilb)。
 
-If you want more information about load balancing options in general, see:
+如需负载平衡选项的其他常规信息，请参阅：
 
-<!--- [Azure Load Balancer](https://azure.microsoft.com/documentation/services/load-balancer/)-->
-- [Azure Traffic Manager](/documentation/services/traffic-manager/)
+<!--- [Azure 负载平衡器](/documentation/services/load-balancer)-->
+- [Azure 流量管理器](/documentation/services/traffic-manager)
 
+<!---HONumber=Mooncake_0425_2016-->

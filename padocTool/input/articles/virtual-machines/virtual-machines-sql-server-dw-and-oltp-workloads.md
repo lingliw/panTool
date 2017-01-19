@@ -1,3 +1,5 @@
+<!-- deleted in Global -->
+
 <properties 
 	pageTitle="SQL Server Data Warehousing and Transactional Workloads in Azure Virtual Machines"
 	description="Describes the preconfigured and optimized SQL Server virtual machine images in Azure for data warehousing and OLTP workloads."
@@ -15,7 +17,7 @@
 
 To use SQL Server for data warehousing or transactional workloads in an Azure Virtual Machine, we recommend using one of the preconfigured virtual machine images in the Azure Virtual Machines Gallery. These images have been optimized based on the recommendations in [Performance Best Practices for SQL Server in Azure Virtual Machines](https://msdn.microsoft.com/zh-cn/library/azure/dn133149.aspx).
 
-This article focuses on running these workloads on Azure Virtual Machines (this is also known as Infrastructure-as-a-Service or IaaS). You can also run data warehousing and transactional workloads as a service in Azure. For more information, see [Azure SQL Data Warehouse Preview](http://azure.microsoft.com/documentation/services/sql-data-warehouse/) and [Azure SQL Database](http://azure.microsoft.com/documentation/services/sql-database/).
+This article focuses on running these workloads on Azure Virtual Machines (this is also known as Infrastructure-as-a-Service or IaaS). You can also run data warehousing and transactional workloads as a service in Azure. For more information, see [Azure SQL Data Warehouse Preview](/documentation/services/sql-data-warehouse/) and [Azure SQL Database](/documentation/services/sql-databases/).
 
 ## What Preconfigured VM Images are Available?
 
@@ -33,13 +35,13 @@ The following preconfigured VM images are available in the Azure VM Gallery:
 
 - [SQL Server 2012 SP2 Enterprise Optimized for DataWarehousing on Windows Server 2012](http://azure.microsoft.com/marketplace/partners/microsoft/sqlserver2012sp2datawarehousingworkloadswindowsserver2012/)
 
-Currently we support these images on VM instances that allow up to 16 data disks attached to provide the highest throughput (or aggregate bandwidth). These instances are Standard Tier A4, A7, A8, A9, D4, D13, D14, F3, G4, and G5 and Basic tier A4. Please refer to [Virtual Machine Sizes in Azure](/documentation/articles/virtual-machines-size-specs) for further details on the sizes and options.
+Currently we support these images on VM instances that allow up to 16 data disks attached to provide the highest throughput (or aggregate bandwidth). These instances are Standard Tier A4, A7, A8, A9, D4, D13, D14, F3, G4, and G5 and Basic tier A4. Please refer to [Virtual Machine Sizes in Azure](/documentation/articles/virtual-machines-linux-sizes/) for further details on the sizes and options.
 
 >[AZURE.NOTE] Prior to September 2014, previous transactional and DW gallery images were available. However, those images required you to attach data disks to be usable. It is recommended to use the newer images above, because they are ready for use upon provisioning.
 
 ## Provisioning a SQL VM from the Gallery Using the Transactional/DW Images
 
-1. Sign in to the [Azure Management Portal](http://manage.windowsazure.com/).
+1. Sign in to the [Azure Management Portal](http://manage.windowsazure.cn/).
 
 1. Click **VIRTUAL MACHINE** in the Azure menu items in the left pane.
 
@@ -67,7 +69,7 @@ For example, the following PowerShell command returns the latest image that matc
 
 	(Get-AzureVMImage | where {$_.Label -like "SQL Server 2012 SP2 Enterprise Optimized for DataWarehousing Workloads on Windows Server 2012 R2"} | sort PublishedDate -Descending)[0].ImageName
 
-For more information about creating images with PowerShell, see [Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-vms).
+For more information about creating images with PowerShell, see [Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines](/documentation/articles/virtual-machines-windows-classic-create-powershell/).
 
 ## Specific Configurations Included in the Transactional/DW Images
 
@@ -97,7 +99,7 @@ The optimizations included in the images are based on the [Performance Best Prac
 
 - Is there any price difference between the optimized images and the non-optimized ones?
 
-	No. The optimized images follow the same pricing model (details [here](http://azure.microsoft.com/pricing/details/virtual-machines/)) with no additional cost. Note that a higher cost is associated with the larger VM instance sizes.
+	No. The optimized images follow the same pricing model (details [here](/pricing/details/virtual-machines/)) with no additional cost. Note that a higher cost is associated with the larger VM instance sizes.
 
 - Any other performance fixes I should consider?
 
@@ -123,7 +125,7 @@ The optimizations included in the images are based on the [Performance Best Prac
 
 After installing any virtual machine with SQL Server, you will likely want to:
 
-- [Migrate your data](/documentation/articles/virtual-machines-migrate-onpremises-database)
-- [Setup connectivity](/documentation/articles/virtual-machines-sql-server-connectivity)
+- [Migrate your data](/documentation/articles/virtual-machines-windows-migrate-sql/)
+- [Setup connectivity](/documentation/articles/virtual-machines-windows-classic-sql-connect/)
 
-For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines](/documentation/articles/virtual-machines-sql-server-infrastructure-services).
+For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines](/documentation/articles/virtual-machines-windows-sql-server-iaas-overview/).

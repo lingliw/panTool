@@ -1,5 +1,7 @@
+<!-- deleted in Global -->
+
 <properties
-   pageTitle="Custom scripts on VMs using templates | Windows Azure"
+   pageTitle="Custom scripts on VMs using templates | Azure"
    description="Automate Windows and Linux Azure VM configuration tasks by using the Custom Script extension with Resource Manager templates"
    services="virtual-machines"
    documentationCenter=""
@@ -9,17 +11,17 @@
    tags="azure-resource-manager"/>
 
 <tags
-   ms.service="virtual-machines"
-   ms.date="07/01/2015"
-   wacn.date=""/>
+	ms.service="virtual-machines"
+	ms.date="07/01/2015"
+	wacn.date=""/>
 
 # Using Custom Script extension With Azure Resource Manager templates
 
 This article gives an overview of writing Azure Resource Manager templates with Custom Script extension for bootstrapping workloads on a Linux or a Windows VM.
 
-For an overview of Custom Script extension please refer to the article [here](/documentation/articles/virtual-machines-extensions-customscript).
+For an overview of Custom Script extension please refer to the article [here](/documentation/articles/virtual-machines-windows-classic-extensions-customscript/).
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating a resource with the Resource Manager deployment model. You can also create a resource with the [classic deployment model](/documentation/articles/virtual-machines-extensions-customscript).
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the [classic deployment model](/documentation/articles/virtual-machines-windows-classic-extensions-customscript/).
 
 Ever since its launch, Custom Script extension has been used widely to configure workloads on both Windows and Linux VMs. With the introduction of Azure Resource Manager templates, users can now create a single template that not only provisions the VM but also configures the workloads on it.
 
@@ -36,7 +38,7 @@ Azure Resource Manager template allow you to declaratively specify the Azure Iaa
 ### Pre-Requistes for running Custom Script extension
 
 1. Install the latest Azure PowerShell Cmdlets or Azure CLI from <a href="http://azure.microsoft.com/downloads" target="_blank">here</a>.
-2. If the scripts will be run on an existing VM, make sure VM Agent is enabled on the VM, if not follow this <a href="https://msdn.microsoft.com/library/azure/dn832621.aspx" target="_blank">article</a> to install one.
+2. If the scripts will be run on an existing VM, make sure VM Agent is enabled on the VM, if not follow this <a href="https://msdn.microsoft.com/zh-cn/library/azure/dn832621.aspx" target="_blank">article</a> to install one.
 3. Upload the scripts that you want to run on the VM to Azure Storage. The scripts can come from a single or multiple storage containers.
 4. Alternatively the scripts can also be uploaded to a Github account.
 5. The script should be authored in such a way that the entry script which is launched by the extension in turn launches other scripts.

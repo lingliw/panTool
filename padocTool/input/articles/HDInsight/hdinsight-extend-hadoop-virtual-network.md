@@ -1,5 +1,5 @@
 <properties
-	pageTitle="Extend HDInsight with Virtual Network | Windows Azure"  
+	pageTitle="Extend HDInsight with Virtual Network | Azure"  
 	description="Learn how to use Azure Virtual Network to connect HDInsight to other cloud resources, or resources in your datacenter"
 	services="hdinsight"
 	documentationCenter=""
@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="hdinsight"
-	ms.date="09/23/2015"
+	ms.date="07/06/2016"
 	wacn.date=""/>
 
 
@@ -17,11 +17,12 @@
 
 Azure Virtual Network allows you to extend your Hadoop solutions to incorporate on-premises resources such as SQL Server, or to create secure private networks between resources in the cloud.
 
-> [AZURE.NOTE] HDInsight does not support affinity-based Azure virtual networks. When using HDInsight, you must use location-based virtual networks.
-<!-- deleted by customization
->
-> Currently (8/25/2015,) you can only provision one Linux-based HDInsight cluster on an Azure Virtual Network.
--->
+> [AZURE.IMPORTANT] Currently, HDInsight in Azure China is only manageable by Azure Service Manager (ASM). Azure Resource Manager (ARM) model for HDInsight is not available yet.
+><p> Please follow the steps in the [Install and Configure Azure CLI](/documentation/articles/xplat-cli-install/) and [Install and Configure Azure PowerShell](/documentation/articles/powershell-install-configure/)  to install the latest version of Azure PowerShell and the Azure CLI.
+
+
+
+
 
 ##<a id="whatis"></a>What is Azure Virtual Network?
 
@@ -55,109 +56,136 @@ Azure Virtual Network allows you to extend your Hadoop solutions to incorporate 
 
 	* **Invoking HDInsight services or jobs** from an LOB application. An example is using HBase Java APIs to store and retrieve data from an HDInsight HBase cluster.
 
-For more information on Virtual Network features, benefits, and capabilities, see the [Azure Virtual Network overview](/documentation/articles/virtual-networks-overview).
+For more information on Virtual Network features, benefits, and capabilities, see the [Azure Virtual Network overview](/documentation/articles/virtual-networks-overview/).
 
 > [AZURE.NOTE] You must create the Azure Virtual Network before provisioning an HDInsight cluster. For more information, see [Virtual Network configuration tasks](/documentation/services/networking/).
->
-> Azure HDInsight supports only location-based virtual networks, and does not currently work with virtual networks based on affinity group.
->
-> It is highly recommended to designate a single subnet for each cluster.
-<!-- deleted by customization
->
-> You cannot use a v1 (Classic,) Azure Virtual Network with Linux-based HDInsight. The Virtual Network must be v2 (Azure Resource Manager,) in order for it to be listed as an option during the HDInsight cluster creation process in the Azure preview portal, or to be usable when creating a cluster from the Azure CLI or Azure PowerShell.
->
-> If you have resources on a v1 network, and you wish to make HDInsight directly accessible to those resources through a virtual network, see [Connecting classic VNets to new VNets](/documentation/articles/virtual-networks-arm-asm-s2s) for information on how to connect a v2 Virtual Network to a v1 Virtual Network. Once this connection is established, you can create the HDInsight cluster in the v2 Virtual Network.
--->
 
-For more information on provisioning an HDInsight cluster on a virtual network, see [Provisioning Hadoop clusters in HDInsight](/documentation/articles/hdinsight-provision-clusters).
+## Virtual Network requirements
+
+> [AZURE.IMPORTANT] Creating an HDInsight cluster on a Virtual Network requires specific Virtual Network configurations, which are described in this section.
+
+###Location-based Virtual networks
+
+Azure HDInsight supports only location-based virtual networks, and does not currently work with virtual networks based on affinity group.
+
+###Classic Virtual Network
+
+Windows-based clusters require a v1 (Classic)  Virtual Network. If you do not have the correct type of network, it will not be usable when you create the cluster.
+
+If you have resources on a Virtual Network that is not usable by the cluster you plan on creating, you can create a new Virtual Network that is usable by the cluster, and connect it to the incompatible Virtual Network. You can then create the cluster in the network version that it requires, and it will be able to access resources in the other network since the two are joined. For more information on connecting classic and new Virtual Networks, see [Connecting classic VNets to new VNets](/documentation/articles/virtual-networks-arm-asm-s2s/).
+
+###Custom DNS
+
+When creating a virtual network, Azure provides default name resolution for Azure services such as HDInsight that are installed in the network. However you may need to use your own Domain Name System (DNS) for situations such as cross network domain name resolution. For example, when communicating between services located in two joined virtual networks. HDInsight supports both the default Azure name resolution as well as custom DNS when used with Azure Virtual Network.
+
+For more information on using your own DNS server with Azure Virtual Network, see the __Name resolution using your own DNS server__ section of the [Name Resolution for VMs and Role Instances](/documentation/articles/virtual-networks-name-resolution-for-vms-and-role-instances/#name-resolution-using-your-own-dns-server) document.
+
+###Secured Virtual Networks
+
+The HDInsight service is a managed service, and requires Internet access during provisioning and while running. This is so that Azure can monitor the health of the cluster, initiate failover of cluster resources, change the number of nodes in the cluster through scaling operations, and other management tasks.
+
+If you need to install HDInsight into a secured Virtual Network, you must allow inbound access over port 443 for the following IP addresses, which allow Azure to manage the HDInsight cluster.
+
+* 168.61.49.99
+* 23.99.5.239
+* 168.61.48.131
+* 138.91.141.162
+
+Allowing inbound access from port 443 for these addresses will allow you to successfully install HDInsight into a secured virtual network.
+
+> [AZURE.IMPORTANT] HDInsight doesn't support restricting outbound traffic, only inbound traffic. When defining Network Security Group rules for the subnet that contains HDInsight, only use inbound rules.
+
+The following examples demonstrate how to create a new Network Security Group that allows the required addresses, and applies the security group to a subnet within your Virtual Network. These steps assume that you have already created a Virtual Network and subnet that you want to install HDInsight into.
+
+__Using Azure PowerShell__
+
+    $vnetName = "Replace with your virtual network name"
+    $subnetName = "Replace with the name of the subnet that HDInsight will be installed into"
+    # Get the Virtual Network object
+    $vnet = Get-AzureVNetSite `
+        -VNetName $vnetName 
+    # Get the region the Virtual network is in.
+    $location = $vnet.Location
+    # Create a new Network Security Group.
+    # And add exemptions for the HDInsight health and management services.
+    $nsg = New-AzureNetworkSecurityGroup `
+        -Name "hdisecure" `
+        -Location $location `
+        | Set-AzureNetworkSecurityRule `
+            -name "hdirule1" `
+            -Protocol "*" `
+            -SourcePortRange "*" `
+            -DestinationPortRange "443" `
+            -SourceAddressPrefix "168.61.49.99" `
+            -DestinationAddressPrefix "*" `
+            -Action Allow `
+            -Priority 300 `
+            -Type Inbound `
+        | Set-AzureNetworkSecurityRule `
+            -Name "hdirule2" `
+            -Protocol "*" `
+            -SourcePortRange "*" `
+            -DestinationPortRange "443" `
+            -SourceAddressPrefix "23.99.5.239" `
+            -DestinationAddressPrefix "*" `
+            -Action Allow `
+            -Priority 301 `
+            -Type Inbound `
+        | Set-AzureNetworkSecurityRule `
+            -Name "hdirule3" `
+            -Protocol "*" `
+            -SourcePortRange "*" `
+            -DestinationPortRange "443" `
+            -SourceAddressPrefix "168.61.48.131" `
+            -DestinationAddressPrefix "*" `
+            -Action Allow `
+            -Priority 302 `
+            -Type Inbound `
+        | Set-AzureNetworkSecurityRule `
+            -Name "hdirule4" `
+            -Protocol "*" `
+            -SourcePortRange "*" `
+            -DestinationPortRange "443" `
+            -SourceAddressPrefix "138.91.141.162" `
+            -DestinationAddressPrefix "*" `
+            -Action Allow `
+            -Priority 303 `
+            -Type Inbound
+    # Apply the NSG to the subnet
+    Set-AzureNetworkSecurityGroupAssociation `
+        -VirtualNetworkName $vnetName `
+        -SubnetName $subnetName `
+        -Name $nsg.Name
+
+__Using the Azure CLI__
+
+1. Use the following command to create a new network security group named `hdisecure`. Replace __LOCATION__ with the Azure Virtual Network' location (region).
+
+        azure network nsg create hdisecure LOCATION
+
+2. Use the following to add rules to the new network security group that allow inbound communication on port 443 from the Azure HDInsight health and management service.
+
+        azure network nsg rule create hdisecure hdirule1 -p "*" -o "*" -u "443" -f "168.61.49.99" -e "*" -c "Allow" -y 300 -r "Inbound"
+        azure network nsg rule create hdisecure hdirule2 -p "*" -o "*" -u "443" -f "23.99.5.239" -e "*" -c "Allow" -y 301 -r "Inbound"
+        azure network nsg rule create hdisecure hdirule3 -p "*" -o "*" -u "443" -f "168.61.48.131" -e "*" -c "Allow" -y 302 -r "Inbound"
+        azure network nsg rule create hdisecure hdirule4 -p "*" -o "*" -u "443" -f "138.91.141.162" -e "*" -c "Allow" -y 303 -r "Inbound"
+
+3. Once the rules have been created, use the following to apply the new network security group to a subnet. Replace __VNETNAME__ and __SUBNETNAME__ with the name of the Azure Virtual Network and the subnet that you will use when installing HDInsight.
+
+        azure network nsg subnet add hdisecure VNETNAME SUBNETNAME
+
+    Once this command completes, you can successfully install HDInsight into the secured Virtual Network on the subnet used in these steps.
+
+> [AZURE.IMPORTANT] Using the above steps only open access to the HDInsight health and management service on the Azure cloud. This allows you to successfully install an HDInsight cluster into the subnet, however access to the HDInsight cluster from outside the Virtual Network is blocked by default. You will have to add additional Network Security Group rules if you wish to enable access from outside the Virtual Network.
+><p> For example, to allow RDP access from the internet, you will need to add a rule similar to the following: 
+><p> * Azure PowerShell - `Set-AzureNetworkSecurityRule -Name "RDP" -Protocol "*" -SourcePortRange "*" -DestinationPortRange "3389" -SourceAddressPrefix "*" -DestinationAddressPrefix "*" -Action Allow -Priority 304 -Type Inbound`
+><p> * Azure CLI - `azure network nsg rule create hdisecure RDP -p "*" -o "*" -u "3389" -f "*" -e "*" -c "Allow" -y 304 -r "Inbound"`
+
+For more information on Network Security Groups, see [Network Security Groups overview](/documentation/articles/virtual-networks-nsg/). For information on controlling routing in an Azure Virtual Network, see [User Defined Routes and IP forwarding](/documentation/articles/virtual-networks-udr-overview/).
 
 ##<a id="tasks"></a>Tasks and information
 
 This section contains information on common tasks and information you may need when using HDInsight with a virtual network.
-
-###Determine the FQDN
-
-The HDInsight cluster will be assigned a specific fully qualified domain name (FQDN) for the Virtual Network interface. This is the address that you should use when connecting to the cluster from other resources on the virtual network. To determine the FQDN, use the following to URL to query the Ambari management service:
-
-	https://<clustername>.azurehdinsight.cn/ambari/api/v1/clusters/<clustername>.azurehdinsight.cn/services/<servicename>/components/<componentname>
-
-> [AZURE.NOTE] For more information on using Ambari with HDInsight, see [Monitor Hadoop clusters in HDInsight using the Ambari API](/documentation/articles/hdinsight-monitor-use-ambari-api).
-
-You must specify the cluster name and a service and component running on the cluster, such as the YARN resource manager.
-
-> [AZURE.NOTE] The data returned is a JavaScript Object Notation (JSON) document that contains a lot of information about the component. To extract just the FQDN, you should use a JSON parser to retrieve the `host_components[0].HostRoles.host_name` value.
-
-For example, to return the FQDN from an HDInsight Hadoop cluster, you can use one of the following methods to retrieve the data for the YARN resource manager:
-
-* [Azure PowerShell](/documentation/articles/powershell-install-configure)
-
-		$ClusterDnsName = <clustername>
-		$Username = <cluster admin username>
-		$Password = <cluster admin password>
-		$DnsSuffix = ".azurehdinsight.cn"
-		$ClusterFQDN = $ClusterDnsName + $DnsSuffix
-
-		$webclient = new-object System.Net.WebClient
-		$webclient.Credentials = new-object System.Net.NetworkCredential($Username, $Password)
-
-		$Url = "https://" + $ClusterFQDN + "/ambari/api/v1/clusters/" + $ClusterFQDN + "/services/yarn/		components/resourcemanager"
-		$Response = $webclient.DownloadString($Url)
-		$JsonObject = $Response | ConvertFrom-Json
-		$FQDN = $JsonObject.host_components[0].HostRoles.host_name
-		Write-host $FQDN
-
-* [cURL](http://curl.haxx.se/) and [jq](http://stedolan.github.io/jq/)
-
-		curl -G -u <username>:<password> https://<clustername>.azurehdinsight.cn/ambari/api/v1/clusters/<clustername>.azurehdinsight.cn/services/yarn/components/resourcemanager | jq .host_components[0].HostRoles.host_name
-
-###Connecting to HBase
-
-To connect to HBase remotely by using the Java API, you must determine the ZooKeeper quorum addresses for the HBase cluster and specify this in your application.
-
-To get the ZooKeeper quorum address, use one of the following methods to query the Ambari management service:
-
-* [Azure PowerShell](/documentation/articles/powershell-install-configure)
-
-		$ClusterDnsName = <clustername>
-		$Username = <cluster admin username>
-		$Password = <cluster admin password>
-		$DnsSuffix = ".azurehdinsight.cn"
-		$ClusterFQDN = $ClusterDnsName + $DnsSuffix
-
-		$webclient = new-object System.Net.WebClient
-		$webclient.Credentials = new-object System.Net.NetworkCredential($Username, $Password)
-
-		$Url = "https://" + $ClusterFQDN + "/ambari/api/v1/clusters/" + $ClusterFQDN + "/configurations?type=hbase-site&tag=default&fields=items/properties/hbase.zookeeper.quorum"
-        $Response = $webclient.DownloadString($Url)
-        $JsonObject = $Response | ConvertFrom-Json
-        Write-host $JsonObject.items[0].properties.'hbase.zookeeper.quorum'
-
-* [cURL](http://curl.haxx.se/) and [jq](http://stedolan.github.io/jq/)
-
-		curl -G -u <username>:<password> "https://<clustername>.azurehdinsight.cn/ambari/api/v1/clusters/<clustername>.azurehdinsight.cn/configurations?type=hbase-site&tag=default&fields=items/properties/hbase.zookeeper.quorum" | jq .items[0].properties[]
-
-> [AZURE.NOTE] For more information on using Ambari with HDInsight, see [Monitor Hadoop clusters in HDInsight using the Ambari API](/documentation/articles/hdinsight-monitor-use-ambari-api).
-
-Once you have the quorum information, use it in your client application.
-
-For example, for a Java application that uses the HBase API, you would add an **hbase-site.xml** file to the project and specify the quorum information in the file as follows:
-
-```
-<configuration>
-  <property>
-    <name>hbase.cluster.distributed</name>
-    <value>true</value>
-  </property>
-  <property>
-    <name>hbase.zookeeper.quorum</name>
-    <value>zookeeper0.address,zookeeper1.address,zookeeper2.address</value>
-  </property>
-  <property>
-    <name>hbase.zookeeper.property.clientPort</name>
-    <value>2181</value>
-  </property>
-</configuration>
-```
 
 ###Verify network connectivity
 
@@ -169,10 +197,10 @@ If you encounter problems accessing a service from HDInsight, consult the docume
 
 The following examples demonstrate how to use HDInsight with Azure Virtual Network:
 
-* [Analyze sensor data with Storm and HBase in HDInsight](/documentation/articles/hdinsight-storm-sensor-data-analysis) - Demonstrates how to configure a Storm and HBase cluster in a virtual network, as well as how to remotely write data to HBase from Storm.
+* [Analyze sensor data with Storm and HBase in HDInsight](/documentation/articles/hdinsight-storm-sensor-data-analysis/) - Demonstrates how to configure a Storm and HBase cluster in a virtual network, as well as how to remotely write data to HBase from Storm.
 
-* [Provision Hadoop clusters in HDInsight](/documentation/articles/hdinsight-provision-clusters) - Provides information on provisioning Hadoop clusters, including information on using Azure Virtual Network.
+* [Provision Hadoop clusters in HDInsight](/documentation/articles/hdinsight-provision-clusters-v1/) - Provides information on provisioning Hadoop clusters, including information on using Azure Virtual Network.
 
-* [Use Sqoop with Hadoop in HDInsight](/documentation/articles/hdinsight-use-sqoop) - Provides information on using Sqoop to transfer data with SQL Server over a virtual network.
+* [Use Sqoop with Hadoop in HDInsight](/documentation/articles/hdinsight-use-sqoop/) - Provides information on using Sqoop to transfer data with SQL Server over a virtual network.
 
-To learn more about Azure virtual networks, see the [Azure Virtual Network overview](/documentation/articles/virtual-networks-overview).
+To learn more about Azure virtual networks, see the [Azure Virtual Network overview](/documentation/articles/virtual-networks-overview/).

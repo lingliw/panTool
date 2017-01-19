@@ -1,19 +1,25 @@
+<!-- rename to virtual-machines-windows-sql-security -->
+
 <properties 
-	pageTitle="Security Considerations for SQL Server in Azure Virtual Machines"
-	description="Provides general guidance for securing SQL Server running in an Azure Virtual Machine."
+	pageTitle="Security Considerations for SQL Server in Azure | Azure"
+	description="This topic refers to resources created with the classic deployment model, and provides general guidance for securing SQL Server running in an Azure Virtual Machine."
 	services="virtual-machines"
 	documentationCenter="na"
 	authors="rothja"
 	manager="jeffreyg"
-	editor="monicar" />
-<tags 
+   editor="monicar"    
+   tags="azure-service-management"/>
+<tags
 	ms.service="virtual-machines"
-	ms.date="08/19/2015"
-	wacn.date="" />
+	ms.date="12/04/2015"
+	wacn.date=""/>
 
 # Security Considerations for SQL Server in Azure Virtual Machines
 
 This topic includes overall security guidelines that help establish secure access to SQL Server instances in an Azure VM. However, in order to ensure better protection to your SQL Server database instances in Azure, we recommend that you implement the traditional on-premises security practices in addition to the security best practices for Azure.
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
+ 
 
 For more information about the SQL Server security practices, see [SQL Server 2008 R2 Security Best Practices - Operational and Administrative Tasks](http://download.microsoft.com/download/1/2/A/12ABE102-4427-4335-B989-5DA579A4D29D/SQL_Server_2008_R2_Security_Best_Practice_Whitepaper.docx)
 
@@ -40,17 +46,17 @@ Following is a list of security recommendations that should be considered when c
 
 ## Considerations for Securing Connections to Azure Virtual Machine:
 
-- Consider using [Azure Virtual Network](/documentation/articles/virtual-networks-overview) to administer the virtual machines instead of public RDP ports.
+- Consider using [Azure Virtual Network](/documentation/articles/virtual-networks-overview/) to administer the virtual machines instead of public RDP ports.
 
 - Remove any endpoints on the virtual machine if you do not use them.
 
 - Enable an encrypted connection option for an instance of the SQL Server Database Engine in Azure Virtual Machines. Configure SQL server instance with a signed certificate. For more information, see [Enable Encrypted Connections to the Database Engine](https://msdn.microsoft.com/zh-cn/library/ms191192.aspx) and [Connection String Syntax](https://msdn.microsoft.com/zh-cn/library/ms254500.aspx).
 
-- If your virtual machines should be accessed only from a specific network, use Windows Firewall to restrict access to certain IP addresses or network subnets. You can also consider adding an ACL on your endpoint to restrict traffic only to the clients you permit. For instructions on using ACLs with endpoints, see [Manage the ACL on an endpoint](/documentation/articles/virtual-machines-set-up-endpoints#manage-the-acl-on-an-endpoint)
+- If your virtual machines should be accessed only from a specific network, use Windows Firewall to restrict access to certain IP addresses or network subnets. You can also consider adding an ACL on your endpoint to restrict traffic only to the clients you permit. For instructions on using ACLs with endpoints, see [Manage the ACL on an endpoint](/documentation/articles/virtual-machines-linux-classic-setup-endpoints/#manage-the-acl-on-an-endpoint)
 
 ## Next Steps
 
-If you are also interested in best practices around performance, see [Performance Best Practices for SQL Server in Azure Virtual Machines](https://msdn.microsoft.com/zh-cn/library/azure/dn133149.aspx).
+If you are also interested in best practices around performance, see [Performance Best Practices for SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-windows-sql-performance/).
 
-For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines](/documentation/articles/virtual-machines-sql-server-infrastructure-services).
+For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines overview](/documentation/articles/virtual-machines-windows-sql-server-iaas-overview/).
 

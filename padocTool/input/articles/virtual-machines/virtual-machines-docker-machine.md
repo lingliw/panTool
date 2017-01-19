@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-linux-classic-docker-machine -->
+
 <properties
-   pageTitle="Use docker-machine with Azure | Windows Azure"
+   pageTitle="Use docker-machine with Azure | Azure"
    description="Shows how to get up and running on Azure with Docker Machine on Ubuntu, using the classic deployment model."
    services="virtual-machines"
    documentationCenter="virtual-machines"
@@ -9,16 +11,16 @@
    tags="azure-service-management"/>
 
 <tags
-   ms.service="virtual-machines"
-   ms.date="09/22/2015"
-   wacn.date=""/>
+	ms.service="virtual-machines"
+	ms.date="01/04/2016"
+	wacn.date=""/>
 
 # How to use docker-machine with Azure
 
 This topic describes how to use [Docker](https://www.docker.com/) with [machine](https://github.com/docker/machine) and the [Azure CLI](https://github.com/Azure/azure-xplat-cli) to create an Azure Virtual Machine to quickly and easily manage Linux containers from a computer running Ubuntu. To demonstrate, the tutorial shows how to deploy both the [busybox Docker Hub image](https://registry.hub.docker.com/_/busybox/) image and also the [nginx Docker Hub image](https://registry.hub.docker.com/_/nginx/) and configures the container to route web requests to the nginx container. (The Docker **machine** documentation describes how to modify these instructions for other platforms.)
 
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-classic-include.md)] Resource Manager model.
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
 
 There are some prerequisites for completing this tutorial. You will need to install the following:
@@ -35,7 +37,7 @@ The quickest way to get going with **docker-machine** is to download the appropr
 
 You can also build your **docker-machine** yourself by following the steps for [contributing to machine](https://github.com/docker/machine#contributing). You should be ready to download as much as 1 GB or more to perform the build, but by doing so you can customize your experience precisely the way you want.
 
-> [AZURE.NOTE] You might well create a [symbolic link](http://zh.wikipedia.org/wiki/Symbolic_link) to your platform version of it, but this tutorial uses the binary directly to demonstrate behavior very clearly. The result is that instead of commands such as `docker-machine env` as the **docker-machine** documentation shows, this tutorial  uses `docker-machine_linux-amd64 env` instead. Whether you create a symlink or just use the binary name directly is up to you, but if you change the name you are using, remember to modify the name in the instructions below.
+> [AZURE.NOTE] You might well create a [symbolic link](http://en.wikipedia.org/wiki/Symbolic_link) to your platform version of it, but this tutorial uses the binary directly to demonstrate behavior very clearly. The result is that instead of commands such as `docker-machine env` as the **docker-machine** documentation shows, this tutorial  uses `docker-machine_linux-amd64 env` instead. Whether you create a symlink or just use the binary name directly is up to you, but if you change the name you are using, remember to modify the name in the instructions below.
 
 <br />
 
@@ -58,7 +60,7 @@ If you have experience with Linux distributions, you may already have these file
 
 		openssl x509 -inform pem -in mycert.pem -outform der -out mycert.cer
 
-2. Upload your certificate's .cer file to Azure. In the [Azure Portal](https://manage.windowsazure.cn), click **Settings** in the bottom left of the service area (shown below)
+2. Upload your certificate's .cer file to Azure. In the [Azure classic portal](https://manage.windowsazure.cn), click **Settings** in the bottom left of the service area (shown below)
 
 	![][portalsettingsitem]
 
@@ -197,7 +199,7 @@ Open your favorite browser and have a look.
 
 <!--Every topic should have next steps and links to the next logical set of content to keep the customer engaged-->
 ## Next steps
-Go to the [Docker user guide](https://docs.docker.com/userguide/) and create some applications on Windows Azure. Or, go play with [**docker** and swarm](https://github.com/docker/swarm) on Azure](virtual-machines-docker-swarm) and see how swarm can be used with docker and Azure.
+Go to the [Docker user guide](https://docs.docker.com/userguide/) and create some applications on Azure. Or, go play with [Docker Swarm on Azure] and see how [swarm](https://github.com/docker/swarm) can be used with docker and Azure.
 
 <!--Image references-->
 [nginx]: ./media/virtual-machines-docker-machine/nginxondocker.png
@@ -206,7 +208,7 @@ Go to the [Docker user guide](https://docs.docker.com/userguide/) and create som
 [uploaditem]: ./media/virtual-machines-docker-machine/uploaditem.png
 
 <!--Link references-->
-[Link 1 to another azure.microsoft.com documentation topic]: /documentation/articles/virtual-machines-windows-tutorial
-[Link 2 to another azure.microsoft.com documentation topic]: /documentation/articles/web-sites-custom-domain-name
-[Link 3 to another azure.microsoft.com documentation topic]: /documentation/articles/storage-whatis-account
- 
+[Link 1 to another azure.microsoft.com documentation topic]: /documentation/articles/virtual-machines-windows-classic-tutorial/
+[Link 2 to another azure.microsoft.com documentation topic]: /documentation/articles/web-sites-custom-domain-name/
+[Link 3 to another azure.microsoft.com documentation topic]: /documentation/articles/storage-whatis-account/
+[Docker Swarm on Azure]: /documentation/articles/virtual-machines-linux-docker-swarm/

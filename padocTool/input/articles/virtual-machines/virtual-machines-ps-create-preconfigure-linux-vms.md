@@ -1,48 +1,59 @@
+<!-- rename to virtual-machines-linux-classic-createpowershell -->
+
 <properties
-	pageTitle="Use Azure PowerShell to create and preconfigure Linux-based virtual machines"
-	description="Learn how to use Azure PowerShell to create and preconfigure Linux-based virtual machines in Azure."
+	pageTitle="Create a Linux VM using Azure Powershell | Azure"
+	description="Learn how to create and preconfigure a Linux VM using Azure PowerShell."
 	services="virtual-machines"
 	documentationCenter=""
-	authors="KBDAzure"
+	authors="cynthn"
 	manager="timlt"
 	editor=""
 	tags="azure-service-management"/>
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="07/09/2015"
+	ms.date="11/11/2015"
 	wacn.date=""/>
 
-# Use Azure PowerShell to create and preconfigure Linux-based virtual machines
+# Create and preconfigure a Linux virtual machine using Azure Powershell
 
 > [AZURE.SELECTOR]
-- [Azure CLI](/documentation/articles/virtual-machines-linux-tutorial)
-- [PowerShell](/documentation/articles/virtual-machines-ps-create-preconfigure-linux-vms)
+- [Azure CLI](/documentation/articles/virtual-machines-linux-quick-create-cli/)
+- [PowerShell](/documentation/articles/virtual-machines-linux-classic-createpowershell/)
 
-These steps show you how to customize a set of Azure PowerShell commands that create and preconfigure a Linux-based Azure virtual machine in Service Management by using a building block approach. You can use this process to quickly create a command set for a new Linux-based virtual machine and expand an existing deployment or to create multiple command sets that quickly build out a custom dev/test or IT pro environment.
+<br>
 
-These steps follow a fill-in-the-blanks approach for creating Azure PowerShell command sets. This approach can be useful if you are new to Azure PowerShell or you just want to know what values to specify for successful configuration. Advanced Azure PowerShell users can take the commands and substitute their own values for the variables (the lines beginning with "$").
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
+ 
+These steps show you how to create a Linux virtual machine using a fill-in-the-blanks approach for creating Azure PowerShell command sets. This approach can be useful if you are new to Azure PowerShell or you just want to know what values to specify for successful configuration. 
 
-For the companion topic to configure Windows-based virtual machines, see [Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-vms).
+You'll build your command set by copying the sets of command blocks into a text file or the PowerShell ISE and then filling in the variable values and removing the < and > characters. See the two [examples](#examples) at the end of this article for an idea of the final result.
 
-## Step 1: Install Azure PowerShell
+For the companion topic for Windows-based virtual machines, see [Use Azure PowerShell to create Windows-based virtual machines](/documentation/articles/virtual-machines-windows-classic-create-powershell/).
 
-If you haven't done so already, use the instructions in [How to install and configure Azure PowerShell](/documentation/articles/install-configure-powershell) to install Azure PowerShell on your local computer. Then, open an Azure PowerShell command prompt.
+## Install Azure PowerShell
 
-## Step 2: Set your subscription and storage account
+If you haven't done so already, [install and configure Azure PowerShell](/documentation/articles/powershell-install-configure/). Then, open an Azure PowerShell command prompt.
 
-Set your Azure subscription and storage account by running the following commands at the Azure PowerShell command prompt. Replace everything within the quotes, including the < and > characters, with the correct names.
+## Set your subscription and storage account
+
+Set your Azure subscription and storage account by running the following commands at the Azure PowerShell command prompt. 
+
+You can get the correct subscription name from the **SubscriptionName** property of the output of the **Get-AzureSubscription** command. 
+
+You can get the correct storage account name from the **Label** property of the output of the **Get-AzureStorageAccount** command after you issue the Select-AzureSubscription command. 
+
+Replace everything within the quotes, including the < and > characters, with the correct names.
 
 	$subscr="<subscription name>"
 	$staccount="<storage account name>"
-	Select-AzureSubscription -SubscriptionName $subscr –Current
-	Set-AzureSubscription -SubscriptionName $subscr -CurrentStorageAccountName $staccount
+	Select-AzureSubscription -SubscriptionName $subscr -Current
+	Set-AzureSubscription -Environment AzureChinaCloud -SubscriptionName $subscr -CurrentStorageAccountName $staccount
 
-You can get the correct subscription name from the **SubscriptionName** property of the output of the **Get-AzureSubscription** command. You can get the correct storage account name from the **Label** property of the output of the **Get-AzureStorageAccount** command after you issue the **Select-AzureSubscription** command. You can also store these commands in a text file for future use.
 
-## Step 3: Determine the ImageFamily
+## Find the image you want to use
 
-Next, you need to determine the ImageFamily value for the specific image corresponding to the Azure virtual machine you want to create. You can get the list of available ImageFamily values with the following command.
+Next, you need to determine the ImageFamily value for the image you wnat to use. You can get the list of available ImageFamily values with the following command.
 
 	Get-AzureVMImage | select ImageFamily -Unique
 
@@ -57,43 +68,47 @@ Open a fresh instance of the text editor of your choice or an instance of the Po
 	$family="<ImageFamily value>"
 	$image=Get-AzureVMImage | where { $_.ImageFamily -eq $family } | sort PublishedDate -Descending | select -ExpandProperty ImageName -First 1
 
-## Step 4: Build your command set
-
-Build the rest of your command set by copying one of the following sets of command blocks into your new text file or the PowerShell ISE and then filling in the variable values and removing the < and > characters. See the two [examples](#examples) at the end of this article for an idea of the final result.
+## Specify the name, size and optionally, the availability set
 
 Start your command set by choosing one of these two command blocks (required).
 
-Option 1: Specify a virtual machine name and a size.
+**Option 1**: Specify a virtual machine name and a size.
 
 	$vmname="<machine name>"
 	$vmsize="<Specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
 	$vm1=New-AzureVMConfig -Name $vmname -InstanceSize $vmsize -ImageName $image
 
-Option 2: Specify a name, size, and availability set name.
+**Option 2**: Specify a name, size, and availability set name.
 
 	$vmname="<machine name>"
 	$vmsize="<Specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
 	$availset="<set name>"
 	$vm1=New-AzureVMConfig -Name $vmname -InstanceSize $vmsize -ImageName $image -AvailabilitySetName $availset
 
-For the InstanceSize values for D-, DS-, or G-series virtual machines, see [Virtual Machine and Cloud Service Sizes for Azure](https://msdn.microsoft.com/zh-CN/library/azure/dn197896.aspx).
+For the InstanceSize values for D-, DS-, or G-series virtual machines, see [Virtual Machine and Cloud Service Sizes for Azure](https://msdn.microsoft.com/zh-cn/library/azure/dn197896.aspx).
 
-Use the following commands to specify the initial Linux user name and password (required). Choose a strong password. To check its strength, see [Password Checker: Using Strong Passwords](https://www.microsoft.com/security/pc-security/password-checker.aspx).
+
+## Setup user access security options
+
+**Option 1**: Specify the initial Linux user name and password (required). Choose a strong password. To check its strength, see [Password Checker: Using Strong Passwords](https://www.microsoft.com/security/pc-security/password-checker.aspx).
 
 	$cred=Get-Credential -Message "Type the name and password of the initial Linux account."
 	$vm1 | Add-AzureProvisioningConfig -Linux -LinuxUser $cred.GetNetworkCredential().Username -Password $cred.GetNetworkCredential().Password
 
-Optionally, specify a set of SSH key pairs that are already deployed in the subscription.
+**Option 2**: Specify a set of SSH key pairs that are already deployed in the subscription.
 
 	$vm1 | Add-AzureProvisioningConfig -Linux -SSHKeyPairs "<SSH key pairs>"
 
-For more information, see [How to Use SSH with Linux on Azure](/documentation/articles/virtual-machines-linux-use-ssh-key).
+For more information, see [How to use SSH with Linux on Azure](/documentation/articles/virtual-machines-linux-ssh-from-linux/).
 
-Optionally, specify a list of SSH public keys that are already deployed in the subscription.
+**Option 3**: Specify a list of SSH public keys that are already deployed in the subscription.
 
 	$vm1 | Add-AzureProvisioningConfig -Linux - SSHPublicKeys "<SSH public keys>"
 
-For additional pre-configuration options for Linux-based virtual machines, see the syntax for the **Linux** parameter set in [Add-AzureProvisioningConfig](https://msdn.microsoft.com/zh-CN/library/azure/dn495299.aspx).
+For additional preconfiguration options for Linux-based virtual machines, see the syntax for the **Linux** parameter set in [Add-AzureProvisioningConfig](https://msdn.microsoft.com/zh-cn/library/azure/dn495299.aspx).
+
+
+## Optional: Assign a static DIP
 
 Optionally, assign the virtual machine a specific IP address, known as a static DIP.
 
@@ -101,13 +116,18 @@ Optionally, assign the virtual machine a specific IP address, known as a static 
 
 You can verify that a specific IP address is available with the following command.
 
-	Test-AzureStaticVNetIP –VNetName <VNet name> –IPAddress <IP address>
+	Test-AzureStaticVNetIP -VNetName <VNet name> -IPAddress <IP address>
 
-Optionally, assign the virtual machine to a specific subnet in an Azure virtual network.
+## Optional: Assign the virtual machine to a specific subnet 
+
+Assign the virtual machine to a specific subnet in an Azure virtual network.
 
 	$vm1 | Set-AzureSubnet -SubnetNames "<name of the subnet>"
 
-Optionally, add a single data disk to the virtual machine.
+	
+## Optional: Add a data disk
+	
+Add the following to your command set to add a data disk to the virtual machine.
 
 	$disksize=<size of the disk in GB>
 	$disklabel="<the label on the disk>"
@@ -115,46 +135,48 @@ Optionally, add a single data disk to the virtual machine.
 	$hcaching="<Specify one: ReadOnly, ReadWrite, None>"
 	$vm1 | Add-AzureDataDisk -CreateNew -DiskSizeInGB $disksize -DiskLabel $disklabel -LUN $lun -HostCaching $hcaching
 
-Optionally, add the virtual machine to an existing load-balanced set for external traffic.
+## Optional: Add the virtual machine to an existing load-balanced 
+
+Add the following to your command set to add the virtual machine to an existing load-balanced set for external traffic.
 
 	$prot="<Specify one: tcp, udp>"
 	$localport=<port number of the internal port>
 	$pubport=<port number of the external port>
 	$endpointname="<name of the endpoint>"
 	$lbsetname="<name of the existing load-balanced set>"
-	$probeprotocol="<Specify one: tcp, udp>"
-	$probeport=<TCP or UDP port number of probe traffic>
+	$probeprotocol="<Specify one: tcp, http>"
+	$probeport=<TCP or HTTP port number of probe traffic>
 	$probepath="<URL path for probe traffic>"
 	$vm1 | Add-AzureEndpoint -Name $endpointname -Protocol $prot -LocalPort $localport -PublicPort $pubport -LBSetName $lbsetname -ProbeProtocol $probeprotocol -ProbePort $probeport -ProbePath $probepath
 
-Finally, start the virtual machine creation process by choosing one of the following command blocks (required).
+## Decide how to start the virtual machine creation process 
 
-Option 1: Create the virtual machine in an existing cloud service.
+Add a block to your command set to start the virtual machine creation process by choosing one of the following command blocks.
 
-	New-AzureVM –ServiceName "<short name of the cloud service>" -VMs $vm1
+**Option 1**: Create the virtual machine in an existing cloud service.
 
-The short name of the cloud service is the name that appears in the list of Azure Cloud Services in the Azure portal or in the list of resource groups in the Azure preview portal.
+	New-AzureVM -ServiceName "<short name of the cloud service>" -VMs $vm1
 
-Option 2: Create the virtual machine in an existing cloud service and virtual network.
+The short name of the cloud service is the name that appears in the list of Azure Cloud Services in the Azure classic portal or in the list of resource groups in the Azure portal.
+
+**Option 2**: Create the virtual machine in an existing cloud service and virtual network.
 
 	$svcname="<short name of the cloud service>"
 	$vnetname="<name of the virtual network>"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
-## Step 5: Run your command set
+## Run your command set
 
-Review the Azure PowerShell command set you built in your text editor or the PowerShell ISE consisting of multiple blocks of commands from step 4. Ensure that you have specified all the needed variables and that they have the correct values. Also make sure that you have removed all the < and > characters.
+Review the Azure PowerShell command set you built in your text editor or the PowerShell ISE and ensure that you have specified all the variables and that they have the correct values. Also, make sure that you have removed all the < and > characters.
 
-If you are using a text editor, copy the command set to the clipboard and then right-click your open Azure PowerShell command prompt. This will issue the command set as a series of PowerShell commands and create your Azure virtual machine. Alternately, run your command set in the PowerShell ISE.
+Copy the command set to the clipboard and then right-click your open Azure PowerShell command prompt. This will issue the command set as a series of PowerShell commands and create your Azure virtual machine. 
 
-If you create the virtual machine in the wrong subscription, storage account, cloud service, availability set, virtual network, or subnet, delete the virtual machine, correct the command block syntax, and then run the corrected command set.
+After the virtual machine is created, see [How to log on to a virtual machine running Linux](/documentation/articles/virtual-machines-linux-classic-log-on/).
 
-After the virtual machine is created, see [How to log on to a virtual machine running Linux](virtual-machines-linux-how-to-log-on.md).
-
-If you will be creating this virtual machine again or a similar one, you can:
+If you want to reuse the command set, you can:
 
 - Save this command set as a PowerShell script file (*.ps1)
-- Save this command set as an Azure automation runbook in the **Automation** section of the Azure portal
+- Save this command set as an Azure automation runbook in the **Automation** section of the Azure classic portal
 
 ## <a id="examples"></a>Examples
 
@@ -195,7 +217,7 @@ Here is the corresponding Azure PowerShell command set to create this virtual ma
 
 	$svcname="Azure-TailspinToys"
 	$vnetname="AZDatacenter"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
 ### Example 2
 
@@ -240,19 +262,18 @@ Here is the corresponding Azure PowerShell command set to create this virtual ma
 
 	$svcname="Azure-TailspinToys"
 	$vnetname="AZDatacenter"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
 ## Additional resources
 
 [Virtual machines documentation](/documentation/services/virtual-machines/)
 
-[Azure virtual machines FAQ](https://msdn.microsoft.com/zh-CN/library/azure/dn683781.aspx)
+[Azure virtual machines FAQ](/documentation/articles/virtual-machines-linux-classic-faq/)
 
-[Overview of Azure Virtual Machines](https://msdn.microsoft.com/zh-CN/library/azure/jj156143.aspx)
+[Overview of Azure Virtual Machines](/documentation/articles/virtual-machines-linux-about/)
 
-[How to install and configure Azure PowerShell](/documentation/articles/install-configure-powershell)
+[How to install and configure Azure PowerShell](/documentation/articles/powershell-install-configure/)
 
-[How to Log on to a Virtual Machine Running Linux](/documentation/articles/virtual-machines-linux-how-to-log-on)
+[How to log on to a virtual machine running Linux](/documentation/articles/virtual-machines-linux-classic-log-on/)
 
-[Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-vms)
-
+[Use Azure PowerShell to create and preconfigure Windows-based virtual machines](/documentation/articles/virtual-machines-windows-classic-create-powershell/)

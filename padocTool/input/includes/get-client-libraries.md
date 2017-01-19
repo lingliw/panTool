@@ -44,5 +44,5 @@ For more information about installing the PHP Client Libraries for Azure (includ
 
 [php-sdk-github]: http://go.microsoft.com/fwlink/?LinkId=252719
 [install-git]: http://git-scm.com/book/en/Getting-Started-Installing-Git
-[download-SDK-PHP]: /documentation/articles/php-download-sdk
+[download-SDK-PHP]: /documentation/articles/php-download-sdk/
 [composer-phar]: http://getcomposer.org/composer.phar

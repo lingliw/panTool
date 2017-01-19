@@ -1,6 +1,6 @@
 <properties 
-	pageTitle="Create a Web App in Azure Websites using the Azure SDK for Java" 
-	description="Learn how to create a Web App on Azure Websites programmatically using the Azure SDK for Java." 
+	pageTitle="Create a Web App in Azure App Service using the Azure SDK for Java" 
+	description="Learn how to create a Web App on Azure App Service programmatically using the Azure SDK for Java." 
 	tags="azure-classic-portal"
 	services="app-service\web" 
 	documentationCenter="Java" 
@@ -8,31 +8,36 @@
 	manager="wpickett" 
 	editor="jimbe"/>
 
-<tags
-	ms.service="multiple"
-	ms.date="10/12/2015"
-	wacn.date=""/>
+<tags 
+	ms.service="multiple" 
+	ms.workload="na" 
+	ms.tgt_pltfrm="na" 
+	ms.devlang="Java" 
+	ms.topic="article" 
+	ms.date="02/25/2016" 
+	wacn.date="" 
+	ms.author="v-donntr"/>
 
 
-# Create a Web App in Azure Websites using the Azure SDK for Java
+# Create a Web App in Azure App Service using the Azure SDK for Java
 
-<!-- Azure Active Directory workflow is not yet available on the Azure Management Portal -->
+<!-- Azure Active Directory workflow is not yet available on the Azure Portal Preview -->
 
 ## Overview
 
-This walkthrough shows you how to create an Azure SDK for Java application that creates a Web App in [Azure Websites][], then deploy an application to it. It consists of two parts:
+This walkthrough shows you how to create an Azure SDK for Java application that creates a Web App in [Azure App Service][], then deploy an application to it. It consists of two parts:
 
 - Part 1 demonstrates how to build a Java application that creates a web app.
-- Part 2 demonstrates how to create a simple JSP "Hello World" application, then use an FTP client to deploy code to Azure Websites.
+- Part 2 demonstrates how to create a simple JSP "Hello World" application, then use an FTP client to deploy code to App Service.
 
 
 ## Prerequisites
 
 ### Software Installations
 
-The AzureWebDemo application code in this article was written using Azure Java SDK 0.7.0, which you can install using the [Web Platform Installer][](/documentation/articles/WebPI). In addition, make sure to use the latest version of the [Azure Toolkit for Eclipse][]. After you install the SDK, update the dependencies in your Eclipse project by running **Update Index** in **Maven Repositories**, then re-add the latest version of each package in the **Dependencies** window. You can verify the version of your installed software in Eclipse by clicking **Help > Installation Details**; you should have at least the following versions:
+The AzureWebDemo application code in this article was written using Azure Java SDK 0.7.0, which you can install using the [Web Platform Installer][] (WebPI). In addition, make sure to use the latest version of the [Azure Toolkit for Eclipse][]. After you install the SDK, update the dependencies in your Eclipse project by running **Update Index** in **Maven Repositories**, then re-add the latest version of each package in the **Dependencies** window. You can verify the version of your installed software in Eclipse by clicking **Help > Installation Details**; you should have at least the following versions:
 
-- Package for Windows Azure Libraries for Java 0.7.0.20150309
+- Package for Azure Libraries for Java 0.7.0.20150309
 - Eclipse IDE for Java EE Developers 4.4.2.20150219
 
 
@@ -43,7 +48,7 @@ Before you begin this procedure, you need to have an active Azure subscription a
 
 ### Create an Active Directory (AD) in Azure
 
-If you do not already have an Active Directory (AD) on your Azure subscription, log into the [Azure Management Portal][] with your Microsoft account. If you have multiple subscriptions, click **Subscriptions** and select the default directory for the subscription you want to use for this project. Then click **Apply** to switch to that subscription view.
+If you do not already have an Active Directory (AD) on your Azure subscription, log into the [Azure Classic Management Portal][] with your Microsoft account. If you have multiple subscriptions, click **Subscriptions** and select the default directory for the subscription you want to use for this project. Then click **Apply** to switch to that subscription view.
 
 1. Select **Active Directory** from the menu at left. **Click New > Directory > Custom Create**.
 
@@ -62,7 +67,7 @@ For more information on AD, see [What is an Azure AD directory][]?
 
 The Azure SDK for Java uses management certificates to authenticate with Azure subscriptions. These are X.509 v3 certificates you use to authenticate a client application that uses the Service Management API to act on behalf of the subscription owner to manage subscription resources.
 
-The code in this procedure uses a self-signed certificate to authenticate with Azure. For this procedure, you need to create a certificate and upload it to the [Azure Management Portal][] beforehand. This involves the following steps:
+The code in this procedure uses a self-signed certificate to authenticate with Azure. For this procedure, you need to create a certificate and upload it to the [Azure Classic Management Portal][] beforehand. This involves the following steps:
 
 - Generate a PFX file representing your client certificate and save it locally.
 - Generate a management certificate (CER file) from the PFX file.
@@ -106,7 +111,7 @@ For more information, see [Create and Upload a Management Certificate for Azure]
 
 #### Upload the certificate
 
-To upload a self-signed certificate to Azure, go to the **Settings** page in the Management Portal, then click the **Management Certificates** tab. Click **Upload** at the bottom of the page and navigate to the location of the CER file you created.
+To upload a self-signed certificate to Azure, go to the **Settings** page in the Classic Management Portal, then click the **Management Certificates** tab. Click **Upload** at the bottom of the page and navigate to the location of the CER file you created.
 
 
 #### Convert the PFX file into JKS
@@ -151,9 +156,9 @@ In this section you create a workspace and a Maven project for the web app creat
 
     ![][1]
     
-    This step can take several minutes depending on the speed of your connection. When the index rebuilds, you should see the Windows Azure packages in the **central** Maven repository.
+    This step can take several minutes depending on the speed of your connection. When the index rebuilds, you should see the Azure packages in the **central** Maven repository.
 
-6. In **Dependencies**, click **Add**. In **Enter Group ID...** enter `azure-management`. Select the packages for base management and Azure Websites management:
+6. In **Dependencies**, click **Add**. In **Enter Group ID...** enter `azure-management`. Select the packages for base management and App Service Web Apps management:
 
         com.microsoft.azure  azure-management
         com.microsoft.azure  azure-management-websites
@@ -168,7 +173,7 @@ Click **OK**. The Azure packages then appear in the **Dependencies** list.
 
 ### Writing Java Code to Create a Web App by Calling the Azure SDK
 
-Next, write the code that calls APIs in the Azure SDK for Java to create the Azure Websites web app.
+Next, write the code that calls APIs in the Azure SDK for Java to create the App Service web app.
 
 1. Create a Java class to contain the main entry point code. In Project Explorer, right-click on the project node and select **New > Class**.
 
@@ -179,7 +184,7 @@ Next, write the code that calls APIs in the Azure SDK for Java to create the Azu
 3. Click **Finish**. The WebCreator.java file appears in Project Explorer.
 
 
-### Calling the Azure API to Create an Azure Websites Web App
+### Calling the Azure API to Create an App Service Web App
 
 
 #### Add necessary imports
@@ -197,11 +202,11 @@ In WebCreator.java, add the following imports; these imports provide access to c
     import com.microsoft.windowsazure.exception.ServiceException;
     import org.xml.sax.SAXException;
     
-    // Imports for Azure Websites management configuration
+    // Imports for Azure App Service management configuration
     import com.microsoft.windowsazure.Configuration;
     import com.microsoft.windowsazure.management.configuration.ManagementConfiguration;
     
-    // Service management imports for Azure Websites creation
+    // Service management imports for App Service Web Apps creation
     import com.microsoft.windowsazure.management.websites.*;
     import com.microsoft.windowsazure.management.websites.models.*;
     
@@ -211,7 +216,7 @@ In WebCreator.java, add the following imports; these imports provide access to c
 
 #### Define the main entry point class
 
-Because the purpose of the AzureWebDemo application is to create an Azure Websites Web App, name the main class for this application `WebAppCreator`. This class provides the main entry point code that calls the Azure Service Management API to create the web app.
+Because the purpose of the AzureWebDemo application is to create an App Service Web App, name the main class for this application `WebAppCreator`. This class provides the main entry point code that calls the Azure Service Management API to create the web app.
 
 Add the following parameter definitions for the web app and webspace. You will need to provide your own Azure subscription ID and certificate information.
 
@@ -236,10 +241,8 @@ where:
 - `<certificate-password>` is the password you specified when you created your JKS certificate.
 - `webAppName` can be any name you choose; this procedure uses the name `WebDemoWebApp`. The full domain name is the `webAppName` with the `domainName` appended, so in this case the full domain is `webdemowebapp.chinacloudsites.cn`.
 - `domainName` should be specified as shown above.
-<!-- deleted by customization
 - `webSpaceName` should be one of the values defined in the [WebSpaceNames][] class.
 - `appServicePlanName` should be specified as shown above.
--->
 
 > **Note:** Each time you run this application, you need to change the value 
 > of `webAppName` and `appServicePlanName` (or delete the web app on the Azure 
@@ -249,11 +252,11 @@ where:
 
 #### Define the web creation method
 
-Next, define a method to create the web app. This method, `createWebApp`, specifies the parameters of the web app and the webspace. It also creates and configures the Azure Websites management client, which is defined by the [WebSiteManagementClient][] object. The management client is key to creating Web Apps. It provides RESTful web services that allow applications to manage web apps (performing operations such as create, update, and delete) by calling the service management API.
+Next, define a method to create the web app. This method, `createWebApp`, specifies the parameters of the web app and the webspace. It also creates and configures the App Service Web Apps management client, which is defined by the [WebSiteManagementClient][] object. The management client is key to creating Web Apps. It provides RESTful web services that allow applications to manage web apps (performing operations such as create, update, and delete) by calling the service management API.
 
     private static void createWebApp() throws Exception {
 
-        // Specify configuration settings for the Azure Websites management client.
+        // Specify configuration settings for the App Service management client.
         Configuration config = ManagementConfiguration.configure(
             new URI(uri),
             subscriptionId,
@@ -262,8 +265,8 @@ Next, define a method to create the web app. This method, `createWebApp`, specif
             KeyStoreType.jks   // Flag that you are using a JKS keystore
         );
 
-        // Create the Azure Websites management client to call Azure APIs
-        // and pass it the Azure Websites management configuration object.
+        // Create the App Service Web Apps management client to call Azure APIs
+        // and pass it the App Service management configuration object.
         WebSiteManagementClient webAppManagementClient = WebSiteManagementService.create(config);
 
         // Create an App Service plan for the web app with the specified parameters.
@@ -279,7 +282,7 @@ Next, define a method to create the web app. This method, `createWebApp`, specif
         webSpaceDetails.setName(webSpaceName);
 
         // Set web app parameters.
-        // Note that the server farm name takes the App Service plan name.
+        // Note that the server farm name takes the Azure App Service plan name.
         WebSiteCreateParameters webAppCreateParameters = new WebSiteCreateParameters();
         webAppCreateParameters.setName(webAppName);
         webAppCreateParameters.setServerFarm(appServicePlanName);
@@ -344,12 +347,12 @@ To verify that your application runs, click **Run > Run**. When the application 
     
     ----------
 
-Log into the Azure Management Portal and click **Web Apps**. The new web app should appear in the Web Apps list within a few minutes.
+Log into the Azure Classic Management Portal and click **Web Apps**. The new web app should appear in the Web Apps list within a few minutes.
 
 
 ## Deploying an Application to the Web App
 
-After you have run AzureWebDemo and created the new web app, log into the Management Portal, click **Web Apps**, and select **WebDemoWebApp** in the **Web Apps** list. In the web app's dashboard page, click **Browse** (or click the URL, `webdemowebapp.chinacloudsites.cn`) to navigate to it. You will see a blank placeholder page, because no content has been published to the web app yet.
+After you have run AzureWebDemo and created the new web app, log into the Classic Management Portal, click **Web Apps**, and select **WebDemoWebApp** in the **Web Apps** list. In the web app's dashboard page, click **Browse** (or click the URL, `webdemowebapp.chinacloudsites.cn`) to navigate to it. You will see a blank placeholder page, because no content has been published to the web app yet.
 
 Next you will create a "Hello World" application and deploy it to the web app.
 
@@ -358,7 +361,7 @@ Next you will create a "Hello World" application and deploy it to the web app.
 
 #### Create the application
 
-In order to demonstrate how to deploy an application to the web, the following procedure shows you how to create a simple "Hello World" Java application and upload it to the Azure Websites Web App that your application created.
+In order to demonstrate how to deploy an application to the web, the following procedure shows you how to create a simple "Hello World" Java application and upload it to the App Service Web App that your application created.
 
 1. Click **File > New > Dynamic Web Project**. Name it `JSPHello`. You do not need to change any other settings in this dialog. Click **Finish**.
 
@@ -429,7 +432,7 @@ Export the web project files as a web archive (WAR) file so that you can deploy 
 
     `<project-path>/JSPHello/src/JSPHello.war`
 
-For more information on deploying WAR files, see [Add a Java application to Azure Websites](/documentation/articles/web-sites-java-add-app).
+For more information on deploying WAR files, see [Add a Java application to Azure App Service Web Apps](/documentation/articles/web-sites-java-add-app/).
 
 
 ### Deploying the Hello World Application Using FTP
@@ -440,16 +443,16 @@ Select a third-party FTP client to publish the application. This procedure descr
 
 > **Note:** We do not recommend using FTP from the Windows command prompt (the command-line FTP.EXE utility that ships with Windows). FTP clients that use active FTP, such as FTP.EXE, often fail to work over firewalls. Active FTP specifies an internal LAN-based address, to which an FTP server will likely fail to connect.
 
-For more information on deployment to an Azure Websites web app using FTP, see the following topics:
+For more information on deployment to an App Service web app using FTP, see the following topics:
 
-- [Deploy using an FTP utility](/documentation/articles/web-sites-deploy)
+- [Deploy using an FTP utility](/documentation/articles/web-sites-deploy/)
 
 
 #### Set up deployment credentials
 
 Make sure you have run the **AzureWebDemo** application to create a web app. You will transfer files to this location.
 
-1. Log into the Management Portal and click **Web Apps**. Make sure **WebDemoWebApp** appears in the list of web apps, and make sure that it is running. Click **WebDemoWebApp** to open its **Dashboard** page.
+1. Log into the Classic Management Portal and click **Web Apps**. Make sure **WebDemoWebApp** appears in the list of web apps, and make sure that it is running. Click **WebDemoWebApp** to open its **Dashboard** page.
 
 2. On the **Dashboard** page, under **Quick Glance**, click **Set up your deployment credentials** (if you already have deployment credentials, this reads **Reset your deployment credentials**).
 
@@ -458,10 +461,9 @@ Make sure you have run the **AzureWebDemo** application to create a web app. You
 
 #### Get FTP connection information
 
-To use FTP to deploy application files to the newly created web app, you need to obtain connection information. There are two ways to obtain connection information. One way is to visit the web app's **Dashboard** page; the other way is to download the web app's publish profile. The publish profile is an XML file that provides information such as FTP host name and logon credentials for your web apps in Azure Websites. You can use this username and password to deploy to any web app in all subscriptions associated with the Azure account, not only this one.
-<!-- deleted by customization
+To use FTP to deploy application files to the newly created web app, you need to obtain connection information. There are two ways to obtain connection information. One way is to visit the web app's **Dashboard** page; the other way is to download the web app's publish profile. The publish profile is an XML file that provides information such as FTP host name and logon credentials for your web apps in Azure App Service. You can use this username and password to deploy to any web app in all subscriptions associated with the Azure account, not only this one.
 
-To obtain FTP connection information from the web app's blade in the [Azure Management Portal][]:
+To obtain FTP connection information from the web app's blade in the [Azure Portal Preview][]:
 
 1. Under **Essentials**, find and copy the **FTP hostname**. This is a URI similar to `ftp://waws-prod-bay-NNN.ftp.azurewebsites.chinacloudapi.cn`.
 
@@ -471,18 +473,6 @@ To obtain FTP connection information from the publish profile:
 
 1. In the web app's blade, click **Get publish profile**. This will download a .publishsettings file to your local drive.
 
--->
-<!-- keep by customization: begin -->
-To obtain FTP connection information from the website's **Dashboard** page:
-
-1. Under **Quick Glance**, find and copy the **FTP host name**. This is a URI similar to `ftp://cnws-prod-sha-001.ftp.chinacloudsites.chinacloudapi.cn`.
-
-2. Under **Quick Glance**, find and copy **Deployment / FTP user**. This will have the form *WebsiteName\DeploymentUsername*; for example `WebDemoWebsite\deployer77`.
-
-To obtain FTP connection information from the website's publish profile:
-
-1. In the website's **Dashboard**, under **Quick Glance**, click **Download the publish profile**. This will download a .publishsettings file to your local drive.
-<!-- keep by customization: end -->
 2. Open the .publishsettings file in an XML editor or text editor and find the `<publishProfile>` element containing `publishMethod="FTP"`. It should look like the following:
 
         <publishProfile
@@ -507,7 +497,7 @@ To obtain FTP connection information from the website's publish profile:
 
 Before you publish the application, you need to change a few configuration settings so that the web app can host a Java application.
 
-1. In the Management Portal, go to the web app's **Dashboard** page and click **Configure**. On the **Configure** page, specify the following settings.
+1. In the Classic Management Portal, go to the web app's **Dashboard** page and click **Configure**. On the **Configure** page, specify the following settings.
 
 2. In **Java version** the default is **Off**; select the Java version your application targets; for example 1.7.0_51. After you do this, also make sure that **Web container** is set to a version of Tomcat Server.
 
@@ -518,7 +508,7 @@ Before you publish the application, you need to change a few configuration setti
 
 #### Publish your application using Kudu
 
-One way to publish the application is to use the Kudu debug console built into Azure. Kudu is known to be stable and consistent with Azure Websites and Tomcat Server. You access the console for the web app by browsing to a URL of the following form:
+One way to publish the application is to use the Kudu debug console built into Azure. Kudu is known to be stable and consistent with App Service Web Apps and Tomcat Server. You access the console for the web app by browsing to a URL of the following form:
 
 `https://<webappname>.scm.chinacloudsites.cn/DebugConsole`
 
@@ -586,7 +576,7 @@ Another tool you can use to publish the application is FileZilla, a popular thir
 
 1. After you have uploaded the WAR file and verified that Tomcat server has created an unpacked `JSPHello` directory, browse to `http://webdemowebapp.chinacloudsites.cn/JSPHello` to run the application.
 
-    > **Note:** If you click **Browse** from the Management Portal, you might
+    > **Note:** If you click **Browse** from the Classic Management Portal, you might
     get the default webpage, saying "This Java based web application has
     been successfully created." You might have to refresh the webpage in
     order to view the application output instead of the default webpage.
@@ -598,13 +588,11 @@ Another tool you can use to publish the application is FileZilla, a popular thir
 
 #### Clean up Azure resources
 
-This procedure creates an Azure Websites web app. You will be billed for the resource as long as it exists. Unless you plan to continue using the web app for testing or development, you should consider stopping or deleting it. A web app that has been stopped will still incur a small charge, but you can restart it at any time. Deleting a web app erases all data you have uploaded to it.
-<!-- deleted by customization
+This procedure creates an App Service web app. You will be billed for the resource as long as it exists. Unless you plan to continue using the web app for testing or development, you should consider stopping or deleting it. A web app that has been stopped will still incur a small charge, but you can restart it at any time. Deleting a web app erases all data you have uploaded to it.
 
-[AZURE.INCLUDE [app-service-web-whats-changed](../includes/app-service-web-whats-changed.md)]
+## What's changed
+* For a guide to the change from Websites to App Service see: [Azure App Service and Its Impact on Existing Azure Services](/documentation/articles/app-service-changes-existing-services/)
 
-[AZURE.INCLUDE [app-service-web-try-app-service](../includes/app-service-web-try-app-service.md)]
--->
 
   [1]: ./media/java-create-azure-website-using-java-sdk/eclipse-maven-repositories-rebuild-index.png
   [2]: ./media/java-create-azure-website-using-java-sdk/eclipse-new-java-class.png
@@ -618,13 +606,13 @@ This procedure creates an Azure Websites web app. You will be billed for the res
   [10]: ./media/java-create-azure-website-using-java-sdk/kudu-console-jsphello-war-2.png
  
 
-[Azure Websites]: /documentation/services/web-sites/
+[Azure App Service]: /documentation/articles/app-service-changes-existing-services/
 [Web Platform Installer]: http://go.microsoft.com/fwlink/?LinkID=252838
-[Azure Toolkit for Eclipse]: https://msdn.microsoft.com/zh-cn/library/azure/hh690946.aspx
-[Azure Management Portal]: https://manage.windowsazure.cn
+[Azure Toolkit for Eclipse]: /documentation/articles/azure-toolkit-for-eclipse-installation/
+[Azure Classic Management Portal]: https://manage.windowsazure.cn
 [What is an Azure AD directory]: http://technet.microsoft.com/zh-cn/library/jj573650.aspx
-[Create and Upload a Management Certificate for Azure]: http://msdn.microsoft.com/zh-cn/library/azure/gg551722.aspx
+[Create and Upload a Management Certificate for Azure]: /documentation/articles/cloud-services-certs-create/
 [Key and Certificate Management Tool (keytool)]: http://docs.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html
-[WebSiteManagementClient]: http://dl.windowsazure.cn/javadoc/com/microsoft/windowsazure/management/websites/WebSiteManagementClient.html
-[WebSpaceNames]: http://dl.windowsazure.cn/javadoc/com/microsoft/windowsazure/management/websites/models/WebSpaceNames.html
-[Azure Management Portal]: https://manage.windowsazure.cn
+[WebSiteManagementClient]: http://azure.github.io/azure-sdk-for-java/com/microsoft/azure/management/websites/WebSiteManagementClient.html
+[WebSpaceNames]: http://azure.github.io/azure-sdk-for-java/com/microsoft/windowsazure/management/websites/models/WebSpaceNames.html
+[Azure Portal Preview]: https://portal.azure.cn

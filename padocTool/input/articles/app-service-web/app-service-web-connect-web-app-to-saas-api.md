@@ -1,8 +1,8 @@
-<!-- not suitable for Mooncake -->
+<!-- deleted in Global -->
 
 <properties 
-	pageTitle="Connect a web app to an API app in Azure Websites" 
-	description="This tutorial shows you how to consume an API app from an ASP.NET web app hosted in Azure Websites." 
+	pageTitle="Connect a web app to an API app in Azure Web App" 
+	description="This tutorial shows you how to consume an API app from an ASP.NET web app hosted in Azure Web App." 
 	services="app-service\web" 
 	documentationCenter=".net" 
 	authors="syntaxc4" 
@@ -11,26 +11,16 @@
 
 <tags
 	ms.service="app-service-web"
-	ms.date="09/15/2015"
+	ms.date="02/26/2016"
 	wacn.date=""/>
 
-# Connect a web app to an API app in Azure Websites
+# Connect a web app to an API app in Azure
 
-This tutorial shows how to consume an API app from an ASP.NET web app hosted in [Azure Websites](/documentation/articles/app-service).
+This tutorial shows how to consume an API app from an ASP.NET web app hosted in [Azure Web App](/home/features/web-site/).
 
 ## Prerequisites
 
-This tutorial builds upon the series from the API App tutorials:
-
-1. [Create an Azure API App](/documentation/articles/app-service-dotnet-create-api-app)
-3. [Deploy an Azure API App](/documentation/articles/app-service-dotnet-deploy-api-app)
-4. [Debug an Azure API App](/documentation/articles/app-service-dotnet-remotely-debug-api-app)
-
-## Make the API app publicly accessible
-
-In the [Azure preview portal](https://manage.windowsazure.cn/), select the API app. Click on the **Settings** button in the command bar. In the **Application Settings** blade, change the **Access Level** to **Public (anonymous)**.
-
-![](./media/app-service-web-connect-web-app-to-saas-api/4-5-Change-Access-Level-To-Public.png)
+This tutorial builds upon [Create an Azure API App](/documentation/articles/app-service-api-dotnet-get-started/).
 
 ## Create an ASP.NET MVC Application in Visual Studio
 
@@ -42,11 +32,11 @@ In the [Azure preview portal](https://manage.windowsazure.cn/), select the API a
 
 	![New ASP.NET Application](./media/app-service-web-connect-web-app-to-saas-api/2-Change-Auth-To-No-Auth.png)
 
-1. In Solution Explorer, right-click the newly created Web Application project and select **Add Azure App Reference**.
+1. In Solution Explorer, right-click the newly created Web Application project and select **Add** > **REST API Client...**.
 
 	![Add Azure API App Reference...](./media/app-service-web-connect-web-app-to-saas-api/3-Add-Azure-API-App-SDK.png)
 
-1. In the **Existing API Apps** dropdown list, select the API App you would like to connect to.
+1. In the **Add REST API Client** select download from Azure API App and click browse. select the API App you would like to connect to.
 
 	![Select Existing API App](./media/app-service-web-connect-web-app-to-saas-api/4-Add-Azure-API-App-SDK-Dialog.png)
 
@@ -55,15 +45,14 @@ In the [Azure preview portal](https://manage.windowsazure.cn/), select the API a
 1. To leverage the generated API code, open the HomeController.cs file and replace the `Contact` action with the following:
 
 	    public async Task<ActionResult> Contact()
-	    {
-	        ViewBag.Message = "Your contact page.";
-	
-	        var contacts = new ContactsList();
-	        var response = await contacts.Contacts.GetAsync();
-	        var contactList = response.Body;
-	
-	        return View(contactList);
-	    }
+        {
+            ViewBag.Message = "Your contact page.";
+
+            var contacts = new ContactsList12242015();
+            var contactList = await contacts.Contacts.GetAsync();
+            
+            return View(contactList);
+        }
 
 	![HomeController.cs Code Updates](./media/app-service-web-connect-web-app-to-saas-api/5-Write-Code-Which-Leverages-Swagger-Generated-Code.png)
 
@@ -83,13 +72,12 @@ In the [Azure preview portal](https://manage.windowsazure.cn/), select the API a
 
 	![Contact.cshtml Code Updates](./media/app-service-web-connect-web-app-to-saas-api/6-Update-View-To-Reflect-Changes.png)
 
-## Deploy the web application to Web Apps in Azure Websites
+## Deploy the web application to Web Apps in Azure
 
-Follow the instructions available at [How to Deploy an Azure web app](/documentation/articles/web-sites-deploy).
+Follow the instructions available at [How to Deploy an Azure web app](/documentation/articles/web-sites-deploy/).
 
->[AZURE.NOTE] If you want to get started with Azure Websites before signing up for an Azure account, go to [Try Azure Websites](http://go.microsoft.com/fwlink/?LinkId=523751), where you can immediately create a short-lived starter web app in Azure Websites. No credit cards required; no commitments.
+>[AZURE.NOTE] If you want to get started with Azure before signing up for an Azure account, go to [Try Azure Web App](https://tryappservice.azure.com/), where you can immediately create a short-lived starter web app in Azure. No credit cards required; no commitments.
 
 ## What's changed
-* For a guide to the change from Websites to Azure Websites see: [Azure Websites and Its Impact on Existing Azure Services](/documentation/services/web-sites/)
-* For a guide to the change of the Management Portal to the new portal see: [Reference for navigating the preview portal](https://manage.windowsazure.cn/)
+* For a guide to the change from Websites to Azure see: [Azure and Its Impact on Existing Azure Services](/documentation/services/web-sites/)
  

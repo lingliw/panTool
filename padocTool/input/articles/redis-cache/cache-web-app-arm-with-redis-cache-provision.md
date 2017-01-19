@@ -1,6 +1,6 @@
 <properties 
-	pageTitle="Provision Web App with Redis Cache" 
-	description="Use Azure Resource Manager template to deploy web app with Redis Cache." 
+	pageTitle="Provision web site with Redis Cache" 
+	description="Use Azure Resource Manager template to deploy web site with Redis Cache." 
 	services="app-service" 
 	documentationCenter="" 
 	authors="tfitzmac" 
@@ -9,35 +9,94 @@
 
 <tags
 	ms.service="app-service"
-	ms.date="07/08/2015"
+	ms.date="12/16/2015"
 	wacn.date=""/>
 
-# Create a Web App plus Redis Cache using a template
+# Create a web site plus Redis Cache using a template
 
-In this topic, you will learn how to create an Azure Resource Manager template that deploys an Azure Web App with Redis cache. You will learn how to define which resources are deployed and 
+In this topic, you will learn how to create an Azure Resource Manager template that deploys an Azure web site with Redis cache. You will learn how to define which resources are deployed and 
 how to define parameters that are specified when the deployment is executed. You can use this template for your own deployments, or customize it to meet your requirements.
 
 For more information about creating templates, see [Authoring Azure Resource Manager Templates](/documentation/articles/resource-group-authoring-templates).
 
-For the complete template, see [Web App with Redis Cache template](https://github.com/Azure/azure-quickstart-templates/blob/master/201-web-app-with-redis-cache/azuredeploy.json).
+For the complete template, see [web site with Redis Cache template](https://github.com/Azure/azure-quickstart-templates/blob/master/201-web-app-with-redis-cache/azuredeploy.json).
 
 ## What you will deploy
 
 In this template, you will deploy:
 
-- Azure Web App
+- Azure web site
 - Azure Redis Cache.
 
-To run the deployment automatically, click the following button:
-
-<!-- deleted by customization
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://manage.windowsazure.cn/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2F201-web-app-with-redis-cache%2Fazuredeploy.json)
--->
-<!-- keep by customization: begin -->
-![Deploy to Azure](http://azuredeploy.net/deploybutton.png)
-<!-- keep by customization: end -->
 
 ## Parameters to specify
+
+With Azure Resource Manager, you define parameters for values you want to specify when the template is deployed. The template includes a section called Parameters that contains all of the parameter values.
+You should define a parameter for those values that will vary based on the project you are deploying or based on the 
+environment you are deploying to. Do not define parameters for values that will always stay the same. Each parameter value is used in the template to define the resources that are deployed. 
+
+When defining parameters, use the **allowedValues** field to specify which values a user can provide during deployment. Use the **defaultValue** field to assign a value to the parameter, if no value is provided 
+during deployment.
+
+We will describe each parameter in the template.
+
+### siteName
+
+The name of the web site that you wish to create.
+
+    "siteName":{
+      "type":"string"
+    }
+
+### hostingPlanName
+
+The name of the App Service plan to use for hosting the web site.
+    
+    "hostingPlanName":{
+      "type":"string"
+    }
+
+### siteLocation
+
+The location to use for creating the web site and hosting plan. It must be one of the Azure locations that support web sites.
+
+    "siteLocation":{
+      "type":"string"
+    }
+
+### sku
+
+The pricing tier for the hosting plan.
+
+    "sku":{
+      "type":"string",
+      "allowedValues":[
+        "Free",
+        "Shared",
+        "Basic",
+        "Standard"
+      ],
+      "defaultValue":"Free"
+    }
+
+The template defines the values that are permitted for this parameter (Free, Shared, Basic, or Standard), and assigns a default value (Free) if no value is specified.
+
+### workerSize
+
+The instance size of the hosting plan (small, medium, or large).
+
+    "workerSize":{
+      "type":"string",
+      "allowedValues":[
+        "0",
+        "1",
+        "2"
+      ],
+      "defaultValue":"0"
+    }
+    
+The template defines the values that are permitted for this parameter (0, 1, or 2), and assigns a default value (0) if no value is specified. The values correspond to small, medium and large.
+
 
 
 ### redisCacheName
@@ -97,11 +156,30 @@ The Redis server version of the new cache.
 
 ## Resources to deploy
 
+### App Service plan
+
+Creates the service plan for hosting the web site. You provide the name of the plan through the **hostingPlanName** parameter. The location of the plan is the 
+same location used for the web site. The pricing tier and worker size are specified in the **sku** and **workerSize** parameters
+
+    {
+      "apiVersion": "2014-06-01",
+      "name": "[parameters('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('siteLocation')]",
+      "properties": {
+        "name": "[parameters('hostingPlanName')]",
+        "sku": "[parameters('sku')]",
+        "workerSize": "[parameters('workerSize')]",
+        "numberOfWorkers": 1
+      }
+    },
+
+
 ### Redis Cache
 
-Creates the Azure Redics Cache that is used with the web app. The name of the cache is specified in the **redisCacheName** parameter.
+Creates the Azure Redis Cache that is used with the web site. The name of the cache is specified in the **redisCacheName** parameter.
 
-The template creates the cache in the same location as the web app, which is recommended for best performance. 
+The template creates the cache in the same location as the web site, which is recommended for best performance. 
 
     {
       "apiVersion": "2014-04-01-preview",
@@ -119,11 +197,11 @@ The template creates the cache in the same location as the web app, which is rec
       }
     }
 
-### Web app
+### web site
 
-Creates the web app with name specified in the **siteName** parameter.
+Creates the web site with name specified in the **siteName** parameter.
 
-Notice that the web app is configured with app setting properties that enable it to work with the Redis Cache. This app settings are dynamically created based on values provided during deployment.
+Notice that the web site is configured with app setting properties that enable it to work with the Redis Cache. This app settings are dynamically created based on values provided during deployment.
         
     {
       "apiVersion": "2015-04-01",
@@ -165,9 +243,11 @@ Notice that the web app is configured with app setting properties that enable it
 
 ## Commands to run deployment
 
+
+
 ### PowerShell
 
-    New-AzureResourceGroupDeployment -TemplateUri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-web-app-with-redis-cache/azuredeploy.json -ResourceGroupName ExampleDeployGroup
+    New-AzureRmResourceGroupDeployment -TemplateUri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-web-app-with-redis-cache/azuredeploy.json -ResourceGroupName ExampleDeployGroup
 
 ### Azure CLI
 

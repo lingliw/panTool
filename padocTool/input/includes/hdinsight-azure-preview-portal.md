@@ -1,9 +1,12 @@
 <!-- not suitable for mooncake-->
 
-##Azure Management Portal and Azure Management Portal
-
-> [AZURE.IMPORTANT] The steps in this document use the Azure Management Portal. Microsoft recommends using the Azure Management Portal when creating new services. For an explanation of the advantages of the Management Portal, see [DevOps just got a whole lot more awesome](https://manage.windowsazure.cn). 
+## Azure portal and Azure Portal Preview
+> [AZURE.IMPORTANT]
+> The steps in this document use the Azure Portal Preview. Azure recommends using the Azure Portal Preview when creating new services. For an explanation of the advantages of the Portal Preview, see [DevOps just got a whole lot more awesome](https://azure.microsoft.comhttp://portal.azure.cn). 
 > 
-> Services and resources created in the Azure Management Portal are not visible in the Azure Management Portal, as they use a new resource model.
+> Services and resources created in the Azure Portal Preview are not visible in the Azure portal, as they use a new resource model.
+> 
+> 
 
-For a version of this document that uses the Azure Management Portal, see the following link:
+For a version of this document that uses the Azure portal, see the following link:
+

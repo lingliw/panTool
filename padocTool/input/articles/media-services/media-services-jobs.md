@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="media-services"
-	ms.date="09/07/2015"
+	ms.date="12/05/2015"
 	wacn.date=""/>
 
 #Working with Azure Media Services Jobs
@@ -27,42 +27,61 @@ This section provides links to common tasks that you would perform when working 
 
 Get Media Processor with **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-get-media-processor](../includes/media-services-selector-get-media-processor.md)]
+> [AZURE.SELECTOR]
+- [.NET](/documentation/articles/media-services-get-media-processor)
+- [REST API](/documentation/articles/media-services-rest-get-media-processor)
 
-##Creating jobs 
+
+##Creating jobs
 
 A job is an entity that contains metadata about a set of tasks (for example, encoding or indexing). Each task performs an atomic operation on the input asset(s). For example on how to create encoding jobs, see:
 
-[AZURE.INCLUDE [media-services-selector-encode](../includes/media-services-selector-encode.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content#encode)
+- [.NET](/documentation/articles/media-services-dotnet-encode-asset)
+- [REST API](/documentation/articles/media-services-rest-encode-asset)
+
 
 ##Indexing
 
-[AZURE.INCLUDE [media-services-selector-index-content](../includes/media-services-selector-index-content.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content)
+- [.NET](/documentation/articles/media-services-index-content)
 
-##Encoding 
+
+##Encoding
 
 Encode with **Azure Media Encoder** using **Azure Management Portal**, **.NET**, or **REST API**.
- 
-[AZURE.INCLUDE [media-services-selector-encode](../includes/media-services-selector-encode.md)]
+
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content#encode)
+- [.NET](/documentation/articles/media-services-dotnet-encode-asset)
+- [REST API](/documentation/articles/media-services-rest-encode-asset)
+
 
 ##Monitoring job progress
 
 Monitor job progress using **Azure Management Portal**, **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-job-progress](../includes/media-services-selector-job-progress.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-portal-check-job-progress)
+- [.NET](/documentation/articles/media-services-check-job-progress)
+- [REST API](/documentation/articles/media-services-rest-check-job-progress)
+
+
+##Listing 
+
+> [AZURE.SELECTOR]
+- [.NET](/documentation/articles/media-services-dotnet-manage-entities#list-jobs-and-assets)
+- [REST](/documentation/articles/media-services-rest-manage-entities#querying-entities)
+
+##Deleting jobs
+
+> [AZURE.SELECTOR]
+- [.NET](/documentation/articles/media-services-dotnet-manage-entities#delete-a-job)
+- [REST](/documentation/articles/media-services-rest-manage-entities##deleting-entities)
 
 ##Related links
 
-[Quotas and Limitations](/documentation/articles/media-services-quotas-and-limitations) – Describes quotas used and limitations of the Media Services Encoder
- 
-
-<!-- deleted by customization
-
-##Media Services learning paths
-
-You can view AMS learning paths here:
-
-- [AMS Live Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-live/)
-- [AMS on Demand Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-on-demand/)
--->
+[Quotas and Limitations](/documentation/articles/media-services-quotas-and-limitations) â Describes quotas used and limitations of the Media Services Encoder
 

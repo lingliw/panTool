@@ -1,11 +1,14 @@
+<!-- rename to virtual-machines-linux-classic-mysql-cluster -->
+
 <properties
-	pageTitle="Using load-balanced sets to clusterize MySQL on Linux"
-	description="An article that illustrates patterns to setup a load-balanced, high availability Linux cluster on Azure using MySQL as an example"
+	pageTitle="Clusterize MySQL with load-balanced sets | Azure"
+	description="Setup a load-balanced, high availability Linux MySQL cluster created with the classic deployment model on Azure"
 	services="virtual-machines"
 	documentationCenter=""
 	authors="bureado"
 	manager="timlt"
-	editor=""/>
+	editor=""
+	tags="azure-service-management"/>
 
 <tags
 	ms.service="virtual-machines"
@@ -14,30 +17,22 @@
 
 # Using load-balanced sets to clusterize MySQL on Linux
 
-* [Getting ready](#getting-ready)
-* [Setting up the cluster](#setting-up-the-cluster)
-* [Setting up MySQL](#setting-up-mysql)
-* [Setting up Corosync](#setting-up-corosync)
-* [Setting up Pacemaker](#setting-up-pacemaker)
-* [Testing](#testing)
-* [STONITH](#stonith)
-* [Limitations](#limitations)
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
-## Introduction
 
-The purpose of this article is to explore and illustrate the different approaches available to deploy highly available Linux-based services on Windows Azure, exploring MySQL Server high availability as a primer. 
+The purpose of this article is to explore and illustrate the different approaches available to deploy highly available Linux-based services on Azure, exploring MySQL Server high availability as a primer.
 
 We outline a shared-nothing two-node single-master MySQL high availability solution based on DRBD, Corosync and Pacemaker. Only one node is running MySQL at a time. Reading and writing from the DRBD resource is also limited to only one node at a time.
 
-There is no need for a VIP solution like LVS since we use Windows Azure's Load Balanced Sets to provide both the round-robin functionality and the endpoint detection, removal and graceful recovery of the VIP. The VIP is a globally routable IPv4 address assigned by Windows Azure when we first create the cloud service.
+There is no need for a VIP solution like LVS since we use Azure's Load Balanced Sets to provide both the round-robin functionality and the endpoint detection, removal and graceful recovery of the VIP. The VIP is a globally routable IPv4 address assigned by Azure when we first create the cloud service.
 
-There are other possible architectures for MySQL including NBD Cluster, Percona and Galera as well as several middleware solutions, including at least one available as a VM on [VM Depot](http://vmdepot.msopentech.com). As long as these solutions can replicate on unicast vs. multicast or broadcast and don't rely on shared storage or multiple network interfaces, the scenarios should be easy to deploy on Windows Azure.
+There are other possible architectures for MySQL including NBD Cluster, Percona and Galera as well as several middleware solutions, including at least one available as a VM on [VM Depot](http://vmdepot.msopentech.com). As long as these solutions can replicate on unicast vs. multicast or broadcast and don't rely on shared storage or multiple network interfaces, the scenarios should be easy to deploy on Azure.
 
 Of course these clustering architectures can be extended to other products like PostgreSQL and OpenLDAP on a similar fashion. For example, this load balancing procedure with shared nothing was successfully tested with multi-master OpenLDAP, and you can watch it on our Channel 9 blog.
 
 ## Getting ready
 
-You will need a Windows Azure account with a valid subscription able to create at least two (2) VMs (XS was used in this example), a network and a subnet, an affinity group and an availability set, as well as the ability to create new VHDs in the same region as the cloud service, and to attach them to the Linux VMs.
+You will need a Azure account with a valid subscription able to create at least two (2) VMs (XS was used in this example), a network and a subnet, an affinity group and an availability set, as well as the ability to create new VHDs in the same region as the cloud service, and to attach them to the Linux VMs.
 
 ### Tested environment
 
@@ -48,7 +43,7 @@ You will need a Windows Azure account with a valid subscription able to create a
 
 ### Affinity group
 
-An affinity group for the solution is created by logging into the Azure Portal scrolling down to Settings and creating a new affinity group. Allocated resources created later will be assigned to this affinity group.
+An affinity group for the solution is created by logging into the Azure classic portal scrolling down to Settings and creating a new affinity group. Allocated resources created later will be assigned to this affinity group.
 
 ### Networks
 
@@ -58,7 +53,7 @@ A new network is created, and a subnet is created inside the network. We chose a
 
 The first Ubuntu 13.10 VM is created using an Endorsed Ubuntu Gallery image, and called `hadb01`. A new cloud service is created in the process, called hadb. We call it this way to illustrate the shared, load-balanced nature that the service will have when we add more resources. The creation of `hadb01` is uneventful and completed using the portal. An endpoint for SSH is automatically created, and our created network is selected. We also choose to create a new availability set for the VMs.
 
-Once the first VM is created (technically, when the cloud service is created) we proceed to create the second VM, `hadb02`. For the second VM we will also use Ubuntu 13.10 VM from the Gallery using the Portal but we will choose to use an existing cloud service, `hadb.chinacloudapp.cn`, instead of creating a new one. The network and availability set should be automatically selected for us. An SSH endpoint will be created, too.
+Once the first VM is created (technically, when the cloud service is created) we proceed to create the second VM, `hadb02`. For the second VM we will also use Ubuntu 13.10 VM from the Gallery using the portal but we will choose to use an existing cloud service, `hadb.chinacloudapp.cn`, instead of creating a new one. The network and availability set should be automatically selected for us. An SSH endpoint will be created, too.
 
 After both VMs have been created, we will take note of the SSH port for `hadb01` (TCP 22) and `hadb02` (automatically assigned by Azure)
 
@@ -129,22 +124,22 @@ For `hadb02`, you have two options. You can install mysql-server now, which will
 
     sudo apt-get install mysql-server
     sudo service mysql stop
-    sudo rm –rf /var/lib/mysql/*
+    sudo rm -rf /var/lib/mysql/*
 
 The second option is to failover to `hadb02` and then install mysql-server there (installation scripts will notice the existing installation and won't touch it)
 
 On `hadb01`:
 
-    sudo drbdadm secondary –force r0
+    sudo drbdadm secondary -force r0
 
 On `hadb02`:
 
-    sudo drbdadm primary –force r0
+    sudo drbdadm primary -force r0
     sudo apt-get install mysql-server
 
 If you don't plan to failover DRBD now, the first option is easier although arguably less elegant. After you set this up, you can start working on your MySQL database. On `hadb02` (or whichever one of the servers is active, according to DRBD):
 
-    mysql –u root –p
+    mysql -u root -p
     CREATE DATABASE azureha;
     CREATE TABLE things ( id SERIAL, name VARCHAR(255) );
     INSERT INTO things VALUES (1, "Yet another entity");
@@ -156,7 +151,7 @@ You also need to enable networking for MySQL if you want to make queries from ou
 
 ### Creating the MySQL Load Balanced Set
 
-We will go back to the Azure Portal and browse to the `hadb01` VM, then Endpoints. We will create a new Endpoint, choose MySQL (TCP 3306) from the dropdown and tick on the *Create new load balanced set* box. We will call our load balanced endpoint `lb-mysql`. We will leave most of the options alone except for time which we'll reduce to 5 (seconds, minimum)
+We will go back to the portal and browse to the `hadb01` VM, then Endpoints. We will create a new Endpoint, choose MySQL (TCP 3306) from the dropdown and tick on the *Create new load balanced set* box. We will call our load balanced endpoint `lb-mysql`. We will leave most of the options alone except for time which we'll reduce to 5 (seconds, minimum)
 
 After the endpoint is created we go to `hadb02`, Endpoints, and create a new endpoint but we will choose `lb-mysql`, then select MySQL from the dropdown menu. You can also use the Azure CLI for this step.
 
@@ -166,7 +161,7 @@ At this moment we have everything we need for a manual operation of the cluster.
 
 Tests can be performed from an outside machine, by using any MySQL client, as well as applications (for example, phpMyAdmin running as an Azure Website) In this case we used MySQL's command line tool on another Linux box:
 
-    mysql azureha –u root –h hadb.chinacloudapp.cn –e "select * from things;"
+    mysql azureha -u root -h hadb.chinacloudapp.cn -e "select * from things;"
 
 ### Manually failing over
 
@@ -186,7 +181,7 @@ Once you failover manually you can repeat your remote query and it should be wor
 
 Corosync is the underlying cluster infrastructure required for Pacemaker to work. For Heartbeat v1 and v2 users (and other methodologies like Ultramonkey) Corosync is a split of the CRM functionalities, while Pacemaker remains more similar to Hearbeat in functionality.
 
-The main constraint for Corosync on Azure is that Corosync prefers multicast over broadcast over unicast communications, but Windows Azure networking only supports unicast.
+The main constraint for Corosync on Azure is that Corosync prefers multicast over broadcast over unicast communications, but Azure networking only supports unicast.
 
 Fortunately, Corosync has a working unicast mode and the only real constraint is that, since all nodes are not communicating among themselves *automagically*, you need to define the nodes in your configuration files, including their IP addresses. We can use the Corosync example files for Unicast and just change bind address, node lists and logging directory (Ubuntu uses `/var/log/corosync` while the example files use `/var/log/cluster`) and enabling quorum tools.
 
@@ -242,11 +237,11 @@ We copy this configuration file in both VMs and start Corosync in both nodes:
 
 Shortly after starting the service the cluster should be established in the current ring and quorum should be constituted. We can check this functionality by reviewing logs or:
 
-    sudo corosync-quorumtool –l
+    sudo corosync-quorumtool -l
 
 An output similar to the image below should follow:
 
-![corosync-quorumtool -l sample output](media/virtual-machines-linux-mysql-cluster/image001.png)
+![corosync-quorumtool -l sample output](./media/virtual-machines-linux-mysql-cluster/image001.png)
 
 ## Setting up Pacemaker
 
@@ -302,21 +297,21 @@ Also, make sure that Pacemaker starts at boot in both nodes:
 
     sudo update-rc.d pacemaker defaults
 
-After a few seconds, and using `sudo crm_mon –L`, verify that one of your nodes has become the master for the cluster, and is running all the resources. You can use mount and ps to check that the resources are running.
+After a few seconds, and using `sudo crm_mon -L`, verify that one of your nodes has become the master for the cluster, and is running all the resources. You can use mount and ps to check that the resources are running.
 
 The following screenshot shows `crm_mon` with one node stopped (exit using Control-C)
 
-![crm_mon node stopped](media/virtual-machines-linux-mysql-cluster/image002.png)
+![crm_mon node stopped](./media/virtual-machines-linux-mysql-cluster/image002.png)
 
 And this screenshot shows both nodes, with one master and one slave:
 
-![crm_mon operational master/slave](media/virtual-machines-linux-mysql-cluster/image003.png)
+![crm_mon operational master/slave](./media/virtual-machines-linux-mysql-cluster/image003.png)
 
 ## Testing
 
 We're ready for an automatic failover simulation. There are two ways to doing this: soft and hard. The soft way is using the cluster's shutdown function: ``crm_standby -U `uname -n` -v on``. Using this on the master, the slave will take over. Remember to set this back to off (crm_mon will tell you one node is on standby otherwise)
 
-The hard way is shutting down the primary VM (hadb01) via the Portal or changing the runlevel on the VM (i.e., halt, shutdown) then we're helping Corosync and Pacemaker by signaling master's going down. We can test this (useful for maintenance windows) but we can also force the scenario by just freezing the VM.
+The hard way is shutting down the primary VM (hadb01) via the portal or changing the runlevel on the VM (i.e., halt, shutdown) then we're helping Corosync and Pacemaker by signaling master's going down. We can test this (useful for maintenance windows) but we can also force the scenario by just freezing the VM.
 
 ## STONITH
 

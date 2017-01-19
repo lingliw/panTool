@@ -26,7 +26,7 @@ The TodoItem class defines the data object, and you need to add the same propert
 
 	These properties are used to generate the SAS and to store image information. Note that the casing on these properties matches the JavaScript backend version. 
 
-	>[AZURE.NOTE] When using the default database initializer, Entity Framework will drop and recreate the database when it detects a data model change in the Code First definition. To make this data model change and maintain existing data in the database, you must use Code First Migrations. The default initializer cannot be used against a SQL Database in Azure. For more information, see [How to Use Code First Migrations to Update the Data Model](/zh-cn/documentation/articles/mobile-services-dotnet-backend-how-to-use-code-first-migrations).
+	>[AZURE.NOTE] When using the default database initializer, Entity Framework will drop and recreate the database when it detects a data model change in the Code First definition. To make this data model change and maintain existing data in the database, you must use Code First Migrations. The default initializer cannot be used against a SQL Database in Azure. For more information, see [How to Use Code First Migrations to Update the Data Model](/zh-cn/documentation/articles/mobile-services-dotnet-backend-how-to-use-code-first-migrations/).
 
 ##Update the TodoItem controller to generate a shared access signature 
 
@@ -34,7 +34,7 @@ The existing **TodoItemController** is updated so that the **PostTodoItem** meth
 
 0. If you haven't yet created your storage account, see [How To Create a Storage Account].
 
-1. In the Management Portal, click **Storage**, click the storage account, then click **Manage Keys**. 
+1. In the [Azure classic portal](https://manage.windowsazure.cn/), click **Storage**, click the storage account, then click **Manage Keys**. 
 
 2. Make a note of the **Storage Account Name** and **Access Key**.
  

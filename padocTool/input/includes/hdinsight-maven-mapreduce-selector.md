@@ -1,5 +1,4 @@
+<!-- deleted in Global -->
+
 > [AZURE.SELECTOR]
-- [Windows cluster](/documentation/articles/hdinsight-develop-deploy-java-mapreduce)
-<!-- deleted by customization
-- [Linux cluster](/documentation/articles/hdinsight-develop-deploy-java-mapreduce-linux)
--->
+- [Windows cluster](/documentation/articles/hdinsight-develop-deploy-java-mapreduce/)

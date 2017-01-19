@@ -1,5 +1,3 @@
-<!-- not suitable for mooncake -->
-
 <properties
 	pageTitle="How to use Azure Redis Cache with Python | Windows Azure"
 	description="Get started with Azure Redis Cache using Python"
@@ -11,10 +9,16 @@
 
 <tags
 	ms.service="cache"
-	ms.date="08/25/2015"
+	ms.date="12/03/2015"
 	wacn.date=""/>
 
 # How to use Azure Redis Cache with Python
+
+> [AZURE.SELECTOR]
+- [.Net](/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache)
+- [Node.js](/documentation/articles/cache-nodejs-get-started)
+- [Java](/documentation/articles/cache-java-get-started)
+- [Python](/documentation/articles/cache-python-get-started)
 
 This topic shows you how to get started with Azure Redis Cache using Python.
 
@@ -26,24 +30,33 @@ Install [redis-py](https://github.com/andymccurdy/redis-py).
 
 ## Create a Redis cache on Azure
 
-In the [Azure Management Portal Preview](http://go.microsoft.com/fwlink/?LinkId=398536), click **New**, **DATA SERVICE**, and select **Redis Cache**.
+In Windows Azure China, Redis Cache can only be managed by Azure PowerShell or Azure CLI
 
-  ![][1]
+> [AZURE.NOTE]
+> In order to use the China Cloud Environment, the following Azure PowerShell commands need to add **"-Environment"** parameter.
+> 
+>	`Add-AzureRmAccount` <br />
+>	`Login-AzureRmAccount` <br />
+>	
+>For example, `Login-AzureRmAccount` should become `$china = Get-AzureRmEnvironment -Name AzureChinaCloud; Login-AzureRmAccount -Environment $china` if you are using Azure PowerShell 1.0.0 or 1.0.1, or `Login-AzureRmAccount -EnvironmentName AzureChinaCloud` if you are using Azure PowerShell 1.0.2 or greater.
+> 
 
-Enter a DNS hostname. It will have the form `<name>.redis.cache.chinacloudapi.cn`. Click **Create**.
+Use the following PowerShell Script to create a cache:
 
-  ![][2]
+	$VerbosePreference = "Continue"
 
-Once you create the cache, click on it in the Azure Management Portal to view the cache settings. You will need:
+	# Create a new cache with date string to make name unique. 
+	$cacheName = "MovieCache" + $(Get-Date -Format ('ddhhmm')) 
+	$location = "China North"
+	$resourceGroupName = "Default-Web-ChinaNorth"
+	
+	$movieCache = New-AzureRmRedisCache -Location $location -Name $cacheName  -ResourceGroupName $resourceGroupName -Size 250MB -Sku Basic
 
-- **Hostname.** You entered this name when you created the cache.
-- **Port.** Click the link under **Ports** to view the ports. Use the SSL port.
-- **Access Key.** Click the link under **Keys** and copy the primary key.
 
 ## Add something to the cache and retrieve it
 
-    >>> import redis
-    >>> r = redis.StrictRedis(host='<name>.redis.cache.chinacloudapi.cn',
+	>>> import redis
+	>>> r = redis.StrictRedis(host='<name>.redis.cache.chinacloudapi.cn',
           port=6380, db=0, password='<key>', ssl=True)
     >>> r.set('foo', 'bar')
     True

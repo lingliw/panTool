@@ -1,6 +1,6 @@
 # Create a Virtual Machine Running Windows Server #
 
-This tutorial will show you how quick and easy it is to create a virtual machine running Windows Server in the cloud using Windows Azure. We will use the Image Gallery in the Windows Azure Management Portal, which contains a variety of images including Windows-based operating systems, Linux-based operating systems, application images, and more. You do not need prior experience with Windows Azure to use this tutorial. 
+This tutorial will show you how quick and easy it is to create a virtual machine running Windows Server in the cloud using Microsoft Azure. We will use the Image Gallery in the Microsoft Azure Management Portal, which contains a variety of images including Windows-based operating systems, Linux-based operating systems, application images, and more. You do not need prior experience with Microsoft Azure to use this tutorial. 
 
 You will learn:
 
@@ -16,7 +16,7 @@ If you'd like to know more, see [Virtual Machines](http://go.microsoft.com/fwlin
 This section will show you how to use the **From Gallery** method in the Management Portal to create a custom virtual machine. This method provides more options than the **Quick Create** method does for configuring the virtual machine when you create it.
 
 
-1. Sign in to the Windows Azure [Management Portal](http://manage.windowsazure.cn). Check out the [Free Trial](http://www.windowsazure.cn/zh-cn/pricing/free-trial/) offer if you do not have a subscription yet.
+1. Sign in to the Microsoft Azure [Management Portal](http://manage.windowsazure.cn). Check out the [Free Trial](http://www.windowsazure.cn/zh-cn/pricing/free-trial/) offer if you do not have a subscription yet.
 
 2. On the command bar at the bottom of the screen, click **New**.
 
@@ -109,7 +109,7 @@ This section will show you how to attach an empty data disk to the virtual machi
 
 	![Specify the size of the empty disk](./media/CreateVirtualMachineWindowsTutorial/emptydisksize.png)	
 	
-	>[WACOM.NOTE] All disks are created from a VHD file in Windows Azure storage. Under **File Name**, you can provide the name for the VHD file that is added to storage, but Azure generates the name of the disk automatically.
+	>[WACOM.NOTE] All disks are created from a VHD file in Microsoft Azure storage. Under **File Name**, you can provide the name for the VHD file that is added to storage, but Azure generates the name of the disk automatically.
 
 6. Return to the dashboard to verify that the empty data disk was successfully attached to the virtual machine. It will be listed as a second disk in the **Disks** list along with the OS Disk.
 

@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-windows-classic-install-mongodb -->
+
 <properties
-	pageTitle="Install MongoDB on a Windows VM | Windows Azure"
+	pageTitle="Install MongoDB on a Windows VM | Azure"
 	description="Learn how to install MongoDB on an Azure VM created with the classic deployment model running Windows Server."
 	services="virtual-machines"
 	documentationCenter=""
@@ -15,34 +17,34 @@
 
 #Install MongoDB on a Windows VM
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-classic-include.md)] Resource Manager model.
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
 
-[MongoDB][MongoDB] is a popular open-source, high-performance NoSQL database.  Using the [Azure portal][AzureManagementPortal], you can create a virtual machine running Windows Server from the Image Gallery, using the classic deployment model. You can then install and configure a MongoDB database on the virtual machine.
+[MongoDB][MongoDB] is a popular open-source, high-performance NoSQL database.  Using the [Azure classic portal][AzurePortal], you can create a virtual machine running Windows Server from the Image Gallery, using the classic deployment model. You can then install and configure a MongoDB database on the virtual machine.
 
 
 ## Create a virtual machine running Windows Server
 
 Follow these instructions to create a virtual machine.
 
-[AZURE.INCLUDE [virtual-machines-create-WindowsVM](../includes/virtual-machines-create-windowsvm.md)]
+[AZURE.INCLUDE [virtual-machines-create-WindowsVM](../../includes/virtual-machines-create-windowsvm.md)]
 
 > [AZURE.NOTE] You can add an endpoint for MongoDB while creating the virtual machine, and configure it as follows: name it as **Mongo**, use **TCP** as the protocol, and set both the public and private ports to **27017**.
 
 ## Attach a data disk
 To provide storage for the virtual machine, attach a data disk and then initialize it so that Windows can use it. You can either attach an existing disk if you already have data you want to use, or attach an empty disk.
 
-[AZURE.INCLUDE [howto-attach-disk-windows-linux](../includes/howto-attach-disk-windows-linux.md)]
+[AZURE.INCLUDE [howto-attach-disk-windows-linux](../../includes/howto-attach-disk-windows-linux.md)]
 
-For instructions on initializing the disk, see "How to: Initialize a new data disk in Windows Server" in [How to attach a data disk to a Windows virtual machine](/zh-cn/documentation/articles/storage-windows-attach-disk/).
+For instructions on initializing the disk, see "How to: Initialize a new data disk in Windows Server" in [How to attach a data disk to a Windows virtual machine](/documentation/articles/virtual-machines-windows-classic-attach-disk/).
 
 ## Install and run MongoDB on the virtual machine
 
-[AZURE.INCLUDE [install-and-run-mongo-on-win2k8-vm](../includes/install-and-run-mongo-on-win2k8-vm.md)]
+[AZURE.INCLUDE [install-and-run-mongo-on-win2k8-vm](../../includes/install-and-run-mongo-on-win2k8-vm.md)]
 
 ##Summary
 In this tutorial, you learned how to create a virtual machine running Windows Server, remotely connect to it, and attach a data disk.  You also learned how to install and configure MongoDB on the Windows-based virtual machine. You can now access MongoDB on the Windows-based virtual machine, by following the advanced topics in the [MongoDB documentation][MongoDocs].
 
 [MongoDocs]: http://docs.mongodb.org/manual/
 [MongoDB]: http://www.mongodb.org/
-[AzureManagementPortal]: http://manage.windowsazure.cn
+[AzurePortal]: http://manage.windowsazure.cn

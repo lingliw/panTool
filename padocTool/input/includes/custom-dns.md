@@ -6,7 +6,7 @@
 When you create an application in Azure, Azure provides a subdomain on the cloudapp.net domain so your users can access your application on a URL like http://&lt;*myapp*>.cloudapp.net. However, you can also expose your application on your own domain name, such as contoso.com.
 
 > [WACOM.NOTE] 
-> The procedures in this task apply to Azure Cloud Services. For storage accounts, see [Configuring a Custom Domain Name for an Azure Storage Account](/documentation/articles/storage-custom-domain-name). For Websites, see [Configuring a Custom Domain Name for an Azure Web Site](/documentation/articles/web-sites-custom-domain-name).
+> The procedures in this task apply to Azure Cloud Services. For storage accounts, see [Configuring a Custom Domain Name for an Azure Storage Account](/documentation/articles/storage-custom-domain-name/). For Websites, see [Configuring a Custom Domain Name for an Azure Web Site](/documentation/articles/web-sites-custom-domain-name/).
 
 In this article:
 
@@ -32,7 +32,7 @@ An A record maps a domain, such as **contoso.com** or **www.contoso.com**, *or a
 > [WACOM.NOTE]
 > Since an A record is mapped to a static IP address, it cannot automatically resolve changes to the IP address of your Cloud Service. The IP address used by your Cloud Service is allocated the first time you deploy to an empty slot (either production or staging.) If you delete the deployment for the slot, the IP address is released by Azure and any future deployments to the slot may be given a new IP address.
 > 
-> Conveniently, the IP address of a given deployment slot (production or staging) is persisted when swapping between staging and production deployments or performing an in-place upgrade of an existing deployment. For more information on performing these actions, see [How to manage cloud services](/documentation/articles/cloud-services-how-to-manage).
+> Conveniently, the IP address of a given deployment slot (production or staging) is persisted when swapping between staging and production deployments or performing an in-place upgrade of an existing deployment. For more information on performing these actions, see [How to manage cloud services](/documentation/articles/cloud-services-how-to-manage/).
 
 
 <h2><a name="add-cname"></a>Add a CNAME record for your custom domain</h2>
@@ -45,7 +45,7 @@ To create a CNAME record, you must add a new entry in the DNS table for your cus
 
   		  ![quick glance section showing the site URL][csurl]
 
-  * Install and configure [Azure Powershell](/documentation/articles/install-configure-powershell), and then use the following command:
+  * Install and configure [Azure Powershell](/documentation/articles/powershell-install-configure/), and then use the following command:
 
     Get-AzureDeployment -ServiceName yourservicename | Select Url
 
@@ -90,7 +90,7 @@ To create an A record, you must first find the virtual IP address of your cloud 
 
    		 ![quick glance section showing the VIP][vip]
 
-  * Install and configure [Azure Powershell](/documentation/articles/install-configure-powershell), and then use the following command:
+  * Install and configure [Azure Powershell](/documentation/articles/powershell-install-configure/), and then use the following command:
 
       get-azurevm -servicename yourservicename | get-azureendpoint -VM {$_.VM} | select Vip
 
@@ -125,7 +125,7 @@ This example demonstrates creating an A record for the root domain. If you wish 
 
 ## Next steps
 
--   [How to Manage Cloud Services](/documentation/articles/cloud-services-how-to-manage)
+-   [How to Manage Cloud Services](/documentation/articles/cloud-services-how-to-manage/)
 -   [How to Map CDN Content to a Custom Domain][]
 
   [Expose Your Application on a Custom Domain]: #access-app

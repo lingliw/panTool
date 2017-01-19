@@ -1,5 +1,7 @@
+<!-- deleted in Global -->
+
 <properties 
-	pageTitle="Should I Choose Azure VMs? | Windows Azure"
+	pageTitle="Should I Choose Azure VMs? | Azure"
 	description="Learn Azure VMs and how they compare to the different application hosting models on Azure."
 	headerExpose=""
 	footerExpose=""
@@ -16,15 +18,15 @@
 
 # Should I Choose Azure Virtual Machines?
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)]
+[AZURE.INCLUDE [learn-about-deployment-models](../../includes/learn-about-deployment-models-include.md)]
 
 Azure provides different hosting models for running applications. Each one provides a different set of services, so which one you choose depends on exactly what you're trying to do. Is an Azure VM the choice for you?
 
-[AZURE.INCLUDE [virtual-machines-choose-me-content](../includes/virtual-machines-choose-me-content.md)]
+[AZURE.INCLUDE [virtual-machines-choose-me-content](../../includes/virtual-machines-choose-me-content.md)]
 
 ## Next steps
 Learn more about [Virtual Machines](https://msdn.microsoft.com/zh-cn/library/azure/jj156143.aspx)
 
-[App Service]: /documentation/articles/app-service-choose-me
+[Azure Websites]: /documentation/services/web-sites
 [Virtual Machines]: #tellmevm
 [Cloud Services]: /documentation/articles/cloud-services-choose-me

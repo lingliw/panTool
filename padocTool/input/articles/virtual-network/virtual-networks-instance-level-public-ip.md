@@ -1,18 +1,22 @@
 <properties 
-   pageTitle="Instance level Public IP (ILPIP)"
+   pageTitle="Instance level Public IP (ILPIP) | Windows Azure"
    description="Understanding ILPIP (PIP) and how to manage them"
    services="virtual-network"
    documentationCenter="na"
    authors="telmosampaio"
-   manager="carolz"
+   manager="carmonm"
    editor="tysonn" />
 <tags
 	ms.service="virtual-network"
-	ms.date="08/10/2015"
+	ms.date="02/10/2016"
 	wacn.date=""/>
 
 # Instance Level Public IP Overview
-An Instance Level Public IP (ILPIP) is an IP address that you can assign directly to your VM or role instance, rather than to the cloud service that your VM or role instance reside in. This doesn’t take the place of the VIP (Virtual IP) that is assigned to your cloud service. Rather, it’s an additional IP address that you can use to connect directly to your VM or role instance.
+An Instance Level Public IP (ILPIP) is a public IP address that you can assign directly to your VM or role instance, rather than to the cloud service that your VM or role instance reside in. This doesn't take the place of the VIP (Virtual IP) that is assigned to your cloud service. Rather, it's an additional IP address that you can use to connect directly to your VM or role instance.
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model). However, In Windows Azure China, Virtual Machines, Storage, and Virtual Network are not manageable with ARM. 
+
+Make sure you understand how [IP addresses](/documentation/articles/virtual-network-ip-addresses-overview-classic) work in Azure.
 
 >[AZURE.NOTE] In the past, an ILPIP was referred to as a PIP, which stands for Public IP. 
 
@@ -22,8 +26,8 @@ As shown in Figure 1, the cloud service is accessed using a VIP, while the indiv
 
 When you create a cloud service in Azure, corresponding DNS A records are created automatically to allow access to the service through a fully qualified domain name (FQDN) instead of using the actual VIP. The same process happens for ILPIP, allowing access to the VM or role instance by FQDN instead of the ILPIP. For instance, if you create a cloud service named *contosoadservice*, and you configure a web role named *contosoweb* with two instances, Azure will register the following A records for the instances:
 
-- contosoweb_IN_0.contosoadservice.chinacloudapp.cn
-- contosoweb_IN_1.contosoadservice.chinacloudapp.cn 
+- contosoweb\_IN_0.contosoadservice.chinacloudapp.cn
+- contosoweb\_IN_1.contosoadservice.chinacloudapp.cn 
 
 >[AZURE.NOTE] You can assign only one ILPIP for each VM or role instance. You can use up to 5 ILPIP's per subscription. At this time, ILPIP is not supported for multi-NIC VMs.
 
@@ -31,8 +35,6 @@ When you create a cloud service in Azure, corresponding DNS A records are create
 If you want to be able to connect to your VM or role instance by an IP address assigned directly to it, rather than using the cloud service VIP:&lt;port number&gt;, request an ILPIP for your VM or your role instance.
 - **Passive FTP** - By having an ILPIP on your VM, you can receive traffic on just about any port, you will not have to open up an endpoint to receive traffic. This enables scenarios like passive FTP where the ports are chosen dynamically.
 - **Outbound IP** - Outbound traffic originating from the VM goes out with the ILPIP as the source and this uniquely identifies the VM to external entities.
-
->[AZURE.NOTE] The use of reserved ILPIPs may incur an extra cost to your Azure subscription. For more information on ILPIP pricing, see [IP Address pricing](/home/features/ip-addresses/#price).
 
 ## How to request an ILPIP during VM creation
 The PowerShell script below creates a new cloud service named *FTPService*, then retrieves an image from Azure, and creates a VM named *FTPInstance* using the retrieved image, sets the VM to use an ILPIP, and adds the VM to the new service:
@@ -118,7 +120,7 @@ You can also associate an ILPIP to a VM by using a service configuration (CSCFG)
 
 ## Next steps
 
-[Reserved IP](/documentation/articles/virtual-networks-reserved-public-ip)
+- Understand how [IP addressing](/documentation/articles/virtual-network-ip-addresses-overview-classic) works in the classic deployment model.
 
-[Reserved IP REST APIs](https://msdn.microsoft.com/zh-cn/library/azure/dn722420.aspx)
+- Learn about [Reserved IPs](/documentation/articles/virtual-networks-reserved-public-ip).
  

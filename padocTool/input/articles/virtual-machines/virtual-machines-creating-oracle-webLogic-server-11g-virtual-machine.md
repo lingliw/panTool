@@ -1,11 +1,13 @@
-<properties title="Creating an Oracle WebLogic Server 12c and Oracle Database 12c Virtual Machine in Azure" pageTitle="Creating an Oracle WebLogic Server 12c and Oracle Database 12c Virtual Machine in Azure" description="Step through an example of creating an Oracle WebLogic Server 12c and Oracle Database 12c image running on Windows Server 2012 in Windows Azure." services="virtual-machines" authors="bbenz" documentationCenter=""/>
+<!-- deleted in Global -->
+
+<properties title="Creating an Oracle WebLogic Server 12c and Oracle Database 12c Virtual Machine in Azure" pageTitle="Creating an Oracle WebLogic Server 12c and Oracle Database 12c Virtual Machine in Azure" description="Step through an example of creating an Oracle WebLogic Server 12c and Oracle Database 12c image running on Windows Server 2012 in Azure." services="virtual-machines" authors="bbenz" documentationCenter=""/>
 <tags ms.service="virtual-machines" ms.date="06/22/2015" wacn.date="" />
 #Creating an Oracle WebLogic Server 11g Virtual Machine in Azure
 The following example shows you how you can create a Virtual Machine based on a Microsoft-provided Oracle WebLogic Server 11g image running on Windows Server 2008 R2 in Azure.
 
 ##To create an Oracle WebLogic Server 11g Virtual Machine in Azure
 
-1. Log in to the [Azure Portal](https://manage.windowsazure.cn).
+1. Log in to the [Azure Management Portal](https://manage.windowsazure.cn).
 
 2. Click on the **Marketplace**, click Compute, then type **Oracle** into the search box.
 
@@ -23,11 +25,11 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 	1. Leave **Storage Account** as-is to create a new storage account with the VM name.
 
-	2. Leave as **Availability Set** as “Not Configured”.
+	2. Leave as **Availability Set** as "Not Configured".
 
 	3. Do not add any **endpoints** at this time.
 
-9. Choose or Create a [Resource Group](/documentation/articles/resource-group-portal)
+9. Choose or Create a [Resource Group](/documentation/articles/resource-group-portal/)
 
 10. Choose a **Subscription**
 
@@ -35,7 +37,7 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 ##To configure your Oracle WebLogic Server 11g Virtual Machine in Azure
 
-1. Log in to the [Azure Portal](https://manage.windowsazure.cn).
+1. Log in to the [Azure Management Portal](https://manage.windowsazure.cn).
 
 2. Click **Virtual Machines**.
 
@@ -49,15 +51,15 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 7. In the **Welcome** dialog, select **Create a new WebLogic domain** and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image30.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image30.png)
 
 8. In the **Select Domain Source** dialog, accept the default values and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image31.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image31.png)
 
 9. In the **Specify Domain Name and Location** dialog, accept the default values and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image32.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image32.png)
 
 10. In the **Configure Administrator User Name and Password** dialog:
 
@@ -67,23 +69,23 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 	3. Click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image33.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image33.png)
 
 11. In the **Configure Server Start Mode and JDK** dialog, select **Production Mode**, select the available JDK (or browser to a JDK if desired), and click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image34.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image34.png)
 
 12.	In the **Select Optional Configuration** dialog, do not select any options, and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image35.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image35.png)
 
 13.	In the **Configuration Summary** dialog, click **Create**.
 	
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image35.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image35.png)
 
 14.	In the **Creating Domain** dialog, check **Start Admin Server** and then click **Done**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image37.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image37.png)
 
 15.	A command prompt for **startWebLogic.cmd** is started. When prompted, provide your WebLogic user name and password.
 
@@ -97,7 +99,7 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 4. For **Path**, type `c:\mywar\shoppingcart.war`.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image38.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-11g-virtual-machine/image38.png)
 
 	Click **Next**.
 
@@ -115,7 +117,7 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 	1. While still logged in to your **Virtual Machine**, click **Windows Start**, click **Control Panel**, click **System and Security**, click **Windows Firewall**, and then click **Advanced settings**. This opens the **Windows Firewall with Advanced Security** management console.
 
-	2. Within the firewall management console, click **Inbound Rules** in the left hand pane (if you don’t see **Inbound Rule**s, expand the top node in the left hand pane), and then click **New Rule** in the right hand pane.
+	2. Within the firewall management console, click **Inbound Rules** in the left hand pane (if you don't see **Inbound Rule**s, expand the top node in the left hand pane), and then click **New Rule** in the right hand pane.
 
 	3. For** Rule Type**, select **Port** and click **Next**.
 
@@ -129,7 +131,7 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 11. Create an endpoint for your Virtual Machine:
 
-	1. Log in to the [Azure Portal](https://manage.windowsazure.cn).
+	1. Log in to the [Azure Management Portal](https://manage.windowsazure.cn).
 
     2. Click **Browse**
 
@@ -155,14 +157,14 @@ The following example shows you how you can create a Virtual Machine based on a 
 
 	10. Click **OK**
 
-12. To see the shopping cart application running on the Internet, open a browser to the URL in the form of `http://<<unique_domain_name>>/shoppingcart`. (You can determine the value for `<<unique_domain_name>>` within the [Azure Portal](https://manage.windowsazure.cn) by clicking V**irtual Machines** and then selecting the Virtual Machine that you are using to run Oracle WebLogic Server).
+12. To see the shopping cart application running on the Internet, open a browser to the URL in the form of `http://<<unique_domain_name>>/shoppingcart`. (You can determine the value for `<<unique_domain_name>>` within the [Azure Management Portal](https://manage.windowsazure.cn) by clicking V**irtual Machines** and then selecting the Virtual Machine that you are using to run Oracle WebLogic Server).
 
 ## Additional Resources
 
-Now that you’ve set up your Virtual Machine running Oracle WebLogic Server, see the following topics for additional information.
+Now that you've set up your Virtual Machine running Oracle WebLogic Server, see the following topics for additional information.
 
-- [Oracle Virtual Machine images - Miscellaneous Considerations](/documentation/articles/virtual-machines-miscellaneous-considerations-oracle-virtual-machine-images)
+- [Oracle Virtual Machine images - Miscellaneous Considerations](/documentation/articles/virtual-machines-windows-classic-oracle-considerations/)
 
 - [Oracle WebLogic Server Product Documentation](http://www.oracle.com/technetwork/middleware/weblogic/documentation/index.html)
 
-- [Oracle Virtual Machine images for Azure](/documentation/articles/virtual-machines-oracle-list-oracle-virtual-machine-images)
+- [Oracle Virtual Machine images for Azure](/documentation/articles/virtual-machines-oracle-list-oracle-virtual-machine-images/)

@@ -55,7 +55,7 @@ Azure has a web interface called the [Management Portal](http://manage.windowsaz
 One of the most basic things a cloud platform does is execute applications. Azure provides these options: 
 
 1.	Virtual Machines gives you control over your own virtual machine, including the operating system. 
-2.	Websites offers a range of applications, frameworks, and templates for you to build large, scalable web applications and presence websites quickly, and then efficiently manage development, test, and operations.
+2.	Websites offers a range of applications, frameworks, and templates for you to build large, scalable web sites and presence websites quickly, and then efficiently manage development, test, and operations.
 3.	Cloud Services is a platform-as-a-service (PaaS) option tuned to create highly scalable and fault resistant applications, but with more flexibility than Websites. 
 
 Each of the Azure execution models has its own role to play. 
@@ -91,11 +91,11 @@ This quite general approach to cloud computing can be used to address many diffe
 ![Azure Websites](./media/intro-to-azure/AzureWebsitesIntroNew.png)   
  **Figure: Azure Websites runs a website application in the cloud without having to manage the underlying web server.**
 
-One of the most common things that people do in the cloud is run websites and web applications. Azure Virtual Machines allows this, but it still leaves you with the responsibility of administering one or more VMs and the underlying operating systems. Cloud services web roles can do this, but deploying and maintaining them still takes administrative work.  What if you just want a website where somebody else takes care of the administrative work for you?
+One of the most common things that people do in the cloud is run websites and web sites. Azure Virtual Machines allows this, but it still leaves you with the responsibility of administering one or more VMs and the underlying operating systems. Cloud services web roles can do this, but deploying and maintaining them still takes administrative work.  What if you just want a website where somebody else takes care of the administrative work for you?
 
 This is exactly what Azure Websites provides. This compute model offers a managed web environment using the Azure Management portal as well as APIs. You can move an existing website application into Azure Websites unchanged, or you can create a new one directly in the cloud. Once a website is running, you can add or remove instances dynamically, relying on Azure Websites to load balance requests across them. Azure Websites offers both a shared option, where your website runs in a virtual machine with other sites, and a standard option that allows a site to run in its own VM. The standard option also lets you increase the size (computing power) of your instances if needed.
 
-For development, Websites supports .NET, PHP, Node.js, Java and Python along with SQL Database and MySQL (from ClearDB, a Microsoft partner) for relational storage. It also provides built-in support for several popular applications, including WordPress, Joomla, and Drupal. The goal is to provide a low-cost, scalable, and broadly useful platform for creating websites and web applications in the public cloud.
+For development, Websites supports .NET, PHP, Node.js, Java and Python along with SQL Database and MySQL (from ClearDB, a Microsoft partner) for relational storage. It also provides built-in support for several popular applications, including WordPress, Joomla, and Drupal. The goal is to provide a low-cost, scalable, and broadly useful platform for creating websites and web sites in the public cloud.
 
 
 **WebSite Scenarios**
@@ -108,7 +108,7 @@ Websites is intended to be useful for corporations, developers, and web design a
 
 Suppose you want to build a cloud application that can support lots of simultaneous users, doesn't require much administration, and never goes down. You might be an established software vendor, for example, that's decided to embrace Software as a Service (SaaS) by building a version of one of your applications in the cloud. Or you might be a start-up creating a consumer application that you expect will grow fast. If you're building on Azure, which execution model should you use?
 
-Azure Websites allows creating this kind of web application, but there are some constraints. You don't have administrative access, for example, which means that you can't install arbitrary software. Azure Virtual Machines gives you lots of flexibility, including administrative access, and you certainly can use it to build a very scalable application, but you'll have to handle many aspects of reliability and administration yourself. What you'd like is an option that gives you the control you need but also handles most of the work required for reliability and administration.
+Azure Websites allows creating this kind of web site, but there are some constraints. You don't have administrative access, for example, which means that you can't install arbitrary software. Azure Virtual Machines gives you lots of flexibility, including administrative access, and you certainly can use it to build a very scalable application, but you'll have to handle many aspects of reliability and administration yourself. What you'd like is an option that gives you the control you need but also handles most of the work required for reliability and administration.
 
 This is exactly what's provided by Azure Cloud Services. This technology is designed expressly to support scalable, reliable, and low-admin applications, and it's an example of what's commonly called Platform as a Service (PaaS). To use it, you create an application using the technology you choose, such as C#, Java, PHP, Python, Node.js, or something else. Your code then executes in virtual machines (referred to as instances) running a version of Windows Server. 
 
@@ -486,7 +486,7 @@ When an scheduled alarm occurs, Scheduler sends HTTP or HTTPS messages to a spec
 - Recurring application actions: As an example, a service may periodically get data from twitter and gather the data into a regular feed.
 - Daily maintenance: Log processing or pruning, performing backups and other intermittently schedule tasks.
 - Tasks that run at night. 
-- Web applications tasks like daily pruning of logs, performing backups, and other maintenance tasks. An administrator may choose to backup her database at 1AM every day for the next 9 months, for example.
+- Web Sites tasks like daily pruning of logs, performing backups, and other maintenance tasks. An administrator may choose to backup her database at 1AM every day for the next 9 months, for example.
 
 The Scheduler API allows you to create, update, delete, view, and manage job collections and scheduled jobs programmatically.
 

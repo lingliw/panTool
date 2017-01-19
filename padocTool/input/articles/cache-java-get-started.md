@@ -1,80 +1,90 @@
-<properties 
-   pageTitle="How to use Azure Redis Cache with Java" 
-   description="Get started with Azure Redis Cache using Java" 
-   services="redis-cache" 
-   documentationCenter="" 
-   authors="MikeWasson" 
-   manager="wpickett" 
-   editor=""/>
+<properties
+	pageTitle="如何将 Azure Redis 缓存与 Java 配合使用"
+	description="开始将 Azure Redis 缓存与 Java 配合使用"
+	services="redis-cache"
+	documentationCenter=""
+	authors="steved0x"
+	manager="dwrede"
+	editor=""/>
 
 <tags
-   ms.service="cache"
-   ms.date="04/30/2015"
-   wacn.date=""/>
+	ms.service="cache"
+	ms.date="08/17/2015"
+	wacn.date=""/>
 
-# How to use Azure Redis Cache with Java 
+# 如何将 Azure Redis 缓存与 Java 配合使用
 
-Azure Redis Cache gives you access to a secure, dedicated Redis cache, managed by Microsoft. Your cache is accessible from any application within Microsoft Azure.
+Azure Redis 缓存可让你访问 Microsoft 管理的、专用安全的 Redis 缓存。可从 Microsoft Azure 内部的任何应用程序访问你的缓存。
 
-This topic shows how to get started with Azure Redis Cache using Java.
-
-
-## Prerequisites
-
-[Jedis](https://github.com/xetorthio/jedis) - Java client for Redis
-
-This tutorial uses Jedis, but you can use any Java client listed at [http://redis.io/clients](http://redis.io/clients).
+本主题说明如何开始将 Azure Redis 缓存与 Java 配合使用。
 
 
-## Create a Redis cache on Azure
+## 先决条件
 
-In the [Azure Management Portal](http://manage.windowsazure.cn), click **New** and select **Redis Cache**. 
+[Jedis](https://github.com/xetorthio/jedis) - Redis 的 Java 客户端
 
-  ![][1]
-
-Enter a DNS hostname. It will have the form `<name>.redis.cache.chinacloudapi.cn`. Click **Create**.
-
-  ![][2]
+本教程使用 Jedis，但你可以使用 [http://redis.io/clients](http://redis.io/clients) 中列出的任何 Java 客户端。
 
 
-Once the cache is created, click on it in the portal to view the cache settings. Click the link under **Keys** and copy the primary key. You will need this to authenticate requests.
+## 在 Azure 上创建 Redis 缓存
 
-  ![][4]
+Windows Azure 中国目前只支持 PowerShell 或者 Azure CLI 对 Redis 缓存进行管理。
+
+> [AZURE.NOTE]
+若要使用中国云环境，以下 AzureRm PowerShell 命令需要添加**“-Environment”**参数。
+> 
+>	`Add-AzureRmAccount`<br />
+>	`Login-AzureRmAccount`<br />
+>
+>例如，`Login-AzureRmAccount` 应变为 `$china = Get-AzureRmEnvironment -Name AzureChinaCloud; Login-AzureRmAccount -Environment $china` (如果你使用的是 Azure PowerShell 1.0.0 或者 1.0.1)，或者 `Login-AzureRmAccount -EnvironmentName AzureChinaCloud` (如果你使用的是 Azure PowerShell 1.0.2 或者 更高)
+> 
 
 
-## Enable the non-SSL endpoint
+使用以下的 PowerShell 脚本创建缓存：
+
+	$VerbosePreference = "Continue"
+
+	# Create a new cache with date string to make name unique. 
+	$cacheName = "MovieCache" + $(Get-Date -Format ('ddhhmm')) 
+	$location = "China North"
+	$resourceGroupName = "Default-Web-ChinaNorth"
+	
+	$movieCache = New-AzureRmRedisCache -Location $location -Name $cacheName  -ResourceGroupName $resourceGroupName -Size 250MB -Sku Basic
 
 
-Click the link under **Ports**, and click **No** for "Allow access only via SSL". This will enable the non-SSL port for the cache. The Jedis client currently does not support SSL.
-
-  ![][3]
+## 启用非 SSL 终结点
 
 
-## Add something to the cache and retrieve it
+你可以使用以下的 PowerShell 命令行启用非 SSL 终结点
+
+	Set-AzureRmRedisCache -Name "<your cache name>" -ResourceGroupName "<your resource group name>" -EnableNonSslPort $true
+
+
+## 在缓存中添加一些内容并检索此内容
 
 	package com.mycompany.app;
 	import redis.clients.jedis.Jedis;
 	import redis.clients.jedis.JedisShardInfo;
-	 
+
 	/* Make sure your turn on non SSL port in Azure Redis using the Configuration section in the Azure portal */
 	public class App
 	{
 	  public static void main( String[] args )
 	  {
         /* In this line, replace <name> with your cache name: */
-	    JedisShardInfo shardInfo = new JedisShardInfo("<name>.redis.cache.chinacloudapi.cn", 6379);
+	    JedisShardInfo shardInfo = new JedisShardInfo("<name>.redis.cache.windows.net", 6379);
 	    shardInfo.setPassword("<key>"); /* Use your access key. */
 	    Jedis jedis = new Jedis(shardInfo);
      	jedis.set("foo", "bar");
      	String value = jedis.get("foo");
 	  }
-	} 
-    
+	}
 
-## Next steps
 
-- [Enable cache diagnostics](https://msdn.microsoft.com/zh-cn/library/azure/dn763945.aspx#EnableDiagnostics) so you can [monitor](https://msdn.microsoft.com/zh-cn/library/azure/dn763945.aspx) the health of your cache. 
-- Read the official [Redis documentation](http://redis.io/documentation).
+## 后续步骤
+
+- [启用缓存诊断](https://msdn.microsoft.com/library/azure/dn763945.aspx#EnableDiagnostics)，以便可以[监视](https://msdn.microsoft.com/library/azure/dn763945.aspx)缓存的运行状况。
+- 阅读官方 [Redis 文档](http://redis.io/documentation)。
 
 
 <!--Image references-->
@@ -83,3 +93,4 @@ Click the link under **Ports**, and click **No** for "Allow access only via SSL"
 [3]: ./media/cache-java-get-started/cache03.png
 [4]: ./media/cache-java-get-started/cache04.png
 
+<!---HONumber=71-->

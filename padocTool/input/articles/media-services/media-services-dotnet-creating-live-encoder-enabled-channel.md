@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="media-services"
-	ms.date="10/18/2015"
+	ms.date="12/17/2015"
 	wacn.date=""/>
 
 
@@ -20,11 +20,14 @@
 - [.NET](/documentation/articles/media-services-dotnet-creating-live-encoder-enabled-channel)
 - [REST API](https://msdn.microsoft.com/zh-cn/library/azure/dn783458.aspx)
 
+>[AZURE.NOTE]
+> To complete this tutorial, you need an Azure account. For details, see [Azure Trial](/pricing/1rmb-trial/?WT.mc_id=A261C142F). 
+
 ##Overview
 
 This tutorial walks you through the steps of creating a **Channel** that receives a single-bitrate live stream and encodes it to multi-bitrate stream.
 
->[AZURE.NOTE]For more conceptual information related to Channels that are enabled for live encoding, see [Working with Channels that Perform Live Encoding from a Single-bitrate to Multi-bitrate Stream](/documentation/articles/media-services-manage-live-encoder-enabled-channels).
+For more conceptual information related to Channels that are enabled for live encoding, see [Working with Channels that Perform Live Encoding from a Single-bitrate to Multi-bitrate Stream](/documentation/articles/media-services-manage-live-encoder-enabled-channels).
 
 
 ##Common Live Streaming Scenario
@@ -33,9 +36,9 @@ The following steps describe tasks involved in creating common live streaming ap
 
 >[AZURE.NOTE] Currently, the max recommended duration of a live event is 8 hours. Please contact amslived at WindowsAzure.cn if you need to run a Channel for longer periods of time.
 
-1. Connect a video camera to a computer. Launch and configure an on-premises live encoder that can output a single bitrate stream in one of the following protocols: RTMP, Smooth Streaming, or RTP (MPEG-TS). For more information, see [Azure Media Services RTMP Support and Live Encoders](http://go.microsoft.com/fwlink/?LinkId=532824).
+1. Connect a video camera to a computer. Launch and configure an on-premises live encoder that can output a single bitrate stream in one of the following protocols: RTMP, Smooth Streaming, or RTP (MPEG-TS). For more information, see [Azure Media Services RTMP Support and Live Encoders](https://azure.microsoft.com/zh-cn/blog/azure-media-services-rtmp-support-and-live-encoders/).
 
-	This step could also be performed after you create your Channel. 
+	This step could also be performed after you create your Channel.
 
 1. Create and start a Channel.
 
@@ -49,9 +52,9 @@ The following steps describe tasks involved in creating common live streaming ap
 
 2. Create an asset.
 3. If you want for the asset to be dynamically encrypted during playback, do the following:
-	1. Create a content key.
-	1. Configure the content key's authorization policy.
-	1. Configure asset delivery policy (used by dynamic packaging and dynamic encryption).
+1. Create a content key.
+1. Configure the content key's authorization policy.
+1. Configure asset delivery policy (used by dynamic packaging and dynamic encryption).
 3. Create a program and specify to use the asset that you created.
 1. Publish the asset associated with the program by creating an OnDemand locator.
 
@@ -62,7 +65,7 @@ The following steps describe tasks involved in creating common live streaming ap
 1. Stop the program whenever you want to stop streaming and archiving the event.
 1. Delete the Program (and optionally delete the asset).
 
-##In this topic
+## What you'll learn
 
 This topic shows you how to execute different operations on channels and programs using Media Services .NET SDK. Because many operations are long-running .NET APIs that manage long running operations are used.
 
@@ -78,20 +81,23 @@ The topic shows how to do the following:
 1. Clean up your channel and all the associated resources.
 
 
+##Prerequisites
+
+The following are required to complete the tutorial.
+
+- To complete this tutorial, you need an Azure account. 
+	
+	If you don't have an account, you can create a trial account in just a couple of minutes. For details, see [Azure Trial](/pricing/1rmb-trial/?WT.mc_id=A261C142F). You get credits that can be used to try out paid Azure services. Even after the credits are used up, you can keep the account and use free Azure services and features, such as the web sites feature in Azure Websites.
+- A Media Services account. To create a Media Services account, see [Create Account](/documentation/articles/media-services-create-account).
+- Visual Studio 2010 SP1 (Professional, Premium, Ultimate, or Express) or later versions.
+- You must use Media Services .NET SDK version 3.2.0.0 or newer.
+- A webcam and an encoder that can send a single bitrate live stream.
+
 ##Considerations
 
 - Currently, the max recommended duration of a live event is 8 hours. Please contact amslived at WindowsAzure.cn if you need to run a Channel for longer periods of time.
 - Make sure to have at least one streaming reserved unit on the streaming endpoint from which you want to stream content.
 
-##Prerequisites
-The following are required to complete the tutorial.
-
-- To complete this tutorial, you need an Azure account. If you don't have an account, you can create a trial account in just a couple of minutes.
-For details, see [Azure Trial](/pricing/1rmb-trial/).
-- A Media Services account. To create a Media Services account, see [Create Account](/documentation/articles/media-services-create-account).
-- Visual Studio 2010 SP1 or higher.
-- You must use Media Services .NET SDK version 3.2.0.0 or newer.
-- A webcam and an encoder that can send a single bitrate live stream.
 
 ##Set up for development with Media Services SDK for .NET
 
@@ -101,12 +107,12 @@ For details, see [Azure Trial](/pricing/1rmb-trial/).
 ##Connect to Media Services
 As a best practice, you should use an app.config file to store the Media Services name and account key.
 
->[AZURE.NOTE]To find the Name and Key values, go to the Azure Management Portal, select your Media Service account, and click on the “MANAGE KEYS” icon on the bottom of the portal window. Clicking on the icon next to each text box copies the value to the system clipboard.
+>[AZURE.NOTE]To find the Name and Key values, go to the Azure Management Portal, select your Media Service account, and click on the âMANAGE KEYSâ icon on the bottom of the portal window. Clicking on the icon next to each text box copies the value to the system clipboard.
 
 Add the appSettings section to the app.config file, and set the values for your Media Services account name and account key.
 
 
-	<?xml version="1.0"?>
+<?xml version="1.0"?>
 	<configuration>
 	  <appSettings>
 	      <add key="MediaServicesAccountName" value="YouMediaServicesAccountName" />
@@ -123,14 +129,10 @@ Add the appSettings section to the app.config file, and set the values for your 
 	using System.IO;
 	using System.Linq;
 	using System.Net;
-	using System.Security.Cryptography;
-	using System.Text;
-	using System.Threading.Tasks;
 	using Microsoft.WindowsAzure.MediaServices.Client;
-	using Newtonsoft.Json.Linq;
 	using Microsoft.WindowsAzure.MediaServices.Client.DynamicEncryption;
 	
-	namespace ConsoleApplication1
+	namespace EncodeLiveStreamWithAmsClear
 	{
 	    class Program
 	    {
@@ -172,10 +174,9 @@ Add the appSettings section to the app.config file, and set the values for your 
 	
 	            Console.WriteLine("Preview URL: {0}", previewEndpoint);
 	
-	            // Get a thumbnail preview of a live feed.
 	            // When Live Encoding is enabled, you can now get a preview of the live feed as it reaches the Channel. 
 	            // This can be a valuable tool to check whether your live feed is actually reaching the Channel. 
-	
+	            // The thumbnail is exposed via the same end-point as the Channel Preview URL.
 	            string thumbnailUri = new UriBuilder
 	            {
 	                Scheme = Uri.UriSchemeHttps,
@@ -203,13 +204,18 @@ Add the appSettings section to the app.config file, and set the values for your 
 	
 	        public static IChannel CreateAndStartChannel()
 	        {
+	            var channelInput = CreateChannelInput();
+	            var channePreview = CreateChannelPreview();
+	            var channelEncoding = CreateChannelEncoding();
+	
+	
 	            ChannelCreationOptions options = new ChannelCreationOptions
 	            {
 	                EncodingType = ChannelEncodingType.Standard,
 	                Name = ChannelName,
-	                Input = CreateChannelInput(),
-	                Preview = CreateChannelPreview(),
-	                Encoding = CreateChannelEncoding()
+	                Input = channelInput,
+	                Preview = channePreview,
+	                Encoding = channelEncoding
 	            };
 	
 	            Log("Creating channel");
@@ -333,6 +339,7 @@ Add the appSettings section to the app.config file, and set the values for your 
 	        /// <returns></returns>
 	        public static ILocator CreateLocatorForAsset(IAsset asset, TimeSpan ArchiveWindowLength)
 	        {
+             	// You cannot create a streaming locator using an AccessPolicy that includes write or delete permissions.            
 	            var locator = _context.Locators.CreateLocator
 	                (
 	                    LocatorType.OnDemandOrigin,
@@ -354,13 +361,16 @@ Add the appSettings section to the app.config file, and set the values for your 
 	        /// <param name="channel"></param>
 	        public static void StartStopAdsSlates(IChannel channel)
 	        {
+	            int cueId = new Random().Next(int.MaxValue);
+	            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\\..\\SlateJPG\\DefaultAzurePortalSlate.jpg"));
+	
 	            Log("Creating asset");
 	            var slateAsset = _context.Assets.Create("Slate test asset " + DateTime.Now.ToString("yyyy-MM-dd HH-mm"), AssetCreationOptions.None);
 	            Log("Slate asset created", slateAsset.Id);
 	
 	            Log("Uploading file");
-	            var assetFile = slateAsset.AssetFiles.Create("SlateTest.jpg");
-	            assetFile.Upload("SlateTest.jpg");
+	            var assetFile = slateAsset.AssetFiles.Create("DefaultAzurePortalSlate.jpg");
+	            assetFile.Upload(path);
 	            assetFile.IsPrimary = true;
 	            assetFile.Update();
 	
@@ -373,11 +383,11 @@ Add the appSettings section to the app.config file, and set the values for your 
 	            TrackOperation(hideSlateOperation, "Hide slate");
 	
 	            Log("Starting ad");
-	            var startAdOperation = channel.SendStartAdvertisementOperation(TimeSpan.FromMinutes(1), 0, false);
+	            var startAdOperation = channel.SendStartAdvertisementOperation(TimeSpan.FromMinutes(1), cueId, false);
 	            TrackOperation(startAdOperation, "Start ad");
 	
 	            Log("Ending ad");
-	            var endAdOperation = channel.SendEndAdvertisementOperation();
+	            var endAdOperation = channel.SendEndAdvertisementOperation(cueId);
 	            TrackOperation(endAdOperation, "End ad");
 	
 	            Log("Deleting slate asset");
@@ -497,20 +507,18 @@ Add the appSettings section to the app.config file, and set the values for your 
 	                operationId ?? string.Empty);
 	        }
 	    }
-	}
-	
+	}	
 
 
-##Next Steps
-<!-- deleted by customization
+Use the [User Voice](http://go.microsoft.com/fwlink/?linkid=698785&clcid=0x409) forum to provide feedback and make suggestions on how to improve Azure Media Services. You can also go directly to one of the following categories: 
 
-###Media Services learning paths
-
-You can view AMS learning paths here:
-
-- [AMS Live Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-live/)
-- [AMS on Demand Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-on-demand/)
--->
+- [Azure Media Player](https://feedback.azure.com/forums/169396-media-services/category/109320-azure-media-player)
+- [Client SDK Libraries](https://feedback.azure.com/forums/169396-media-services/category/144435-client-sdks)
+- [Encoding and Processing](https://feedback.azure.com/forums/169396-media-services/category/144411-encoding-and-processing)
+- [Live Streaming](https://feedback.azure.com/forums/169396-media-services/category/144414-live-streaming)
+- [Azure Management Portal](https://feedback.azure.com/forums/169396-media-services/category/144432-portal)
+- [REST API and Platform](https://feedback.azure.com/forums/169396-media-services/category/144423-rest-api-and-platform)
+- [VoD Streaming](https://feedback.azure.com/forums/169396-media-services/category/144429-vod-streaming)
 
 ### Looking for something else?
 

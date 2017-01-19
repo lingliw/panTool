@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-windows-classic-hybrid-test-env -->
+
 <properties
-	pageTitle="Hybrid cloud test environments in Azure | Windows Azure"
+	pageTitle="Hybrid cloud test environments in Azure | Azure"
 	description="Find the articles that describe how to build dev/test or proof-of-concept IT pro environments for your Azure-based hybrid cloud."
 	documentationCenter=""
 	services="virtual-machines"
@@ -10,18 +12,19 @@
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="09/16/2015"
+	ms.date="01/12/2016"
 	wacn.date=""/>
 
 # Azure hybrid cloud test environments
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating resources with the classic deployment model. 
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
+
 
 For dev/test or a proof-of-concept, hybrid cloud test environments use your local Internet connection and one of your public IP addresses and step you through setting up a functioning, cross-premises Azure Virtual Network (VNet). When you are finished, you can develop and test applications, experiment with simplified IT workloads, and gauge the performance of a site-to-site virtual private network (VPN) connection relative to your location on the Internet.
 
 ## Hybrid cloud base configuration
 
-The [hybrid cloud base configuration](/documentation/articles/virtual-networks-setup-hybrid-cloud-environment-testing) consists of:
+The [hybrid cloud base configuration](/documentation/articles/virtual-networks-setup-hybrid-cloud-environment-testing/) consists of:
 
 - A simplified on-premises network with four virtual machines (a domain controller, an application server, a client computer, and a VPN device running Windows Server and Routing and Remote Access)
 - An Azure virtual network with a replica domain controller
@@ -29,27 +32,21 @@ The [hybrid cloud base configuration](/documentation/articles/virtual-networks-s
 
 ## SharePoint intranet farm in a hybrid cloud
 
-The [SharePoint intranet farm in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-sharepoint-hybrid-cloud-testing) adds a SQL Server 2014 server and a SharePoint Server 2013 server to the hybrid cloud base configuration. This creates a two-tier SharePoint farm that you can access from the client computer on the simplified on-premises network.
+The [SharePoint intranet farm in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-sharepoint-hybrid-cloud-testing/) adds a SQL Server 2014 server and a SharePoint Server 2013 server to the hybrid cloud base configuration. This creates a two-tier SharePoint farm that you can access from the client computer on the simplified on-premises network.
 
 ## Web-based line-of-business (LOB) application in a hybrid cloud
 
-The [web-based LOB application in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-lobapp-hybrid-cloud-testing) adds a SQL Server 2014 server and an Internet Information Services (IIS) server to the hybrid cloud base configuration. This creates the infrastructure into which you can deploy and test a tiered, web-based LOB application.
+The [web-based LOB application in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-lobapp-hybrid-cloud-testing/) adds a SQL Server 2014 server and an Internet Information Services (IIS) server to the hybrid cloud base configuration. This creates the infrastructure in which you can deploy and test a tiered, web-based LOB application.
 
 ## Office 365 Directory Synchronization (DirSync) server in a hybrid cloud
 
-The [Office 365 DirSync server in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-dirsync-hybrid-cloud-testing) adds a DirSync server to the hybrid cloud base configuration and demonstrates Office 365 DirSync with password synchronization to a trial Office 365 subscription.
+The [Office 365 DirSync server in a hybrid cloud test environment](/documentation/articles/virtual-networks-setup-dirsync-hybrid-cloud-testing/) adds a DirSync server to the hybrid cloud base configuration and demonstrates Office 365 DirSync with password synchronization to a trial Office 365 subscription.
 
 ## Simulated hybrid cloud test environment
 
-For organizations and individuals for which a direct Internet connection and public IP address are not readily available, the [simulated hybrid cloud test environment](/documentation/articles/virtual-networks-setup-simulated-hybrid-cloud-environment-testing) builds out the simplified on-premises network in a separate Azure Virtual Network and then connects the two virtual networks with a VNet-to-VNet VPN connection.
+For organizations and individuals for which a direct Internet connection and public IP address are not readily available, the [simulated hybrid cloud test environment](/documentation/articles/virtual-networks-setup-simulated-hybrid-cloud-environment-testing/) builds out the simplified on-premises network in a separate Azure Virtual Network and then connects the two virtual networks with a VNet-to-VNet VPN connection.
 
 
-## Additional resources
+## Next step
 
-[SharePoint farms hosted in Azure Infrastructure Services](/documentation/articles/virtual-machines-sharepoint-infrastructure-services)
-
-[Azure Infrastructure Services Workload: High-availability line of business application](/documentation/articles/virtual-machines-workload-high-availability-LOB-application)
-
-[Deploy Office 365 Directory Synchronization (DirSync) in Microsoft Azure](https://technet.microsoft.com/zh-CN/library/dn635310.aspx)
-
-[Azure infrastructure services implementation guidelines](/documentation/articles/virtual-machines-infrastructure-services-implementation-guidelines)
+- Learn about [implementation guidelines](/documentation/articles/virtual-machines-linux-infrastructure-service-guidelines/) to design a custom dev/test or production deployment in Azure infrastruture services.

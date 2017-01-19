@@ -41,7 +41,7 @@
 
     >[AZURE.NOTE]The client secret and package SID are important security credentials. Do not share these secrets with anyone or distribute them with your app.
 
-10. Log on to the [Azure Management Portal], click **Mobile Services**, and then click your app.
+10. Log on to the [Azure classic portal](https://manage.windowsazure.cn/), click **Mobile Services**, and then click your app.
 
 11. Click the **Identity** tab, enter the **Client Secret** and **Package SID** values obtained from WNS in Step 4, and then click **Save**.
 
@@ -61,4 +61,4 @@ You are now ready to use a Microsoft account for authentication in your app.
 <!-- URLs. -->
 [Get started with Mobile Services]: /zh-cn/documentation/articles/mobile-services-javascript-backend-windows-store-dotnet-get-started/#create-new-service
 [Submit an app page]: http://go.microsoft.com/fwlink/p/?LinkID=266582
-[Azure Management Portal]: https://manage.windowsazure.cn/
+

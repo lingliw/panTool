@@ -1,4 +1,4 @@
-If you need to review the deployment output, including the custom deployment script output, navigate to the  **DEPLOYMENTS** page on the Azure Management Portal.
+If you need to review the deployment output, including the custom deployment script output, navigate to the  **DEPLOYMENTS** page on the Azure Classic Management portal.
 
 Expand the desired deployment:
 
@@ -7,3 +7,4 @@ Expand the desired deployment:
 Click on **View Log** to see the output of the custom deployment script:
 
 ![](./media/web-sites-python-troubleshoot-deployment/portal-deployment-log.png)
+

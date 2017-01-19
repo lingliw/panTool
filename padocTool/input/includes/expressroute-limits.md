@@ -18,13 +18,12 @@ The following limits apply to ExpressRoute resources per subscription.
 
 | **Circuit Size** | **Number of VNet links for standard** | **Number of VNet Links with Premium add-on** |
 |---|---|---|
-| 10 Mbps | 10 | Not Supported |
 | 50 Mbps | 10 | 20 |
 | 100 Mbps | 10 | 25 |
 | 200 Mbps | 10 | 25 |
 | 500 Mbps | 10 | 40 |
 | 1 Gbps | 10 | 50 |
-| 2 Gbps | 10 | 50 |
-| 5 Gbps | 10 | 50 |
+| 2 Gbps | 10 | 60 |
+| 5 Gbps | 10 | 75 |
 | 10 Gbps | 10 | 100 |
 

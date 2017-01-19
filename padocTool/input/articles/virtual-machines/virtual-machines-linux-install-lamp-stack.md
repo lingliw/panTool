@@ -1,15 +1,17 @@
+<!-- deleted in Global -->
+
 <properties
-	pageTitle="Install the LAMP stack on a Linux virtual machine | Windows Azure"
+	pageTitle="Install the LAMP stack on a Linux virtual machine | Azure"
 	description="Learn how to install the LAMP stack on a Linux virtual machine (VM) in Azure."
-	services="virtual-machines"
+	services="virtual-machines-linux"
 	documentationCenter=""
 	authors="szarkos"
 	manager="timlt"
 	editor=""
-	tags=¡°azure-service-management,azure-resource-manager"/>
+	tags="azure-service-management,azure-resource-manager"/>
 
 <tags
-	ms.service="virtual-machines"
+	ms.service="virtual-machines-linux"
 	ms.date="07/29/2015"
 	wacn.date=""/>
 
@@ -17,7 +19,8 @@
 
 #Install the LAMP Stack on a Linux virtual machine in Azure
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating a resource with the Resource Manager deployment model or the classic deployment model.
+[AZURE.INCLUDE [learn-about-deployment-models](../../includes/learn-about-deployment-models-both-include.md)]
+
 
 A LAMP stack consists of the following different elements:
 
@@ -100,9 +103,9 @@ Setting Up
 
 		- CentOS & Oracle: `sudo service httpd restart`
 
-	- Apache listens on port 80 by default. You may need to open an endpoint to access your Apache server remotely.  Please see the documentation on [configuring endpoints](/documentation/articles/virtual-machines-set-up-endpoints) for more detailed instructions.
+	- Apache listens on port 80 by default. You may need to open an endpoint to access your Apache server remotely.  Please see the documentation on [configuring endpoints](/documentation/articles/virtual-machines-linux-classic-setup-endpoints/) for more detailed instructions.
 
-	- You can now check to see that Apache is running and serving content. Point your browser to `http://[MYSERVICE].cloudapp.net`, where **[MYSERVICE]** is the name of the cloud service in which your virtual machine resides. On some distributions you may be greeted by a default web page that simply states "It works!". On others you may see a more complete web page with links to additional documentation and content for configuring the Apache server.
+	- You can now check to see that Apache is running and serving content. Point your browser to `http://[MYSERVICE].chinacloudapp.cn`, where **[MYSERVICE]** is the name of the cloud service in which your virtual machine resides. On some distributions you may be greeted by a default web page that simply states "It works!". On others you may see a more complete web page with links to additional documentation and content for configuring the Apache server.
 
 2. Set up **MySQL**
 
@@ -117,7 +120,7 @@ Setting Up
 
 ##Further Reading
 
-Suppose you want to automate these steps to deploy applications to remote Linux virtual machines? You can do this using the Linux CustomScript extension. See [Deploy a LAMP app using the Azure CustomScript Extension for Linux](/documentation/articles/virtual-machines-linux-script-lamp).
+Suppose you want to automate these steps to deploy applications to remote Linux virtual machines? You can do this using the Linux CustomScript extension. See [Deploy a LAMP app using the Azure CustomScript Extension for Linux](/documentation/articles/virtual-machines-linux-classic-lamp-script/).
 
 There are many other resources for setting up a LAMP stack on Ubuntu.
 

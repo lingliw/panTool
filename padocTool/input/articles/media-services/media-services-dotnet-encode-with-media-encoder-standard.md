@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="media-services"
-	ms.date="10/15/2015"
+	ms.date="12/02/2015"
 	wacn.date=""/>
 
 
@@ -17,11 +17,26 @@
 
 Encoding jobs are one of the most common processing operations in Media Services. You create encoding jobs to convert media files from one encoding to another. When you encode, you can use the Media Services built-in Media Encoder. You can also use an encoder provided by a Media Services partner; third party encoders are available through the Azure Marketplace. 
 
-This topic shows how to use .NET to encode your assets with Media Encoder Standard. Media Encoder Standard is configured using one of the encoder presets described [here](https://msdn.microsoft.com/zh-cn/library/azure/mt269960.aspx).
+This topic shows how to use .NET to encode your assets with Media Encoder Standard (MES). Media Encoder Standard is configured using one of the encoder presets described [here](https://msdn.microsoft.com/zh-cn/library/azure/mt269960.aspx).
 
 It is recommended to always encode your mezzanine files into an adaptive bitrate MP4 set and then convert the set to the desired format using the [Dynamic Packaging](/documentation/articles/media-services-dynamic-packaging-overview). To take advantage of dynamic packaging, you must first get at least one On-demand streaming unit for the streaming endpoint from which you plan to delivery your content. For more information, see [How to Scale Media Services](/documentation/articles/media-services-manage-origins#scale_streaming_endpoints).
 
 If your output asset is storage encrypted, you must configure asset delivery policy. For more information see [Configuring asset delivery policy](/documentation/articles/media-services-dotnet-configure-asset-delivery-policy).
+
+###MES Formats
+
+[Formats and codecs](/documentation/articles/media-services-media-encoder-standard-formats)
+
+###MES Presets
+
+Media Encoder Standard is configured using one of the encoder presets described [here](https://msdn.microsoft.com/zh-cn/library/azure/mt269960.aspx).
+
+###MES Input and output metadata
+
+The encoders input metadata is described [here](http://msdn.microsoft.com/zh-cn/library/azure/dn783120.aspx).
+
+The encoders output metadata is described [here](http://msdn.microsoft.com/zh-cn/library/azure/dn783217.aspx).
+
 
 ##Example
 
@@ -109,15 +124,16 @@ The following code example uses Media Services .NET SDK to perform the following
 		    return processor;
 		}
 
-<!-- deleted by customization
 
-##Media Services learning paths
+Use the [User Voice](http://go.microsoft.com/fwlink/?linkid=698785&clcid=0x409) forum to provide feedback and make suggestions on how to improve Azure Media Services. You can also go directly to one of the following categories: 
 
-You can view AMS learning paths here:
-
-- [AMS Live Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-live/)
-- [AMS on Demand Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-on-demand/)
--->
+- [Azure Media Player](https://feedback.azure.com/forums/169396-media-services/category/109320-azure-media-player)
+- [Client SDK Libraries](https://feedback.azure.com/forums/169396-media-services/category/144435-client-sdks)
+- [Encoding and Processing](https://feedback.azure.com/forums/169396-media-services/category/144411-encoding-and-processing)
+- [Live Streaming](https://feedback.azure.com/forums/169396-media-services/category/144414-live-streaming)
+- [Azure Management Portal](https://feedback.azure.com/forums/169396-media-services/category/144432-portal)
+- [REST API and Platform](https://feedback.azure.com/forums/169396-media-services/category/144423-rest-api-and-platform)
+- [VoD Streaming](https://feedback.azure.com/forums/169396-media-services/category/144429-vod-streaming)
 
 ##See Also 
 

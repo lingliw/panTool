@@ -1,14 +1,12 @@
 To be able to store app data in the new mobile service, you must first create a new table in the associated SQL Database instance.
 
-1. In the Management Portal, click **Mobile Services**, and then click the mobile service that you just created.
+1. In the [Azure classic portal](https://manage.windowsazure.cn/), click **Mobile Services**, and then click the mobile service that you just created.
 
 2. Click the **Data** tab, then click **+Create**.
 
    	This displays the **Create new table** dialog.
 
-3. In **Table name** type _TodoItem_, then click the check button.
-
-  This creates a new storage table **TodoItem** with the default permissions set. This means that anyone with the application key, which is distributed with your app, can access and change data in the table. 
+3. In **Table name** type _TodoItem_, then click the check button. This creates a new storage table **TodoItem** with the default permissions set. This means that anyone with the application key, which is distributed with your app, can access and change data in the table. 
 
 	>[AZURE.NOTE] The same table name is used in Mobile Services quickstart. However, each table is created in a schema that is specific to a given mobile service. This is to prevent data collisions when multiple mobile services use the same database.
 

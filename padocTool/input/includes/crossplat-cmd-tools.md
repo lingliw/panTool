@@ -46,7 +46,7 @@ To test the installation, type `azure` at the command prompt. If the installatio
 
 To use the Azure Command-Line Tools for Mac and Linux, you will need an Azure account.
 
-Open a web browser and browse to [http://www.windowsazure.com][windowsazuredotcom] and click **free trial** in the upper right corner.
+Open a web browser and browse to [http://www.windowsazure.cn][windowsazuredotcom] and click **free trial** in the upper right corner.
 
 ![Azure Web Site][Azure Web Site]
 
@@ -74,17 +74,11 @@ To see a list of options for `account` commands, use the `-help` option:
 
 After importing your publish settings, you should delete the `.publishsettings` file for security reasons.
 
-<div class="dev-callout"> 
-<b>Note</b> 
-<p>When you import publish settings, credentials for accessing your Azure subscription are stored inside your <code>user</code> folder. Your <code>user</code> folder is protected by your operating system. However, it is recommended that you take additional steps to encrypt your <code>user</code> folder. You can do so in the following ways:</p>
-
-<ul>
-<li>On Windows, modify the folder properties or use BitLocker.</li>
-<li>On Mac, turn on FileVault for the folder.</li>
-<li>On Ubuntu, use the Encrypted Home directory feature. Other Linux distributions offer equivalent features.</li>
-</ul>
-
-</div>
+> [AZURE.NOTE] When you import publish settings, credentials for accessing your Azure subscription are stored inside your `user` folder. Your `user` folder is protected by your operating system. However, it is recommended that you take additional steps to encrypt your `user` folder. You can do so in the following ways:    
+> 
+> - On Windows, modify the folder properties or use BitLocker.
+> - On Mac, turn on FileVault for the folder.
+> - On Ubuntu, use the Encrypted Home directory feature. Other Linux distributions offer equivalent features.
 
 You are now ready to being creating and managing Azure Websites and Azure Virtual Machines.  
 
@@ -191,7 +185,7 @@ Instead of creating an image from a local .vhd, you can create an image from a .
 
 After creating an image, you can provision a virtual machine from the image by using `vm create`. The command below creates a virtual machine called `myVM` from the image created above (`myImage`).
 
-	azure vm create myVM myImage myusername --location "West US"
+	azure vm create myVM myImage myusername --location "China East"
 
 After you have provisioned a virtual machine, you may want to create endpoints to allow remote access to your virtual machine (for example). The following example uses the `vm create endpoint` command to open external port 22 and local port 22 on `myVM`:
 
@@ -224,5 +218,5 @@ For a complete list of commands for creating and managing virtual machines, use 
 [mac-installer]: http://go.microsoft.com/fwlink/?LinkId=252249
 [windows-installer]: http://go.microsoft.com/fwlink/?LinkID=275464
 [reference-docs]: http://go.microsoft.com/fwlink/?LinkId=252246
-[windowsazuredotcom]: http://www.windowsazure.com
+[windowsazuredotcom]: http://www.windowsazure.cn
 

@@ -1,29 +1,33 @@
-<properties 
-   pageTitle="Extend on-premises AlwaysOn Availability Groups to Azure"
-   description="This tutorial describes how to use the Add Replica wizard in SQL Server Management Studio (SSMS) to add an AlwaysOn Availability Group replica in Azure."
-   services="virtual-machines"
-   documentationCenter="na"
-   authors="rothja"
-   manager="jeffreyg"
-   editor="monicar" />
-<tags 
-   ms.service="virtual-machines"
-   ms.date="08/17/2015"
-   wacn.date="" />
+<!-- rename to virtual-machines-windows-classic-sql-onprem-availability -->
+
+<properties
+	pageTitle="Extend on-premises AlwaysOn Availability Groups to Azure | Azure"
+	description="This tutorial uses resources created with the classic deployment model, and describes how to use the Add Replica wizard in SQL Server Management Studio (SSMS) to add an AlwaysOn Availability Group replica in Azure."
+	services="virtual-machines"
+	documentationCenter="na"
+	authors="rothja"
+	manager="jeffreyg"
+	editor="monicar"
+	tags="azure-service-management"/>
+
+<tags
+	ms.service="virtual-machines"
+	ms.date="02/03/2016"
+	wacn.date=""/>
 
 # Extend on-premises AlwaysOn Availability Groups to Azure
 
 AlwaysOn Availability Groups provide high availability for groups of database by adding secondary replicas. These replicas allow failing over databases in case of a failure. In addition they can be used to offload read workloads or backup tasks.
 
-You can extend on-premises Availability Groups to Windows Azure by provisioning one or more Azure VMs with SQL Server and then adding them as replicas to your on-premises Availability Groups.
+You can extend on-premises Availability Groups to Azure by provisioning one or more Azure VMs with SQL Server and then adding them as replicas to your on-premises Availability Groups.
 
 This tutorial assumes you have the following:
 
-- An active Azure subscription. You can [sign up for a trial](/pricing/1rmb-trial).
+- An active Azure subscription. You can [sign up for a trial](/pricing/1rmb-trial/).
 
 - An existing AlwaysOn Availability Group on-premises. For more information on Availability Groups, see [AlwaysOn Availability Groups](https://msdn.microsoft.com/zh-cn/library/hh510230.aspx).
 
-- Connectivity between the on-premises network and your Azure virtual network. For more information about creating this virtual network, see [Configure a Site-to-Site VPN in the Management Portal](/documentation/articles/vpn-gateway-site-to-site-create).
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
 ## Add Azure Replica Wizard
 
@@ -57,7 +61,7 @@ This section shows you how to use the **Add Azure Replica Wizard** to extend you
 |**VM Username**|Specify a user name that will become the administrator account on the VM|
 |**VM Administrator Password**|Specify a password for the new account|
 |**Confirm Password**|Confirm the password of the new account|
-|**Virtual Network**|Specify the Azure virtual network that the new VM should use. For more information on virtual networks, see [Virtual Network Overview](/documentation/articles/virtual-networks-overview).|
+|**Virtual Network**|Specify the Azure virtual network that the new VM should use. For more information on virtual networks, see [Virtual Network Overview](/documentation/articles/virtual-networks-overview/).|
 |**Virtual Network Subnet**|Specify the virtual network subnet that the new VM should use|
 |**Domain**|Confirm the pre-populated value for the domain is correct|
 |**Domain User Name**|Specify an account that is in the local administrators group on the local cluster nodes|
@@ -83,14 +87,14 @@ This section shows you how to use the **Add Azure Replica Wizard** to extend you
 
 1. The provisioning process begins. When the wizard completes successfully, click **Close** to exit out of the wizard.
 
->[AZURE.NOTE] The Add Azure Replica Wizard creates a log file in <Users>\<user name>\AppData\Local\SQL Server\AddReplicaWizard. This log file can be used to troubleshoot failed Azure replica deployments. If the Wizard fails executing any action, all previous operations are rolled back, including deleting the provisioned VM.
+>[AZURE.NOTE] The Add Azure Replica Wizard creates a log file in Users\User Name\AppData\Local\SQL Server\AddReplicaWizard. This log file can be used to troubleshoot failed Azure replica deployments. If the Wizard fails executing any action, all previous operations are rolled back, including deleting the provisioned VM.
 
-## Create an Availability Group Listener
+## Create an availability group listener
 
-After the availability group has been created, you should create a listener for clients to connect to the replicas. Listeners direct incoming connections to either the primary or a read-only secondary replica. For more information on listeners, see [Configure an ILB listener for AlwaysOn Availability Groups in Azure](/documentation/articles/virtual-machines-sql-server-configure-ilb-alwayson-availability-group-listener).
+After the availability group has been created, you should create a listener for clients to connect to the replicas. Listeners direct incoming connections to either the primary or a read-only secondary replica. For more information on listeners, see [Configure an ILB listener for AlwaysOn Availability Groups in Azure](/documentation/articles/virtual-machines-windows-classic-ps-sql-int-listener/).
 
-## Next Steps
+## Next steps
 
-In addition to using the **Add Azure Replica Wizard** to extend your AlwaysOn Availability Group to Azure, you might also move some SQL Server workloads completely to Azure. To get started, see [Provisioning a SQL Server Virtual Machine on Azure](virtual-machines-provision-sql-server).
+In addition to using the **Add Azure Replica Wizard** to extend your AlwaysOn Availability Group to Azure, you might also move some SQL Server workloads completely to Azure. To get started, see [Provisioning a SQL Server Virtual Machine on Azure](/documentation/articles/virtual-machines-windows-classic-ps-sql-create/).
 
-For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines](/documentation/articles/virtual-machines-sql-server-infrastructure-services).
+For other topics related to running SQL Server in Azure VMs, see [SQL Server on Azure Virtual Machines](/documentation/articles/virtual-machines-windows-sql-server-iaas-overview/).

@@ -1,6 +1,8 @@
+<!-- deleted in Global -->
+
 <properties
-	pageTitle="Using the Windows Azure CLI for Mac, Linux, and Windows with Azure Resource Management | Windows Azure"
-	description="Using the Windows Azure CLI for Mac, Linux, and Windows with Azure Resource Manager."
+	pageTitle="CLI for Mac, Linux, and Windows | Azure"
+	description="Using the Azure CLI for Mac, Linux, and Windows with Azure Resource Manager."
 	editor="tysonn"
 	manager="timlt"
 	documentationCenter=""
@@ -15,13 +17,16 @@
 # Use the Azure CLI for Mac, Linux, and Windows with Azure Resource Manager
 
 > [AZURE.SELECTOR]
-- [Azure PowerShell](/documentation/articles/powershell-azure-resource-manager)
-- [Azure CLI](/documentation/articles/xplat-cli-azure-resource-manager)
+- [Azure PowerShell](/documentation/articles/powershell-azure-resource-manager/)
+
+<br>
+
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
 
 
 This article describes how to create, manage, and delete Azure resources and VMs using the Azure CLI for Mac, Linux, and Windows using the Azure Resource Manager mode.  
 
->[AZURE.NOTE] To create and manage Azure resources on the command line, you will need an Azure account ([trial here](/pricing/1rmb-trial/)). You will also need to [install the Azure CLI](/documentation/articles/xplat-cli-install), and to [log on to use Azure resources associated with your account](/documentation/articles/xplat-cli-connect). If you've done these things, you're ready to go.
+>[AZURE.NOTE] To create and manage Azure resources on the command line, you will need an Azure account ([trial here](/pricing/1rmb-trial/)). You will also need to [install the Azure CLI](/documentation/articles/xplat-cli-install/), and to [log on to use Azure resources associated with your account](/documentation/articles/xplat-cli-connect/). If you've done these things, you're ready to go.
 
 ## Azure resources
 
@@ -29,15 +34,15 @@ Use the Azure Resource Manager to manage a group of _resources_ (user-managed en
 
 Using the Azure Resoure Manager mode, you can also manage your Azure resources in a _declarative_ way by describing the structure and relationships of a deployable group of resources in JSON *templates*. The template describes parameters that can be filled in either inline when running a command or stored in a separate JSON azuredeploy-parameters.json file. This allows you to easily create new resources using the same template by simply providing different parameters. For example, a template that creates a website will have parameters for the site name, the region the website will be located in, and other common parameters.
 
-When a template is used to modify or create a group, a _deployment_ is created, which is then applied to the group. For more information on the Azure Resource Manager, visit the [Azure Resource Manager Overview](/documentation/articles/resource-group-overview).
+When a template is used to modify or create a group, a _deployment_ is created, which is then applied to the group. For more information on the Azure Resource Manager, visit the [Azure Resource Manager Overview](/documentation/articles/resource-group-overview/).
 
 ## Authentication
 
-Working with the Azure Resource Manager through the Azure CLI requires that you authenticate to Windows Azure using a work or school account. Authenticating with a certificate installed through a .publishsettings file will not work.
+Working with the Azure Resource Manager through the Azure CLI requires that you authenticate to Azure using a work or school account. Authenticating with a certificate installed through a .publishsettings file will not work.
 
-For more information on authenticating using a work or school account, see [Connect to an Azure subscription from the Azure CLI](/documentation/articles/xplat-cli-connect).
+For more information on authenticating using a work or school account, see [Connect to an Azure subscription from the Azure CLI](/documentation/articles/xplat-cli-connect/).
 
-> [AZURE.NOTE] Because you use a work or school account -- which is managed by Azure Active Directory -- you can also use Azure Role-Based Access Control (RBAC) to manage access and usage of Azure resources. For details, see [Managing and Auditing Access to Resources](/documentation/articles/resource-group-rbac).
+> [AZURE.NOTE] Because you use a work or school account -- which is managed by Azure Active Directory -- you can also use Azure Role-Based Access Control (RBAC) to manage access and usage of Azure resources. For details, see [Managing and Auditing Access to Resources](/documentation/articles/resource-group-rbac/).
 
 ## Setting the Azure Resource Manager mode
 
@@ -108,7 +113,7 @@ You should be able to create a NIC using these resources with the **network nic 
 
 >[AZURE.NOTE] Although optional, it is very important to pass the public IP name as a parameter to the **network nic create** command as this binds the NIC to this IP, which will be later used to SSH into the virtual machine created using this NIC.
 
-For more imformation on the **network** commands, see command-line help or [Using the Azure CLI with Azure Resource Management](/documentation/articles/azure-cli-arm-commands).
+For more imformation on the **network** commands, see command-line help or [Using the Azure CLI with Azure Resource Management](/documentation/articles/azure-cli-arm-commands/).
 
 #### Finding the operating system image
 
@@ -158,7 +163,7 @@ Then SSH into it by using the **ssh username@ipaddress** command. To quickly loo
 
 	azure network public-ip show "testrg" "testip"
 
-Managing this virtual machine is easy with **vm** commands. For more information, visit [Using the Azure CLI with Azure Resource Management](/documentation/articles/azure-cli-arm-commands).
+Managing this virtual machine is easy with **vm** commands. For more information, visit [Using the Azure CLI with Azure Resource Management](/documentation/articles/azure-cli-arm-commands/).
 
 ### vm quick-create shortcut
 
@@ -212,7 +217,7 @@ The Azure CLI will create a virtual machine with default VM size. It will also c
 
 	When using a template, you can supply parameters either as part of the command-line parameters, or by specifying a file containing the parameter values. You can also write your **value** fields directly inside the **parameters** section in the template, although that would make the template tightly bound to a particular deployment and wouldn't be reusable easily. Either way, the parameters must be in JSON format, and you must provide your own values for those keys that do not have default values.
 
-	For example, to create a file that contains parameters for the CoreOS.CoreOSStable.0.2.40-preview template, use the following data to create a file named params.json. Replace the values used in this sample with your own values. The **Location** should specify an Azure region near you, such as **North Europe** or **South Central US**. (This example uses **China North**).
+	For example, to create a file that contains parameters for the CoreOS.CoreOSStable.0.2.40-preview template, use the following data to create a file named params.json. Replace the values used in this sample with your own values. The **Location** should specify an Azure region near you, such as **China North** or **China East**. (This example uses **China North**).
 
 		{
 		  "newStorageAccountName": {
@@ -334,11 +339,11 @@ To view logged information on operations performed on a group, use the `azure gr
 ## Next steps
 
 * For information on using the Azure Command-Line Interface (Azure CLI), see [Install and Configure the Azure CLI][clisetup].
-* For information on working with Azure Resource Manager using Azure PowerShell, see [Using Azure PowerShell with Azure Resource Manager](/documentation/articles/powershell-azure-resource-manager).
-* For information on working with Azure Resource Manager from the Azure Portal, see [Using resource groups to manage your Azure resources][psrm].
+* For information on working with Azure Resource Manager using Azure PowerShell, see [Using Azure PowerShell with Azure Resource Manager](/documentation/articles/powershell-azure-resource-manager/).
+* For information on working with Azure Resource Manager from the Azure Management Portal, see [Using resource groups to manage your Azure resources][psrm].
 
-[signuporg]: http://www.windowsazure.com/documentation/articles/sign-up-organization/
+[signuporg]: /documentation/articles/sign-up-organization/
 [adtenant]: http://technet.microsoft.com/zh-cn/library/jj573650#createAzureTenant
-[portal]: https://manage.windowsazure.com/
-[clisetup]: /documentation/articles/xplat-cli
+[portal]: https://manage.windowsazure.cn/
+[clisetup]: /documentation/articles/xplat-cli-install/
 [psrm]: http://go.microsoft.com/fwlink/?LinkId=394760

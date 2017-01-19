@@ -32,7 +32,7 @@ The Table service contains the following components:
     OData protocol. For more information, see [OData.org][]
 
 -   **Storage Account:** All access to Azure Storage is done
-    through a storage account. See [Azure Storage Scalability and Performance Targets](/documentation/articles/storage-scalability-targets) for details about storage account capacity.
+    through a storage account. See [Azure Storage Scalability and Performance Targets](/documentation/articles/storage-scalability-targets/) for details about storage account capacity.
 
 -   **Table**: A table is a collection of entities. Tables don't enforce
     a schema on entities, which means a single table can contain
@@ -50,7 +50,7 @@ The Table service contains the following components:
     quickly, and inserted/updated in atomic operations. An entity's row
     key is its unique identifier within a partition.
 
-
+For details about naming tables and properties, see [Understanding the Table Service Data Model](https://msdn.microsoft.com/zh-cn/library/azure/dd179338.aspx).
   
   [Table1]: ./media/storage-table-concepts-include/table1.png
   [OData.org]: http://www.odata.org/

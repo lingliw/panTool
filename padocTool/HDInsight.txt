@@ -1,2 +1,0 @@
-hdinsight-storm-develop-java-event-hub-topology.md
-hdinsight-storm-develop-python-topology.md

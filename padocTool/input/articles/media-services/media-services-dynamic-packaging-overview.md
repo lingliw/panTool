@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="media-services"
-	ms.date="09/07/2015"
+	ms.date="12/05/2015"
 	wacn.date=""/>
 
 
@@ -17,7 +17,7 @@
 
 ##Overview
 
-Windows Azure Media Services can be used to deliver many media source file formats, media streaming formats, and content protection formats to a variety of client technologies (for example, iOS, XBOX, Silverlight, Windows 8). These clients understand different protocols, for example iOS requires an HTTP Live Streaming (HLS) V4 format and Silverlight and Xbox require Smooth Streaming. If you have a set of adaptive bitrate (multi-bitrate) MP4 (ISO Base Media 14496-12) files or a set of adaptive bitrate Smooth Streaming files that you want to serve to clients that understand MPEG DASH, HLS or Smooth Streaming, you should take advantage of Media Services dynamic packaging.  
+Windows Azure Media Services can be used to deliver many media source file formats, media streaming formats, and content protection formats to a variety of client technologies (for example, iOS, XBOX, Silverlight, Windows 8). These clients understand different protocols, for example iOS requires an HTTP Live Streaming (HLS) V4 format and Silverlight and Xbox require Smooth Streaming. If you have a set of adaptive bitrate (multi-bitrate) MP4 (ISO Base Media 14496-12) files or a set of adaptive bitrate Smooth Streaming files that you want to serve to clients that understand MPEG DASH, HLS or Smooth Streaming, you should take advantage of Media Services dynamic packaging.
 
 With dynamic packaging all you need is to create an asset that contains a set of adaptive bitrate MP4 files or adaptive bitrate Smooth Streaming files. Then, based on the specified format in the manifest or fragment request, the On-Demand Streaming server will ensure that you receive the stream in the protocol you have chosen. As a result, you only need to store and pay for the files in single storage format and Media Services service will build and serve the appropriate response based on requests from a client.
 
@@ -58,11 +58,19 @@ For information about how to upload and encode assets see the following articles
 
 Upload your files using **Azure Management Portal**, **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-upload-files](../includes/media-services-selector-upload-files.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content)
+- [.NET](/documentation/articles/media-services-dotnet-upload-files)
+- [REST API](/documentation/articles/media-services-rest-upload-files)
+
 
 Encode with **Azure Media Encoder** using **Azure Management Portal**, **.NET**, or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-encode](../includes/media-services-selector-encode.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content#encode)
+- [.NET](/documentation/articles/media-services-dotnet-encode-asset)
+- [REST API](/documentation/articles/media-services-rest-encode-asset)
+
 
 
 ###Upload existing adaptive bitrate sets and validate them using the Media Packager
@@ -79,11 +87,18 @@ For information on how to create locators and use dynamic packaging to stream yo
 
 Configure asset delivery policy using **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-asset-delivery-policy](../includes/media-services-selector-asset-delivery-policy.md)]
+> [AZURE.SELECTOR]
+- [.NET](/documentation/articles/media-services-dotnet-configure-asset-delivery-policy)
+- [REST API](/documentation/articles/media-services-rest-configure-asset-delivery-policy)
+- [Java](https://github.com/southworkscom/azure-sdk-for-media-services-java-samples)
 
 Publish assets (by creating Locators) using **Azure Management Portal** or **.NET**.
 
-[AZURE.INCLUDE [media-services-selector-publish](../includes/media-services-selector-publish.md)]
+> [AZURE.SELECTOR]
+- [Portal](/documentation/articles/media-services-manage-content#publish)
+- [.NET](/documentation/articles/media-services-deliver-streaming-content)
+- [REST API](/documentation/articles/media-services-rest-deliver-streaming-content)
+
 
 
 ##<a id="unsupported_formats"></a>Formats that are not supported by dynamic packaging
@@ -93,12 +108,3 @@ The following source file formats are not supported by dynamic packaging.
 - Dolby digital plus mp4 files.
 - Dolby digital plus smooth files.
 
-<!-- deleted by customization
-
-##Media Services learning paths
-
-You can view AMS learning paths here:
-
-- [AMS Live Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-live/)
-- [AMS on Demand Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-on-demand/)
--->

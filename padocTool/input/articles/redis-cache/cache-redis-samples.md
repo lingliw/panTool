@@ -1,15 +1,15 @@
 <properties 
-	pageTitle="Azure Redis Cache samples" 
+	pageTitle="Azure Redis Cache samples | Azure" 
 	description="Learn how to use Azure Redis Cache" 
 	services="redis-cache" 
 	documentationCenter="" 
 	authors="steved0x" 
-	manager="dwrede" 
+	manager="douge" 
 	editor=""/>
 
 <tags
 	ms.service="cache"
-	ms.date="08/25/2015"
+	ms.date="06/09/2016"
 	wacn.date=""/>
 
 # Azure Redis Cache samples 
@@ -31,14 +31,13 @@ This sample shows how to:
 -	Work with Redis lists and sorted sets
 -	Store .NET objects using JsonConvert serializers
 -	Use Redis sets to implement tagging
+-	Work with Redis Cluster
 
 For more information, see the [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) documentation on github, and for more usage scenarios see the [StackExchange.Redis.Tests](https://github.com/StackExchange/StackExchange.Redis/tree/master/StackExchange.Redis.Tests) unit tests.
 
-[How to use Azure Redis Cache with Python](/documentation/articles/cache-python-get-started) shows how to get started with Azure Redis Cache using Python and the [redis-py](https://github.com/andymccurdy/redis-py) client.
+[How to use Azure Redis Cache with Python](/documentation/articles/cache-python-get-started/) shows how to get started with Azure Redis Cache using Python and the [redis-py](https://github.com/andymccurdy/redis-py) client.
 
-The [PHP example](https://msdn.microsoft.com/zh-cn/library/azure/dn690470.aspx#PHPExample) shows you how to get started using Azure Redis Cache with PHP and the [predis](https://github.com/nrk/predis) client.
-
-[Work with .NET objects in the cache](https://msdn.microsoft.com/zh-cn/library/azure/dn690521.aspx#Objects) shows you one way to serialize .NET objects so you can write them to and read them from an Azure Redis Cache instance. 
+[Work with .NET objects in the cache](/documentation/articles/cache-dotnet-how-to-use-azure-redis-cache/#work-with-net-objects-in-the-cache) shows you one way to serialize .NET objects so you can write them to and read them from an Azure Redis Cache instance. 
 
 ## Use Redis Cache as a Scale out Backplane for ASP.NET SignalR
 
@@ -61,7 +60,7 @@ The [Manage Azure Redis Cache using Azure Management Libraries](https://github.c
 
 ## Custom monitoring sample
 
-The [Access Redis Cache Monitoring data](https://github.com/rustd/RedisSamples/tree/master/CustomMonitoring) sample demonstrates how you can access monitoring data for your Azure Redis Cache outside of the Azure  preview portal.
+The [Access Redis Cache Monitoring data](https://github.com/rustd/RedisSamples/tree/master/CustomMonitoring) sample demonstrates how you can access monitoring data for your Azure Redis Cache.
 
 ## A Twitter-style clone written using PHP and Redis
 

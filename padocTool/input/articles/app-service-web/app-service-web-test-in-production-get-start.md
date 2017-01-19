@@ -1,8 +1,6 @@
-<!-- not suitable for Mooncake -->
-
 <properties
 	pageTitle="Get started with test in production for Web Apps"
-	description="Learn about the Test in Production (TiP) feature in Azure Websites."
+	description="Learn about the Test in Production (TiP) feature in Azure App Service Web Apps."
 	services="app-service\web"
 	documentationCenter=""
 	authors="cephalin"
@@ -11,16 +9,21 @@
 
 <tags
 	ms.service="app-service-web"
-	ms.date="10/16/2015"
-	wacn.date=""/>
+	ms.workload="web"
+	ms.tgt_pltfrm="na"
+	ms.devlang="na"
+	ms.topic="article"
+	ms.date="01/13/2016"
+	wacn.date=""
+	ms.author="cephalin"/>
 
 # Get started with test in production for Web Apps
 
 Testing in production, or live-testing your web app using live customer traffic, is a test strategy that app developers increasingly integrate into their [agile development](https://en.wikipedia.org/wiki/Agile_software_development) methodology. It enables you to test the quality of your apps with live user traffic in your production environment, as opposed to synthesized data in a test environment. By exposing your new app to real users, you can be informed on the real problems your app may face once it is deployed. You can verify the functionality, performance, and value of your app updates against the volume, velocity, and variety of real user traffic, which you can never approximate in a test environment.
 
-## Traffic Routing in Azure Websites
+## Traffic Routing in App Service Web Apps
 
-With the Traffic Routing feature in [Azure Websites](/documentation/services/web-sites/), you can direct a portion of live user traffic to one or more [deployment slots](/documentation/articles/web-sites-staged-publishing), and then analyze your app with [Azure Application Insights](/home/features/application-insights/) or [Azure HDInsight](/home/features/hdinsight/), or a third-party tool like [New Relic](/marketplace/partners/newrelic/newrelic/) to validate your change. For example, you can implement the following scenarios with Azure Websites:
+With the Traffic Routing feature in [Azure App Service](/documentation/articles/app-service-changes-existing-services/), you can direct a portion of live user traffic to one or more [deployment slots](/documentation/articles/web-sites-staged-publishing/), and then analyze your app with [Azure Application Insights](/home/features/application-insights/) or [Azure HDInsight](/home/features/hdinsight/), or a third-party tool like [New Relic](/marketplace/partners/newrelic/newrelic/) to validate your change. For example, you can implement the following scenarios with App Service:
 
 - Discover functional bugs or pinpoint performance bottlenecks in your updates prior to site-wide deployment
 - Perform "controlled test flights" of your changes by measuring usibility metrics on the beta app
@@ -37,9 +40,9 @@ With the Traffic Routing feature in [Azure Websites](/documentation/services/web
 
 At the basic level in every TiP scenario, you route a predefined percentage of your live traffic to a non-production deployment slot. To do this, follow the steps below:
 
->[AZURE.NOTE] The steps here assumes that you already have a [non-production deployment slot](/documentation/articles/web-sites-staged-publishing) and that the desired web app content is already [deployed]((web-sites-publish-source-control.md)) to it.
+>[AZURE.NOTE] The steps here assumes that you already have a [non-production deployment slot](/documentation/articles/web-sites-staged-publishing/) and that the desired web app content is already [deployed](/documentation/articles/web-sites-deploy/) to it.
 
-1. Log into the Azure [preview portal](https://manage.windowsazure.cn).
+1. Log into the [Azure Portal Preview](https://portal.azure.cn/).
 2. In your web app's blade, click **Settings** > **Traffic Routing**.
   ![](./media/app-service-web-test-in-production/01-traffic-routing.png)
 3. Select the slot that you want to route traffic to and the percentage of the total traffic you desire, then click **Save**.
@@ -56,7 +59,7 @@ Once Traffic Routing is configured, the specified percentage of clients will be 
 
 ## Force client requests to a specific slot
 
-In addition to automatic traffic routing, Azure Websites is able to route requests to a specific slot. This is useful when you want your users to be able to opt-into or opt-out of your beta app. To do this, you use the `x-ms-routing-name` query parameter.
+In addition to automatic traffic routing, App Service is able to route requests to a specific slot. This is useful when you want your users to be able to opt-into or opt-out of your beta app. To do this, you use the `x-ms-routing-name` query parameter.
 
 To reroute users to a specific slot using `x-ms-routing-name`, you must make sure that the slot is already added to the Traffic Routing list. Since you want to route to a slot explicitly, the actual routing percentage you set doesn't matter. If you want, you can craft a "beta link" that users can click to access the beta app.
 
@@ -80,7 +83,7 @@ To let users opt in to your beta app, set the same query parameter to the name o
 
 ## More resources ##
 
--   [Set up staging environments for web apps in Azure Websites](/documentation/articles/web-sites-staged-publishing)
--	[Deploy a complex application predictably in Azure](/documentation/articles/app-service-deploy-complex-application-predictably)
--   [Agile software development with Azure Websites](/documentation/articles/app-service-agile-software-development)
--	[Use DevOps environments effectively for your web apps](/documentation/articles/app-service-web-staged-publishing-realworld-scenarios)
+-   [Set up staging environments for web apps in Azure App Service](/documentation/articles/web-sites-staged-publishing/)
+-	[Deploy a complex application predictably in Azure](/documentation/articles/app-service-deploy-complex-application-predictably/)
+-   [Agile software development with Azure App Service](/documentation/articles/app-service-agile-software-development/)
+-	[Use DevOps environments effectively for your web apps](/documentation/articles/app-service-web-staged-publishing-realworld-scenarios/)

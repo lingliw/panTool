@@ -1,18 +1,31 @@
-<properties urlDisplayName="Optimizing MySQL Performance on Azure Linux VMs" pageTitle="Optimizing MySQL Performance on Azure Linux VMs" metaKeywords="Azure Linux MySQL vm, Linux MySQL vm, MySQL vm performance" description="Learn how to optimize MySQL running on an Azure virtual machine (VM) running Linux. " metaCanonical="" services="virtual-machines" documentationCenter="" title="" authors="ningk" solutions="" manager="timlt" editor="tysonn" />
-<tags 
-	ms.service="virtual-machines" 
-	
-	ms.date="05/21/2015" 
+<!-- rename to virtual-machines-linux-classic-optimize-mysql -->
+
+<properties
+	pageTitle="Optimize MySQL Performance on Linux VMs | Azure"
+	description="Learn how to optimize MySQL running on an Azure virtual machine (VM) running Linux."
+	services="virtual-machines"
+	documentationCenter=""
+	authors="NingKuang"
+	manager="timlt"
+	editor=""
+	tags="azure-service-management"/>
+
+<tags
+	ms.service="virtual-machines"
+	ms.date="12/15/2015"
 	wacn.date=""/>
 
-#Optimizing MySQL Performance on Azure Linux VMs 
+#Optimizing MySQL Performance on Azure Linux VMs
 
 There are many factors that impact MySQL performance on Azure, both in virtual hardware selection and software configuration. This article focuses on optimizing performance through storage, system, and database configurations.
 
-##Utilizing RAID on an Azure virtual machine 
-Storage is the key factor that impacts database performance in cloud environments.  Compared to a single disk, RAID can provide faster access via concurrency.  Refer to [Standard RAID Levels](http://zh.wikipedia.org/wiki/Standard_RAID_levels) for more detail.   
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
-Disk I/O throughput and I/O response time in Azure can be significantly improved through RAID. Our lab tests show disk I/O throughput can be doubled and I/O response time can be reduced by half on average when the number of RAID disks is doubled (from 2 to 4, 4 to 8, etc.). See [Appendix A](AppendixA) for details.  
+
+##Utilizing RAID on an Azure virtual machine
+Storage is the key factor that impacts database performance in cloud environments.  Compared to a single disk, RAID can provide faster access via concurrency.  Refer to [Standard RAID Levels](http://en.wikipedia.org/wiki/Standard_RAID_levels) for more detail.   
+
+Disk I/O throughput and I/O response time in Azure can be significantly improved through RAID. Our lab tests show disk I/O throughput can be doubled and I/O response time can be reduced by half on average when the number of RAID disks is doubled (from 2 to 4, 4 to 8, etc.). See [Appendix A](#AppendixA) for details.  
 
 In addition to disk I/O, MySQL performance improves when you increase the RAID level.  See [Appendix B](#AppendixB) for details.  
 
@@ -21,30 +34,30 @@ You may also want to consider the chunk size. In general when you have a larger 
 Please note that there are limits on how many disks you can add for different virtual machine types. These limits are detailed in [Virtual Machine and Cloud Service Sizes for Azure](http://msdn.microsoft.com/zh-cn/library/azure/dn197896.aspx). You will need 4 attached data disks to follow the RAID example in this article, although you could choose to set up RAID with fewer disks.  
 
 This article assumes you have already created a Linux virtual machine and have MYSQL installed and configured. For more information on getting started please refer to How to install MySQL on Azure.  
-  
+
 ###Setting up RAID on Azure
-The following steps show how to create RAID on Azure using the Windows Azure Management Portal. You can also set up RAID using Windows PowerShell scripts. 
+The following steps show how to create RAID on Azure using the Azure classic portal. You can also set up RAID using Windows PowerShell scripts.
 In this example we will configure RAID 0 with 4 disks.  
 
 ####Step 1: Add a Data Disk to your Virtual Machine  
 
-In the Virtual Machines page of the Azure Management Portal, click the virtual machine to which you want to add a data disk. In this example, the virtual machine is mysqlnode1.  
+In the Virtual Machines page of the Azure classic portal, click the virtual machine to which you want to add a data disk. In this example, the virtual machine is mysqlnode1.  
 
 ![][1]
 
 On the page for the virtual machine, click **Dashboard**.  
 
 ![][2]
- 
+
 
 In the task bar, click **Attach**.
- 
+
 ![][3]
 
 And then click **Attach empty disk**.  
 
 ![][4]
- 
+
 For data disks, the **Host Cache Preference** should be set to **None**.  
 
 This will add one empty disk into your virtual machine. Repeat this step three more times so that you have 4 data disks for RAID.  
@@ -56,7 +69,7 @@ You can see the added drives in the virtual machine by looking at the kernel mes
 ####Step 2: Create RAID with the additional disks
 Follow this article for detailed RAID setup steps:  
 
-[/zh-cn/documentation/articles/virtual-machines-linux-configure-RAID/](/zh-cn/documentation/articles/virtual-machines-linux-configure-RAID/)
+[Configure software RAID on Linux](/documentation/articles/virtual-machines-linux-configure-raid/)
 
 >[AZURE.NOTE] If you are using the XFS file system, follow the steps below after you have created RAID.
 
@@ -66,7 +79,7 @@ To install XFS on Debian, Ubuntu, or Linux Mint, use the following command:
 
 To install XFS On Fedora, CentOS, or RHEL, use the following command:  
 
-	yum -y install xfsprogs  xfsdump 
+	yum -y install xfsprogs  xfsdump
 
 
 ####Step 3: Set up a new storage path
@@ -106,11 +119,11 @@ For the Debian distribution family:
 ###Step 1.View the current I/O scheduler
 Use the following command:  
 
-	root@mysqlnode1:~# cat /sys/block/sda/queue/scheduler 
+	root@mysqlnode1:~# cat /sys/block/sda/queue/scheduler
 
 You will see following output, which indicates the current scheduler.  
 
-	noop [deadline] cfq 
+	noop [deadline] cfq
 
 
 ###Step 2. Change the current device (/dev/sda) of I/O scheduling algorithm
@@ -140,14 +153,14 @@ For the Redhat distribution family, you only need the following command:
 
 ##Configure system file operations settings
 One best practice is to disable the atime logging feature on the file system. Atime is the last file access time. Whenever a file is accessed, the file system records the timestamp in the log. However, this information is rarely used. You can disable it if you don't need it, which will reduce overall disk access time.  
- 
+
 To disable atime logging, you need to modify the file system configuration file /etc/ fstab and add the **noatime** option.  
 
 For example, edit  the vim /etc/fstab file, adding the noatime as shown below.  
 
 	# CLOUD_IMG: This file was created/modified by the Cloud Image build process
 	UUID=3cc98c06-d649-432d-81df-6dcd2a584d41       /        ext4   defaults,discard        0 0
-	#Add the “noatime” option below to disable atime logging
+	#Add the "noatime" option below to disable atime logging
 	UUID="431b1e78-8226-43ec-9460-514a9adf060e"     /RAID0   xfs   defaults,nobootwait, noatime 0 0
 	/dev/sdb1       /mnt    auto    defaults,nobootwait,comment=cloudconfig 0       2
 
@@ -160,7 +173,7 @@ Test the modified result. Note that when you modify the test file, the access ti
 Before example:		
 
 ![][5]
- 
+
 After example:
 
 ![][6]
@@ -180,15 +193,15 @@ Add the following four lines in the /etc/security/limits.conf file to increase t
 Run the following commands:  
 
 	ulimit -SHn 65536
-	ulimit -SHu 65536 
+	ulimit -SHu 65536
 
 ###Step 3: Ensure that the limits are updated at boot time
 Put the following startup commands in the /etc/rc.local file so it will take effect during every boot time.  
 
-	echo “ulimit -SHn 65536” >>/etc/rc.local
-	echo “ulimit -SHu 65536” >>/etc/rc.local
+	echo "ulimit -SHn 65536" >>/etc/rc.local
+	echo "ulimit -SHu 65536" >>/etc/rc.local
 
-##MySQL database optimization 
+##MySQL database optimization
 You can use the same performance tuning strategy to configure MySQL on Azure as on an on-premises machine.  
 
 The main I/O optimization rules are:   
@@ -208,7 +221,7 @@ The following configuration items are the main factors that affect MySQL perform
 -	**innodb_flush_log_at_trx_commit**: Default value is 1, with the scope set to 0~2. The default value is the most suitable option for standalone MySQL DB. The setting of 2 enables the most data integrity and is suitable for Master in MySQL cluster. The setting of 0 allows data loss, which can affect reliability, in some cases with better performance, and is suitable for Slave in MySQL cluster.
 -	**Innodb_log_buffer_size**: The log buffer allows transactions to run without having to flush the log to disk before the transactions commit. However, if there is large binary object or text field, the cache will be consumed very quickly and frequent disk I/O will be triggered. It is better increase the buffer size if Innodb_log_waits state variable is not 0.
 -	**query_cache_size**:  The best option is to disable it from the outset. Set query_cache_size to 0 (this is now the default setting in MySQL 5.6) and use other methods to speed up queries .  
-  
+
 See [Appendix D](#AppendixD) for comparing performance after the optimization.
 
 
@@ -226,12 +239,12 @@ Please note that by default this is not enabled. Turning on the slow query log m
 ###Step 2: Restart mysql server
 	service  mysql  restart
 
-###Step 3: Check whether the setting is taking effect using the “show” command
- 
+###Step 3: Check whether the setting is taking effect using the "show" command
+
 ![][7]   
-   
+
 ![][8]
- 
+
 In this example, you can see that the slow query feature has been turned on. You can then use the **mysqldumpslow** tool to determine performance bottlenecks and optimize performance, such as adding indexes.
 
 
@@ -240,14 +253,14 @@ In this example, you can see that the slow query feature has been turned on. You
 
 ##Appendix
 
-The following are sample performance test data produced on targeted lab environment, they provide general background on the performance data trend with different performance tuning approaches, however the results may vary under different environment or product versions. 
+The following are sample performance test data produced on targeted lab environment, they provide general background on the performance data trend with different performance tuning approaches, however the results may vary under different environment or product versions.
 
 <a name="AppendixA"></a>Appendix A:  
-**Disk Performance (IOPS) with Different RAID Levels** 
+**Disk Performance (IOPS) with Different RAID Levels**
 
 
 ![][9]
- 
+
 **Test commands:**  
 
 	fio -filename=/path/test -iodepth=64 -ioengine=libaio -direct=1 -rw=randwrite -bs=4k -size=5G -numjobs=64 -runtime=30 -group_reporting -name=test-randwrite
@@ -258,13 +271,13 @@ The following are sample performance test data produced on targeted lab environm
 **MySQL Performance (Throughput) Comparison with Different RAID Levels**   
 (XFS file system)
 
- 
+
 ![][10]  
 ![][11]
 
 **Test commands:**
 
-	mysqlslap -p0ps.123 --concurrency=2 --iterations=1 --number-int-cols=10 --number-char-cols=10 -a --auto-generate-sql-guid-primary --number-of-queries=10000 --auto-generate-sql-load-type=write –engine=innodb
+	mysqlslap -p0ps.123 --concurrency=2 --iterations=1 --number-int-cols=10 --number-char-cols=10 -a --auto-generate-sql-guid-primary --number-of-queries=10000 --auto-generate-sql-load-type=write -engine=innodb
 
 **MySQL Performance (OLTP) Comparison with Different RAID Levels**  
 ![][12]
@@ -277,7 +290,7 @@ The following are sample performance test data produced on targeted lab environm
 **Disk Performance (IOPS) Comparison for Different Chunk Sizes**  
 (XFS file system)
 
- 
+
 ![][13]
 
 **Test commands:**  
@@ -292,12 +305,12 @@ Note the file size used for this testing is 30GB and 1GB respectively, with RAID
 **MySQL Performance (Throughput) Comparison Before and After Optimization**  
 (XFS File System)
 
-  
+
 ![][14]
 
 **Test commands:**
 
-	mysqlslap -p0ps.123 --concurrency=2 --iterations=1 --number-int-cols=10 --number-char-cols=10 -a --auto-generate-sql-guid-primary --number-of-queries=10000 --auto-generate-sql-load-type=write –engine=innodb,misam
+	mysqlslap -p0ps.123 --concurrency=2 --iterations=1 --number-int-cols=10 --number-char-cols=10 -a --auto-generate-sql-guid-primary --number-of-queries=10000 --auto-generate-sql-load-type=write -engine=innodb,misam
 
 **The configuration setting for default and optmization is as follows:**
 

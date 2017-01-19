@@ -1,0 +1,4 @@
+- [Role Based Access Control](/documentation/articles/role-based-access-control-configure/)
+- [Manage access using Azure Powershell](/documentation/articles/role-based-access-control-manage-access-powershell/)
+- [Manage access using the Azure CLI](/documentation/articles/role-based-access-control-manage-access-azure-cli/)
+- [RBAC Built in Roles](/documentation/articles/role-based-access-built-in-roles/)

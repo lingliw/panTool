@@ -1,15 +1,15 @@
 <properties 
-	pageTitle="Provision a Redis Cache" 
+	pageTitle="Provision a Redis Cache | Azure" 
 	description="Use Azure Resource Manager template to deploy an Azure Redis Cache." 
 	services="app-service" 
 	documentationCenter="" 
-	authors="tfitzmac" 
-	manager="wpickett" 
+	authors="steved0x" 
+	manager="Erikre" 
 	editor=""/>
 
 <tags
-	ms.service="app-service"
-	ms.date="10/02/2015"
+	ms.service="cache"
+	ms.date="07/12/2016"
 	wacn.date=""/>
 
 # Create a Redis Cache using a template
@@ -19,24 +19,21 @@ how to define parameters that are specified when the deployment is executed. You
 
 Currently, diagnostic settings are shared for all caches in the same region for a subscription. Updating one cache in the region will affect all other caches in the region.
 
-For more information about creating templates, see [Authoring Azure Resource Manager Templates](/documentation/articles/resource-group-authoring-templates).
+For more information about creating templates, see [Authoring Azure Resource Manager Templates](/documentation/articles/resource-group-authoring-templates/).
 
 For the complete template, see [Redis Cache template](https://github.com/Azure/azure-quickstart-templates/blob/master/101-redis-cache/azuredeploy.json).
 
->[AZURE.NOTE] ARM templates for the new [Premium tier](/documentation/articles/cache-premium-tier-intro) are coming soon. To check for the latest templates, see [Azure Quickstart Templates](https://azure.microsoft.com/documentation/templates/) and search for `Redis Cache`.
+>[AZURE.NOTE] ARM templates for the new [Premium tier](/documentation/articles/cache-premium-tier-intro/) are available. 
+>
+>-    [Create a Premium Redis Cache with clustering](https://github.com/Azure/azure-quickstart-templates/tree/master/201-redis-premium-cluster-diagnostics/)
+>-    [Create Premium Redis Cache with data persistence](https://github.com/Azure/azure-quickstart-templates/tree/master/201-redis-premium-persistence/)
+>-    [Create Premium Redis Cache with VNet and optional clustering](https://github.com/Azure/azure-quickstart-templates/tree/master/201-redis-premium-vnet-cluster-diagnostics/)
+>
+>To check for the latest templates, see [Azure Quickstart Templates](https://github.com/Azure/azure-quickstart-templates/) and search for `Redis Cache`.
 
 ## What you will deploy
 
-In this template, you will deploy an Azure Redis Cache that uses an existing storage account for diagnostic data.
-
-To run the deployment automatically, click the following button:
-
-<!-- deleted by customization
-[![Deploy to Azure](./media/cache-redis-cache-arm-provision/deploybutton.png)](https://manage.windowsazure.cn/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2F101-redis-cache%2Fazuredeploy.json)
--->
-<!-- keep by customization: begin -->
-![Deploy to Azure](./media/cache-redis-cache-arm-provision/deploybutton.png)
-<!-- keep by customization: end -->
+In this template, you will deploy an Azure Redis Cache.
 
 ## Parameters
 
@@ -45,57 +42,68 @@ You should define a parameter for those values that will vary based on the proje
 environment you are deploying to. Do not define parameters for values that will always stay the same. Each parameter value is used in the template to define the resources that are deploy. 
 
 We will describe each parameter in the template.
-### redisCacheName
 
-The name of the Azure Redis Cache to create.
 
-    "redisCacheName": {
-      "type": "string"
-    }
-
-### redisCacheSKU
+### cacheSKUName
 
 The pricing tier of the new Azure Redis Cache.
 
-    "redisCacheSKU": {
+    "cacheSKUName": {
       "type": "string",
-      "allowedValues": [ "Basic", "Standard" ],
-      "defaultValue": "Standard"
-    }
+      "allowedValues": [
+        "Basic",
+        "Standard"
+      ],
+      "defaultValue": "Basic",
+      "metadata": {
+        "description": "The pricing tier of the new Azure Redis Cache."
+      }
+    },
 
-The template defines the values that are permitted for this parameter (Basic or Standard), and assigns a default value (Standard) if no value is specified. Basic provides a single node with multiple sizes available up to 53 GB.
+The template defines the values that are permitted for this parameter (Basic or Standard), and assigns a default value (Basic) if no value is specified. Basic provides a single node with multiple sizes available up to 53 GB.
 Standard provides two-node Primary/Replica with multiple sizes available up to 53 GB and 99.9% SLA.
 
-### redisCacheFamily
+### cacheSKUFamily
 
 The family for the sku.
 
-    "redisCacheFamily": {
+    "cacheSKUFamily": {
       "type": "string",
-      "defaultValue": "C"
-    }
+      "allowedValues": [
+        "C"
+      ],
+      "defaultValue": "C",
+      "metadata": {
+        "description": "The family for the sku."
+      }
+    },
 
-### redisCacheCapacity
+
+### cacheSKUCapacity
 
 The size of the new Azure Redis Cache instance. 
 
-    "redisCacheCapacity": {
+    "cacheSKUCapacity": {
       "type": "int",
-      "allowedValues": [ 0, 1, 2, 3, 4, 5, 6 ],
-      "defaultValue": 1
+      "allowedValues": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "defaultValue": 0,
+      "metadata": {
+        "description": "The size of the new Azure Redis Cache instance. "
+      }
     }
+
 
 The template defines the values that are permitted for this parameter (0, 1, 2, 3, 4, 5 or 6), and assigns a default value (1) if no value is specified. Those numbers correspond to following cache sizes: 
 0 = 250 MB, 1 = 1 GB, 2 = 2.5 GB, 3 = 6 GB, 4 = 13 GB, 5 = 26 GB, 6 = 53 GB
 
-### redisCacheVersion
-
-The Redis server version of the new cache.
-
-    "redisCacheVersion": {
-      "type": "string",
-      "defaultValue": "2.8"
-    }
 
 
 ### redisCacheLocation
@@ -106,11 +114,11 @@ The location of the Redics Cache. For best perfomance, use the same location as 
       "type": "string"
     }
 
-### diagnosticsStorageAccountName
+### existingDiagnosticsStorageAccountName
 
 The name of the existing storage account to use for diagnostics. 
 
-    "diagnosticsStorageAccountName": {
+    "existingDiagnosticsStorageAccountName": {
       "type": "string"
     }
 
@@ -148,36 +156,45 @@ Creates the Azure Redis Cache.
       "location": "[parameters('redisCacheLocation')]",
       "properties": {
         "enableNonSslPort": "[parameters('enableNonSslPort')]",
-        "redisVersion": "[parameters('redisCacheVersion')]",
         "sku": {
           "capacity": "[parameters('redisCacheCapacity')]",
           "family": "[parameters('redisCacheFamily')]",
           "name": "[parameters('redisCacheSKU')]"
         }
       },
-        "resources": [
-          {
-            "apiVersion": "2014-04-01",
-            "type": "diagnosticSettings",
-            "name": "service", 
-            "location": "[parameters('redisCacheLocation')]",
-            "dependsOn": [
-              "[concat('Microsoft.Cache/Redis/', parameters('redisCacheName'))]"
-            ],
-            "properties": {
-              "status": "[parameters('diagnosticsStatus')]",
-              "storageAccountName": "[parameters('diagnosticsStorageAccountName')]",
-              "retention": "30"
-            }
+      "resources": [
+        {
+          "apiVersion": "2015-07-01",
+          "type": "Microsoft.Cache/redis/providers/diagnosticsettings",
+          "name": "[concat(parameters('redisCacheName'), '/Microsoft.Insights/service')]",
+          "location": "[parameters('redisCacheLocation')]",
+          "dependsOn": [
+            "[concat('Microsoft.Cache/Redis/', parameters('redisCacheName'))]"
+          ],
+          "properties": {
+            "status": "[parameters('diagnosticsStatus')]",
+            "storageAccountName": "[parameters('existingDiagnosticsStorageAccountName')]"
           }
-        ]
+        }
+      ]
     }
 
-## Commands to run deployment 
+
+## Commands to run deployment
+
+
+To deploy the resources to Azure, you must be logged in to your Azure account and you must use the Azure Resource Manager module. To learn about using Azure Resource Manager with either Azure PowerShell or Azure CLI, 
+see:
+
+- [Using Azure PowerShell with Azure Resource Manager](powershell-azure-resource-manager.md)
+- [Using the Azure CLI for Mac, Linux, and Windows with Azure Resource Management](../articles/virtual-machines/xplat-cli-azure-resource-manager.md).
+
+The examples below assume you already have a resource group in your account with the specified name. 
+ 
 
 ### PowerShell
 
-    New-AzureResourceGroupDeployment -TemplateUri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-redis-cache/azuredeploy.json -ResourceGroupName ExampleDeployGroup -redisCacheName ExampleCache -redisCacheLocation "China North"
+    New-AzureRmResourceGroupDeployment -TemplateUri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-redis-cache/azuredeploy.json -ResourceGroupName ExampleDeployGroup -redisCacheName ExampleCache -redisCacheLocation "China North"
 
 ### Azure CLI
 

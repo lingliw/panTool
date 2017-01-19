@@ -1,18 +1,23 @@
+<!-- rename to virtual-machines-windows-classic-web-app-visual-studio -->
+
 <properties
-	pageTitle="Creating a VM for a web project using Visual Studio | Windows Azure"
+	pageTitle="Creating a VM for a web project using Visual Studio | Azure"
 	description="Create a virtual machine for a web application"
 	services="virtual-machines"
 	documentationCenter=""
-	authors="kempb"
+	authors="TomArcher"
 	manager="douge"
-	editor=""/>
+	editor=""
+	tags="azure-service-management"/>
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="10/19/2015"
-        wacn.date=""/>
+	ms.date="01/05/2016"
+	wacn.date=""/>
 
 # Creating a virtual machine for a web application with Visual Studio
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
 When you create a web application project for Azure, you can provision a virtual machine in Azure. You can then configure the virtual machine with additional software, or use the virtual machine for diagnostic or debugging purposes.
 
@@ -23,7 +28,7 @@ To create a virtual machine when you create a web application, follow these step
 
 	![][0]
 
-3. For this example, in the drop-down list under Windows Azure, choose **Virtual Machine (v1)**, and then click the **OK** button.
+3. For this example, in the drop-down list under Azure, choose **Virtual Machine (v1)**, and then click the **OK** button.
 4. Sign in to Azure if you're prompted. The **Create Virtual Machine** dialog box appears.
 
 	![][2]
@@ -55,7 +60,7 @@ To create a virtual machine when you create a web application, follow these step
 
 ## Next steps
 
-If you want to customize the published scripts you created, read more in-depth information at [Using Windows PowerShell Scripts to Publish to Dev and Test Environments](http://msdn.microsoft.com/zh-cn/library/dn642480.aspx).
+If you want to customize the published scripts you created, read more in-depth information at [Using Windows PowerShell Scripts to Publish to Dev and Test Environments](/documentation/articles/vs-azure-tools-publishing-using-powershell-scripts/).
 
 [0]: ./media/virtual-machines-dotnet-create-visual-studio-powershell/CreateVM_NewProject.PNG
 [1]: ./media/dotnet-visual-studio-create-virtual-machine/CreateVM_SignIn.PNG

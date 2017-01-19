@@ -1,7 +1,5 @@
 
-1. In the Solution view, expand the **Components** folder in the Xamarin.Android app and make sure that Azure Mobile Services package is installed. 
-
-2. Right-click the **Components** folder, click  **Get More Components...**, search for the **Google Cloud Messaging Client** component and add it to the project. 
+1. In the Solution view (or **Solution Explorer** in Visual Studio), right-click the **Components** folder, click  **Get More Components...**, search for the **Google Cloud Messaging Client** component and add it to the project.
 
 3. Open the ToDoActivity.cs project file and add the following using statement to the class:
 
@@ -29,13 +27,9 @@
             }
         }
 
-	This enables you to access the Mobile Services client instance from the service process.
+	This enables you to access the mobile client instance from the push handler service process.
 
-5. Change the existing Mobile Services client declaration to public, as follows:
-
-		public MobileServiceClient client { get; private set; }
-
-6.	Add the following code to the **OnCreate** method, after the **MobileServiceClient** is created:
+4.	Add the following code to the **OnCreate** method, after the **MobileServiceClient** is created:
 
         // Set the current instance of TodoActivity.
         instance = this;

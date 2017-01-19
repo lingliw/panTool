@@ -1,3 +1,7 @@
+<!-- deleted in Global -->
+
+<!-- not suitable for Mooncake -->
+
 <properties
 	pageTitle="Create an availability set using Azure Resource Manager templates"
 	description="Describes how to use the availability set template and includes template syntax"
@@ -19,9 +23,9 @@ You can easily create an availability set for a virtual machine by using Azure P
 
 Before you start, make sure you have Azure PowerShell and Azure CLI configured and ready to go.
 
-[AZURE.INCLUDE [arm-getting-setup-powershell](../includes/arm-getting-setup-powershell.md)]
+[AZURE.INCLUDE [arm-getting-setup-powershell](../../includes/arm-getting-setup-powershell.md)]
 
-[AZURE.INCLUDE [xplat-getting-set-up](../includes/xplat-getting-set-up.md)]
+[AZURE.INCLUDE [xplat-getting-set-up](../../includes/xplat-getting-set-up.md)]
 
 
 ## Create an availability set with a Resource Manager template
@@ -59,10 +63,10 @@ Fill in an Azure deployment name, Resource Group name, Azure location, the folde
 
 	$deployName="<deployment name>"
 	$RGName="<resource group name>"
-	$locName="<Azure location, such as West US>"
+	$locName="<Azure location, such as China North>"
 	$folderName="<folder name, such as C:\Azure\Templates\availability>"
 	$templateFile= $folderName + "\azuredeploy.json"
-	New-AzureResourceGroup –Name $RGName –Location $locName
+	New-AzureResourceGroup -Name $RGName -Location $locName
 	New-AzureResourceGroupDeployment -Name $deployName -ResourceGroupName $RGName -TemplateFile $templateFile
 
 When you run the **New-AzureResourceGroupDeployment** command, you'll be prompted to supply the values for parameters in the **"parameters"** section of the JSON file. After you've done this, the command creates the resource group and the availability set.
@@ -71,10 +75,10 @@ Here is an example of the PowerShell command set for the template.
 
 	$deployName="TestDeployment"
 	$RGName="TestRG"
-	$locname="West US"
+	$locname="China North"
 	$folderName="C:\Azure\Templates\[thing]"
 	$templateFile= $folderName + "\azuredeploy.json"
-	New-AzureResourceGroup –Name $RGName –Location $locName
+	New-AzureResourceGroup -Name $RGName -Location $locName
 	New-AzureResourceGroupDeployment -Name $deployName -ResourceGroupName $RGName -TemplateFile $templateFile
 
 You would see something like this.
@@ -91,7 +95,7 @@ You would see something like this.
 
 To remove this resource group and all of its resources (the storage account, virtual machine, and virtual network), use this command.
 
-	Remove-AzureResourceGroup –Name "<resource group name>"
+	Remove-AzureResourceGroup -Name "<resource group name>"
 
 
 ## Use Azure CLI

@@ -1,6 +1,8 @@
+<!-- rename to virtual-machines-linux-classic-create-custom -->
+
 <properties
-	pageTitle="Create a custom virtual machine running Linux in Azure"
-	description="Learn how to create a custom virtual machine running Linux in Azure."
+	pageTitle="Create a Linux VM | Azure"
+	description="Learn how to create a custom virtual machine with the classic deployment model running the Linux operating system."
 	services="virtual-machines"
 	documentationCenter=""
 	authors="dsk-2015"
@@ -10,10 +12,12 @@
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="07/24/2015"
+	ms.date="10/14/2015"
 	wacn.date=""/>
 
-# How to Create a Custom Virtual Machine Running Linux in Azure
+# How to Create a Custom Linux VM
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the [Resource Manager model](/documentation/articles/virtual-machines-linux-tutorial/).
 
 This topic describes how to create a *custom* virtual machine with the Azure CLI using the classic deployment model. We will use a Linux image from the available **IMAGES** on Azure. The Azure CLI commands give following configuration choices among others:
 
@@ -22,14 +26,9 @@ This topic describes how to create a *custom* virtual machine with the Azure CLI
 - Adding the VM to an existing storage account
 - Adding the VM to an availability set or location
 
-> [AZURE.IMPORTANT] If you want your virtual machine to use a virtual network so you can connect to it directly by hostname or set up cross-premises connections, make sure you specify the virtual network when you create the virtual machine. A virtual machine can be configured to join a virtual network only when you create the virtual machine. For details on virtual networks, see [Azure Virtual Network Overview](http://msdn.microsoft.com/zh-CN/library/azure/jj156007.aspx).
-
-<p/>
-[AZURE.INCLUDE [service-management-pointer-to-resource-manager](../includes/service-management-pointer-to-resource-manager.md)]
-
-- [Create a Virtual Machine Running Linux](virtual-machines-linux-tutorial.md)
+> [AZURE.IMPORTANT] If you want your virtual machine to use a virtual network so you can connect to it directly by hostname or set up cross-premises connections, make sure you specify the virtual network when you create the virtual machine. A virtual machine can be configured to join a virtual network only when you create the virtual machine. For details on virtual networks, see [Azure Virtual Network Overview](https://msdn.microsoft.com/zh-cn/library/azure/jj156007.aspx).
 
 
 ## How to create a Linux virtual machine using the classic deployment model
 
-[AZURE.INCLUDE [virtual-machines-create-LinuxVM](../includes/virtual-machines-create-linuxvm.md)]
+[AZURE.INCLUDE [virtual-machines-create-LinuxVM](../../includes/virtual-machines-create-linuxvm.md)]

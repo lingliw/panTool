@@ -8,7 +8,7 @@
 	documentationCenter=""/>
 
 <tags 
-wacn.date="05/15/2015"
+wacn.date=""
 
 	ms.service="media-services" 
 	ms.workload="media" 
@@ -99,29 +99,45 @@ For an overview about streaming endpoints and information on how to manage them,
 
 Upload your files using **Azure Management Portal**, **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-upload-files](../includes/media-services-selector-upload-files)]
-
+<div class="technical-azure-selector">
+<a href="/documentation/articles/media-services-manage-content">Portal</a>
+<a href="/documentation/articles/media-services-dotnet-upload-files">.NET</a>
+<a href="/documentation/articles/media-services-rest-upload-files">REST API</a>
+</div>
 ###Encoding assets
 
 Encode with **Azure Media Encoder** using **Azure Management Portal**, **.NET**, or **REST API**.
  
-[AZURE.INCLUDE [media-services-selector-encode](../includes/media-services-selector-encode)]
-
+<div class="technical-azure-selector">
+<a href="/documentation/articles/media-services-manage-content#encode">Portal</a>
+<a href="/documentation/articles/media-services-dotnet-encode-asset">.NET</a>
+<a href="/documentation/articles/media-services-rest-encode-asset">REST API</a>
+</div>
 ###Creating content key
 
 Create a content key with which you want to encrypt your asset using **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-create-contentkey](../includes/media-services-selector-create-contentkey)]
-
+<div class="technical-azure-selector">
+<a href="/documentation/articles/media-services-dotnet-create-contentkey">.NET</a>
+<a href="/documentation/articles/media-services-rest-create-contentkey">REST API</a>
+<a href="https://github.com/southworkscom/azure-sdk-for-media-services-java-samples">Java</a>
+</div>
 ###Configuring content key authorization policy 
 
 Configure content protection and key authorization policy using **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-content-key-auth-policy](../includes/media-services-selector-content-key-auth-policy)]
-
+<div class="technical-azure-selector">
+<a href="/documentation/articles/media-services-portal-configure-content-key-auth-policy">Portal</a>
+<a href="/documentation/articles/media-services-dotnet-configure-content-key-auth-policy">.NET</a>
+<a href="/documentation/articles/media-services-rest-configure-content-key-auth-policy">REST API</a>
+<a href="https://github.com/southworkscom/azure-sdk-for-media-services-java-samples">Java</a>
+</div>
 ###Configuring asset delivery policy
 
 Configure asset delivery policy using **.NET** or **REST API**.
 
-[AZURE.INCLUDE [media-services-selector-asset-delivery-policy](../includes/media-services-selector-asset-delivery-policy)]
-
+<div class="technical-azure-selector">
+<a href="/documentation/articles/media-services-dotnet-configure-asset-delivery-policy">.NET</a>
+<a href="/documentation/articles/media-services-rest-configure-asset-delivery-policy">REST API</a>
+<a href="https://github.com/southworkscom/azure-sdk-for-media-services-java-samples">Java</a>
+</div>

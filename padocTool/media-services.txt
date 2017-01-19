@@ -1,4 +1,0 @@
-media-services-dotnet-generate-thumbnail-with-mes.md
-media-services-licenses-partner-integration.md
-media-services-live-encoders-overview.md
-media-services-troubleshooting-live-streaming.md

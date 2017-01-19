@@ -4,6 +4,6 @@ This tutorial is based on the code you download in the Mobile Services quickstar
 
 
 <!-- URLs. 
-[Get started with Mobile Services]:  /documentation/articles/mobile-services-android-get-started
-[Add Mobile Services to an existing app]:/documentation/articles/mobile-services-android-get-started-data
+[Get started with Mobile Services]:  /documentation/articles/mobile-services-android-get-started/
+[Add Mobile Services to an existing app]:/documentation/articles/mobile-services-android-get-started-data/
 -->

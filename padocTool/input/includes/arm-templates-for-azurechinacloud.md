@@ -1,0 +1,1 @@
+> [AZURE.NOTE] In the ARM template GitHub Repo, all templates are written for Global Azure. In order to use those template for Azure China Cloud, you need to do some modification such as changing the location to "China East" or "China North".

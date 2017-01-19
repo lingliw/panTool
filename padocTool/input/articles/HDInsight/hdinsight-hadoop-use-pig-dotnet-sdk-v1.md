@@ -1,5 +1,5 @@
 <properties
-   pageTitle="Use Hadoop Pig with .NET in HDInsight | Windows Azure"
+   pageTitle="Use Hadoop Pig with .NET in HDInsight | Azure"
    description="Learn how to use the .NET SDK for Hadoop to submit Pig jobs to Hadoop on HDInsight."
    services="hdinsight"
    documentationCenter=".net"
@@ -9,26 +9,30 @@
 
 <tags
 	ms.service="hdinsight"
-	ms.date="09/23/2015"
+	ms.date="05/04/2016"
 	wacn.date=""/>
 
 #Run Pig jobs using the .NET SDK for Hadoop in HDInsight
 
-[AZURE.INCLUDE [pig-selector](../includes/hdinsight-selector-use-pig.md)]
+> [AZURE.SELECTOR]
+- [Overview](/documentation/articles/hdinsight-use-pig)
+- [Curl](/documentation/articles/hdinsight-hadoop-use-pig-curl)
+- [PowerShell](/documentation/articles/hdinsight-hadoop-use-pig-powershell)
+- [.NET](/documentation/articles/hdinsight-hadoop-use-pig-dotnet-sdk-v1)
+- [Remote Desktop](/documentation/articles/hdinsight-hadoop-use-pig-remote-desktop)
+
 
 This document provides an example of using the .NET SDK for Hadoop to submit Pig jobs to a Hadoop on HDInsight cluster.
 
 The HDInsight .NET SDK provides .NET client libraries that makes it easier to work with HDInsight clusters from .NET. Pig allows you to create MapReduce operations by modeling a series of data transformations. You will learn how to use a basic C# application to submit a Pig job to an HDInsight cluster.
 
-[AZURE.INCLUDE [azure-preview-portal](../includes/hdinsight-azure-portal.md)]
-
-* [Run Pig jobs using the .NET SDK for Hadoop in HDInsight](/documentation/articles/hdinsight-hadoop-use-pig-dotnet-sdk)
+> [AZURE.IMPORTANT] Currently, HDInsight in Azure China is only manageable by Azure Service Manager (ASM). Azure Resource Manager (ARM) model for HDInsight is not available yet.
 
 ##<a id="prereq"></a>Prerequisites
 
 To complete the steps in this article, you will need the following.
 
-* An Azure HDInsight (Hadoop on HDInsight) cluster (either Windows<!-- deleted by customization or Linux-based -->)
+* An Azure HDInsight (Hadoop on HDInsight) cluster (Windows) 
 
 * Visual Studio 2012 or 2013
 
@@ -122,11 +126,10 @@ Save the subscription ID, as it will be used later.
 		            // Define the Pig job
 		            var parameters = new PigJobSubmissionParameters()
 		            {
-		                UserName = ExistingClusterUsername,
 		                Query = queryString,
 		            };
 		
-		            System.Console.WriteLine("Submitting the Sqoop job to the cluster...");
+		            System.Console.WriteLine("Submitting the Pig job to the cluster...");
 		            var response = _hdiJobManagementClient.JobManagement.SubmitPigJob(parameters);
 		            System.Console.WriteLine("Validating that the response is as expected...");
 		            System.Console.WriteLine("Response status code is " + response.StatusCode);

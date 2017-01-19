@@ -91,7 +91,7 @@ eavesdropping on the wire to capture credentials sent in clear. These
 attacks can lead to an identity spoof threat being realized. To make it
 simple consider threats, vulnerabilities, and attacks as bad things.
 Consider the following diagrams as a balcony view of the bad things
-related to a Web application deployed to Azure (from J.D.
+related to a Web Site deployed to Azure (from J.D.
 Meier's [Azure Security Notes PDF](http://blogs.msdn.com/b/jmeier/archive/2010/08/03/now-available-azure-security-notes-pdf.aspx)):
 
 ![Threats Vulnerabilities and Attacks][02]
@@ -202,9 +202,9 @@ application.
     Google, Yahoo!, Open ID.** In this scenario you control access to
     your WCF (REST) service using Internet identity such as Live ID /
     Microsoft Account.
--   **ASP.NET Web App to REST WCF Service Using Shared SWT Token.** In
+-   **ASP.NET Web Site to REST WCF Service Using Shared SWT Token.** In
     this scenario you have distributed application with front end
-    ASP.NET web app and downstream REST service and you want to flow end
+    ASP.NET web site and downstream REST service and you want to flow end
     user's context through physical tiers.
 -   **Role-Based Access Control (RBAC) Authorization In Claims-Aware
     Applications and Services.** In this scenario you want to implement
@@ -236,7 +236,7 @@ orientation.
 
 ###ASP.NET Web Form Application with Federated Authentication
 
-In this application architecture scenario your web application may be
+In this application architecture scenario your web site may be
 deployed to Azure or on-premises. The application requires that
 its users will be authenticated by either corporate Active Directory or
 Internet identity providers.
@@ -249,11 +249,11 @@ Identity Foundation.
 Refer to the following resources to implement this scenario:
 
 -   [How To: Create My First Claims-Aware ASP.NET Application Using ACS](http://msdn.microsoft.com/en-us/library/gg429779.aspx)
--   [How To: Host Login Pages in Your ASP.NET Web Application](http://msdn.microsoft.com/en-us/library/gg185926.aspx)
+-   [How To: Host Login Pages in Your ASP.NET Web Site](http://msdn.microsoft.com/en-us/library/gg185926.aspx)
 -   [How To: Implement Claims Authorization in a Claims-Aware ASP.NET Application Using WIF and ACS](http://msdn.microsoft.com/en-us/library/gg185907.aspx)    
 -   [How To: Implement Role Based Access Control (RBAC) in a Claims-Aware
     ASP.NET Application Using WIF and ACS](http://msdn.microsoft.com/en-us/library/gg185914.aspx)
--   [How To: Configure Trust Between ACS and ASP.NET Web Applications
+-   [How To: Configure Trust Between ACS and ASP.NET Web Sites
     Using X.509 Certificates](http://msdn.microsoft.com/en-us/library/gg185947.aspx)
 -   [Code Sample: ASP.NET Simple Forms](http://msdn.microsoft.com/en-us/library/gg185938.aspx)
 
@@ -261,7 +261,7 @@ Refer to the following resources to implement this scenario:
 
 In this application architecture scenario your WCF (SOAP) service may be
 deployed to Azure or on-premises. The service is being accessed
-as a downstream service by a web application or even by another web
+as a downstream service by a web site or even by another web
 service. You need to control access to it using application specific
 identity. Think of it in terms of the type of app pool account that you
 used in IIS - although the technology is different, the approaches are
@@ -320,7 +320,7 @@ Refer to the following resources to implement this scenario:
 
 In this scenario your WCF (REST) service may be deployed to 
 Azure or on-premises. The service is accessed as a downstream service by
-a web application or by another web service. You need to control access
+a web site or by another web service. You need to control access
 to it using an application-specific identity Think of it in terms of the
 type of app pool account that you used in IIS - although the technology
 is different, the approaches are similar in that the service is accessed
@@ -362,13 +362,13 @@ without using the WIF infrastructure.
 It is important to note that in order to implement this scenario, the
 application needs to use web browser control to collect end user
 credentials. This makes it unsuitable for scenarios in which the REST
-service is accessed from an ASP.NET web app. It is only suitable for
+service is accessed from an ASP.NET web site. It is only suitable for
 scenarios in which the REST service is being accessed by the user's
 client application, such as a Windows Phone 7 app or a rich desktop
 client. The key reason for popping the web browser control is that
 Internet identities don't natively support active profile scenarios (web
 services scenario). Internet identities mainly support passive profile
-scenarios (web apps) that rely on browser redirects: this is where web
+scenarios (web sites) that rely on browser redirects: this is where web
 browser control comes handy.
 
 Consider the following diagram (WIF is optional, and thus not shown):
@@ -386,23 +386,23 @@ Refer to the following resources to implement this scenario:
     Service (ACS)](http://code.msdn.microsoft.com/REST-WCF-With-SWT-Token-123d93c0)
 
 
-###ASP.NET Web App to REST WCF Service Using Shared SWT Token
+###ASP.NET Web Site to REST WCF Service Using Shared SWT Token
 
 In this scenario you have a distributed application with a front-end
-ASP.NET web app and a downstream REST service and you want to maintain
+ASP.NET web site and a downstream REST service and you want to maintain
 the end user's context across physical tiers. This is sometimes needed
 when implementing authorization logic or logging based on the end user's
 identity in the downstream REST service.
 
 Configure Azure AD Access Control to issue SWT token. The SWT
-token is issued to the front-end ASP.NET web app and then shared with
+token is issued to the front-end ASP.NET web site and then shared with
 the downstream REST service. In this case, there is only one relying
 party configured in Azure AD Access Control. However, there are
 several caveats:
 
 -   Since WIF does not provide a SWT token handler out of the box you
     need to implement a custom token handler to be used with the ASP.NET
-    web app. You should rely on the heavy lifting that WIF does to
+    web site. You should rely on the heavy lifting that WIF does to
     support the WS-Federation protocol that relies on browser redirects
     vs. implementing it yourself.
 -   When implementing a SWT custom token handler, make sure the
@@ -413,14 +413,14 @@ several caveats:
     the token "manually" since there is no need to handle redirects in
     this case.
 
-![ASP.NET Web Application][08]
+![ASP.NET Web Site][08]
 
 Refer to the following resources to implement this scenario:
 
 -   [How To: Configure Google as an Identity Provider](http://msdn.microsoft.com/en-us/library/gg185976.aspx)
 -   [How To: Configure Facebook as an Identity Provider](http://msdn.microsoft.com/en-us/library/gg185919.aspx)
 -   [How To: Configure Yahoo! as an Identity Provider](http://msdn.microsoft.com/en-us/library/gg185977.aspx)
--   [ASP.NET Web App To REST WCF Service Delegation Using Shared SWT
+-   [ASP.NET Web Site To REST WCF Service Delegation Using Shared SWT
     Token](http://code.msdn.microsoft.com/ASPNET-Web-App-To-REST-WCF-b2b95f82)
 
 ###Role-Based Access Control (RBAC) In Claims-Aware Applications and Services
@@ -486,7 +486,7 @@ Refer to the following resources to implement this scenario:
 ###Claims-Based Authorization In Claims-Aware Applications and Services
 
 In this scenario you need to implement complex authorization logic in
-your web application or service and the IsInRole() method is not
+your web site or service and the IsInRole() method is not
 satisfactory for your authorization needs. If your authorization
 approach relies on roles then consider implementing role-based access
 control outlined in previous section.
@@ -658,7 +658,7 @@ for these technologies when designing and deploying your application.
 
 The following are key security knobs of WIF. The information below is a
 digest from [WIF Design Considerations](http://msdn.microsoft.com/en-us/library/ee517298.aspx) and [Windows Identity Foundation
-(WIF) Security for ASP.NET Web Applications - Threats & Countermeasures](http://blogs.msdn.com/b/alikl/archive/2010/12/02/windows-identity-foundation-wif-security-for-asp-net-web-applications-threats-amp-countermeasures.aspx)
+(WIF) Security for ASP.NET Web Sites - Threats & Countermeasures](http://blogs.msdn.com/b/alikl/archive/2010/12/02/windows-identity-foundation-wif-security-for-asp-net-web-applications-threats-amp-countermeasures.aspx)
 .
 
 -   **IssuerNameRegistry**. Specifies trusted Security Token Services
@@ -772,7 +772,7 @@ application is hosted on Azure Virtual Machines.
 -   [A Guide to Claims-based Identity and Access Control](http://go.microsoft.com/fwlink/?LinkId=214562)
 -   [Access Control Service](http://msdn.microsoft.com/en-us/library/windowsazure/gg429786.aspx)
 -   [ACS How To's](http://msdn.microsoft.com/en-us/library/windowsazure/gg185939.aspx)
--   [Secure Azure Web Role ASP.NET Web Application Using Access Control Service v2.0](http://social.technet.microsoft.com/wiki/contents/articles/2590.aspx)
+-   [Secure Azure Web Role ASP.NET Web Site Using Access Control Service v2.0](http://social.technet.microsoft.com/wiki/contents/articles/2590.aspx)
 -   [Azure AD Access Control Service (ACS) Academy Videos](http://social.technet.microsoft.com/wiki/contents/articles/2777.aspx)
 -   [Microsoft Security Development Lifecycle](http://www.microsoft.com/security/sdl/default.aspx)
 -   [SDL Threat Modeling Tool 3.1.8](http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=2955)

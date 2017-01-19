@@ -1,13 +1,10 @@
 
-## Prerequisites
-
-
 To run the PHP code sample given in this topic, your client computer must have the following software items installed:
 
 
-- [Microsoft Drivers for PHP for Microsoft SQL Server](http://www.microsoft.com/download/details.aspx?id=20098)
+- [Microsoft Drivers for PHP for Microsoft SQL Server](http://www.microsoft.com/en-us/download/details.aspx?id=20098)
  - `SQLSRV32.EXE` contains the latest bits.
-- [Microsoft SQL Server Native Client 11.0](http://www.microsoft.com/zh-CN/download/details.aspx?id=36434)
+- [Microsoft SQL Server Native Client 11.0](http://www.microsoft.com/zh-cn/download/details.aspx?id=36434)
 - [Microsoft ODBC Driver](https://www.microsoft.com/zh-cn/download/details.aspx?id=36434)
 - IIS Express
 - [PHP 5.6 for IIS Express](http://www.microsoft.com/web/downloads/platform.aspx)

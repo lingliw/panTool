@@ -1,40 +1,57 @@
-1. Sign in to your Azure subscription using the steps listed in [Connect to Azure from the Azure CLI](/documentation/articles/xplat-cli-connect).
+<!-- need to be verified -->
 
-2. Make sure you are in the Service Management mode by using:
+1. Sign in to your Azure subscription using the steps listed in [Connect to Azure from the Azure CLI](/documentation/articles/xplat-cli-connect/).
 
-        azure config mode asm
+2. Make sure you are in the Classic deployment mode as follows:
 
-3. Find out the Linux image that you want to load from the available images:
+    ```azurecli
+    azure config mode asm
+    ```
 
-        azure vm image list | grep "Linux"
+3. Find out the Linux image that you want to load from the available images as follows:
 
-4. Use `azure vm create` to create a new virtual machine with the Linux image from the above list. This step creates a new cloud service as well as a new storage account. You could also connect this virtual machine to an existing cloud service with a `-c` option. It also creates an SSH endpoint to login to the Linux virtual machine with the `-e` option.
+   ```azurecli   
+    azure vm image list | grep "Linux"
+    ```
+   
+    In a Windows command-prompt window, use **find** instead of grep.
+   
+4. Use `azure vm create` to create a VM with the Linux image from the previous list. This step creates a cloud service and storage account. You could also connect this VM to an existing cloud service with a `-c` option. Create an SSH endpoint to log in to the Linux virtual machine with the `-e` option. The following example creates a VM named `myVM` using the `Ubuntu-14_04_3-LTS` image in the `China North` location, and adds a user name `ops`:
+   
+    ```azurecli
+    azure vm create myVM \
+        b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_04_3-LTS-amd64-server-20160516-en-us-30GB \
+        -g ops -p P@ssw0rd! -z "Small" -e -l "China North"
+    ```
 
-        ~$ azure vm create "MyTestVM" b4590d9e3ed742e4a1d46e5424aa335e__suse-opensuse-13.1-20141216-x86-64 "adminUser" -z "Small" -e -l "West US"
-        info:    Executing command vm create
-        + Looking up image b4590d9e3ed742e4a1d46e5424aa335e__suse-opensuse-13.1-20141216-x86-64
-        Enter VM 'adminUser' password:*********
-        Confirm password: *********
-        + Looking up cloud service
-        info:    cloud service MyTestVM not found.
-        + Creating cloud service
-        + Retrieving storage accounts
-        + Creating a new storage account 'mytestvm1437604756125'
-        + Creating VM
-        info:    vm create command OK
+    The output is similar to the following example:
 
-    >[AZURE.NOTE] For a Linux virtual machine, you must provide the `-e` option in `vm create`; it is not possible to enable SSH after the virtual machine has been created. For more details on SSH, read [How to Use SSH with Linux on Azure](/documentation/articles/virtual-machines-linux-use-ssh-key).
+    ```azurecli
+    info:    Executing command vm create
+    + Looking up image b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_04_3-LTS-amd64-server-20160516-en-us-30GB
+    + Looking up cloud service
+    info:    cloud service myVM not found.
+    + Creating cloud service
+    + Retrieving storage accounts
+    + Creating VM
+    info:    vm create command OK
+    ```
+   
+   > [AZURE.NOTE]
+   > For a Linux virtual machine, you must provide the `-e` option in `vm create`. It is not possible to enable SSH after the virtual machine has been created. For more details on SSH, read [How to Use SSH with Linux on Azure](/documentation/articles/virtual-machines-linux-mac-create-ssh-keys/).
 
-    Note that the image *b4590d9e3ed742e4a1d46e5424aa335e__suse-opensuse-13.1-20141216-x86-64* is the one we chose from the image list in the above step. *MyTestVM* is the name of our new virtual machine, and *adminUser* is the username that we will use to SSH into the virtual machine. You can replace these variables as per your requirement. For more details on this command, visit the [Using the Azure CLI with Azure Service Management](/documentation/articles/virtual-machines-command-line-tools).
+5. You can verify the attributes of the VM by using the `azure vm show` command. The following example lists information for the VM named `myVM`:
 
-5. The newly created Linux virtual machine will appear in the list given by:
+    ```azurecli   
+    azure vm show myVM
+    ```
 
-        azure vm list
+6. Start your VM with the `azure vm start` command as follows:
 
-6. You can verify the attributes of the virtual machine by using the command:
+    ```azurecli
+    azure vm start myVM
+    ```
 
-        azure vm show MyTestVM
+## Next steps
+For details on all these Azure CLI virtual machine commands, read the [Using the Azure CLI with the Classic deployment API](/documentation/articles/virtual-machines-command-line-tools/).
 
-7. The newly created virtual machine is ready to start with the `azure vm start` command.
-
-For details on all these Azure CLI virtual machine commands, please read the [Using the Azure CLI with the Service Management API](/documentation/articles/virtual-machines-command-line-tools).

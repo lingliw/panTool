@@ -1,5 +1,7 @@
+<!-- deleted in Global -->
+
 <properties
-   pageTitle="Create a multi-VM deployment with the Azure CLI | Windows Azure"
+   pageTitle="Create a multi-VM deployment with the Azure CLI | Azure"
    description="Learn how to create a multi-VM deployment using the classic deployment model and the Azure CLI."
    services="virtual-machines"
    documentationCenter="nodejs"
@@ -9,13 +11,13 @@
    tags="azure-service-management"/>
 
    <tags
-   ms.service="virtual-machines"
-   ms.date="02/20/2015"
-   wacn.date=""/>
+	ms.service="virtual-machines"
+	ms.date="02/20/2015"
+	wacn.date=""/>
 
 # Create a multi-VM deployment with the Azure CLI
 
-> [AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating resources with the classic deployment model. 
+> > [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the
 
 The following script will show you how to configure a multi-VM multi-cloud service deployment in a VNET using Azure Command-Line Interface (Azure CLI).
 
@@ -31,9 +33,9 @@ The code to set this up is relatively straightforward:
 >[AZURE.NOTE] You will likely need to change the cloud service names servercs and workercs to be unique cloud service names
 
     azure network vnet create samplevnet -l "China North"
-    azure vm create -l "China North" -w samplevnet -e 10000 -z Small -n servervm servercs b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
-    azure vm create -l "China North" -w samplevnet -e 10001 -z Small –n clientvm1 clientcs b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
-    azure vm create -l "China North" -w samplevnet -e 10002 -c -z Small -n clientvm2 clientcs b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
+    azure vm create -l "China North" -w samplevnet -e 10000 -z Small -n servervm servercs b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
+    azure vm create -l "China North" -w samplevnet -e 10001 -z Small -n clientvm1 clientcs b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
+    azure vm create -l "China North" -w samplevnet -e 10002 -c -z Small -n clientvm2 clientcs b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_10-amd64-server-20150202-en-us-30GB azureuser Password@1
     azure vm disk attach-new servervm 100
     azure vm disk attach-new servervm 500
     azure vm endpoint create servervm 443 443 -n https -o tcp
@@ -45,11 +47,11 @@ As is the code to tear it down:
     azure vm delete -b -q clientvm2
     azure network vnet delete -q samplevnet
 
-*The –q option suppresses the interactive confirmation for deleting objects, -b cleans up the disks / blobs associated with the VM.*
+*The -q option suppresses the interactive confirmation for deleting objects, -b cleans up the disks / blobs associated with the VM.*
 
 ## Generic forms of the commands used
 
-While you can find more information by using the –help option on any of the Azure CLI commands, the generic form of each command as used above is:
+While you can find more information by using the -help option on any of the Azure CLI commands, the generic form of each command as used above is:
 
     azure network vnet create -l <Region> <VNet_name>
     azure network vnet delete -q <VNet_name>
@@ -62,6 +64,6 @@ While you can find more information by using the –help option on any of the Az
 ## Next steps
 
 
-* [Linux and open-source computing on Azure](/documentation/articles/virtual-machines-linux-opensource)
-* [How to log on to a virtual machine running Linux](/documentation/articles/virtual-machines-linux-how-to-log-on)
+* [Linux and open-source computing on Azure](/documentation/articles/virtual-machines-linux-opensource-links/)
+* [How to log on to a virtual machine running Linux](/documentation/articles/virtual-machines-linux-classic-log-on/)
  

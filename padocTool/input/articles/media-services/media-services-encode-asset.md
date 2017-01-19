@@ -9,7 +9,7 @@
 
 <tags
 	ms.service="media-services"
-	ms.date="10/15/2015"
+	ms.date="10/29/2015"
 	wacn.date=""/>
 
 #Overview and Comparison of Azure On Demand Media Encoders
@@ -32,9 +32,6 @@ Media Services supports the following on demand encoders that are described in t
 
 - **Media Encoder Standard**
 - **Azure Media Encoder** 
-<!-- deleted by customization
-- **Media Encoder Premium Workflow**
--->
 
 This article gives a brief overview of on demand media encoders and provides links to articles that give more detailed information. The topic also provides comparison of the encoders.
 
@@ -143,12 +140,9 @@ Media Processor Name|Applicable Pricing|Notes
 ---|---|---
 **Media Encoder Standard** |ENCODER|Encoding Tasks will be charged according to the size of the output Asset, in GBytes, at the rate specified [here][1], under the ENCODER column.
 **Azure Media Encoder** |ENCODER|Encoding Tasks will be charged according to the size of the output Asset, in GBytes, at the rate specified [here][1], under the ENCODER column.
-<!-- deleted by customization
-**Media Encoder Premium Workflow** |PREMIUM ENCODER|Encoding Tasks will be charged according to the size of the output Asset, in GBytes, at the rate specified [here][1], under the PREMIUM ENCODER column.
--->
 
 
-This section compares the encoding capabilities of **Media Encoder Standard**, **Azure Media Encoder**<!-- deleted by customization , and **Media Encoder Premium Workflow** -->.
+This section compares the encoding capabilities of **Media Encoder Standard**, **Azure Media Encoder**.
 
 
 ###Input Container/File Formats
@@ -167,6 +161,7 @@ AVI (Uncompressed 8bit/10bit)|Yes|Yes	|Yes
 Smooth Streaming File Format (PIFF 1.3)|Yes|Yes|No
 [Microsoft Digital Video Recording(DVR-MS)](https://msdn.microsoft.com/zh-cn/library/windows/desktop/dd692984)|Yes|No|No
 Matroska/WebM				|Yes|No|No
+QuickTime (.mov) |Yes|No|No
 
 ###Input Video Codecs
 
@@ -182,6 +177,12 @@ Windows Media Video/VC-1							|Yes|Yes|Yes
 Canopus HQ/HQX										|No|Yes|No
 MPEG-4 Part 2										|Yes|No|No
 [Theora](https://en.wikipedia.org/wiki/Theora)		|Yes|No|No
+Apple ProRes 422	|Yes|No|No
+Apple ProRes 422 LT	|Yes|No|No
+Apple ProRes 422 HQ |Yes|No|No
+Apple ProRes Proxy|Yes|No|No
+Apple ProRes 4444 |Yes|No|No
+Apple ProRes 4444 XQ |Yes|No|No
 
 ###Input Audio Codecs
 
@@ -240,12 +241,19 @@ MP3 (MPEG-1 Audio Layer 3)|No|No|Yes
 Windows Media Audio|No|Yes|Yes
 
 
-##Media Services learning paths
 
-You can view AMS learning paths here:
 
-- [AMS Live Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-live/)
-- [AMS on Demand Streaming Workflow](http://azure.microsoft.com/documentation/learning-paths/media-services-streaming-on-demand/)
+
+##Provide feedbackUse the [User Voice](http://go.microsoft.com/fwlink/?linkid=698785&clcid=0x409) forum to provide feedback and make suggestions on how to improve Azure Media Services. You can also go directly to one of the following categories: 
+
+- [Azure Media Player](https://feedback.azure.com/forums/169396-media-services/category/109320-azure-media-player)
+- [Client SDK Libraries](https://feedback.azure.com/forums/169396-media-services/category/144435-client-sdks)
+- [Encoding and Processing](https://feedback.azure.com/forums/169396-media-services/category/144411-encoding-and-processing)
+- [Live Streaming](https://feedback.azure.com/forums/169396-media-services/category/144414-live-streaming)
+- [Azure Management Portal](https://feedback.azure.com/forums/169396-media-services/category/144432-portal)
+- [REST API and Platform](https://feedback.azure.com/forums/169396-media-services/category/144423-rest-api-and-platform)
+- [VoD Streaming](https://feedback.azure.com/forums/169396-media-services/category/144429-vod-streaming)
+
 
 ##Related articles
 

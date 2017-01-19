@@ -66,9 +66,9 @@ Azure Service Management API, see the <a href="http://msdn.microsoft.com/en-us/l
 
 	This value is also used as the name of this storage account in the portal, or when accessing this account programmatically.
 
-5.  From the **Region/Affinity Group** drop-down list, select a region or affinity group for the storage account. Select an affinity group instead of a region if you want your storage services to be in the same data center with other Windows Azure services that you are using. This can improve performance, and no charges are incurred for egress.  
+5.  From the **Region/Affinity Group** drop-down list, select a region or affinity group for the storage account. Select an affinity group instead of a region if you want your storage services to be in the same data center with other Microsoft Azure services that you are using. This can improve performance, and no charges are incurred for egress.  
 
-    **Note:** To create an affinity group, open the **Settings** area of the Management Portal, click **Affinity Groups**, and then click either **Add an affinity group** or **Add**. You can also create and manage affinity groups using the Windows Azure Service Management API. For more information, see [Operations on Affinity Groups].
+    **Note:** To create an affinity group, open the **Settings** area of the Management Portal, click **Affinity Groups**, and then click either **Add an affinity group** or **Add**. You can also create and manage affinity groups using the Microsoft Azure Service Management API. For more information, see [Operations on Affinity Groups].
 
 6. From the **Subscription** drop-down list, select the subscription that the storage account will be used with.
 7.  Click **Create Storage Account**. The process of creating the storage account might take several minutes to complete.

@@ -1,19 +1,23 @@
+<!-- rename to virtual-machines-linux-load-balance -->
+
 <properties
-	pageTitle="Load balancing for Azure infrastructure services"
+	pageTitle="Load balancing for infrastructure services | Azure"
 	description="Describes the two different types of load balancing supported by Azure: Load balancer for cloud services and Azure Traffic Manager for client traffic."
 	services="virtual-machines"
 	documentationCenter=""
 	authors="joaoma"
-	manager="adinah"
+	manager="carmonm"
 	editor=""/>
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="07/21/2015"
+	ms.date="02/02/2016"
 	wacn.date=""/>
 
 
 # Load balancing for Azure infrastructure services#
+
+[AZURE.INCLUDE [learn-about-deployment-models](../../includes/learn-about-deployment-models-both-include.md)]
 
 There are two levels of load balancing available for Azure infrastructure services:
 
@@ -32,7 +36,7 @@ Traffic Manager uses three load-balancing methods to distribute traffic:
 - **Performance**:  Use this method when you have endpoints in different geographic locations and you want requesting clients to use the "closest" endpoint in terms of the lowest latency.
 - **Round Robin:**  Use this method when you want to distribute load across a set of cloud services in the same datacenter or across cloud services or websites in different datacenters.
 
-For more information, see [About Traffic Manager Load Balancing Methods](/documentation/articles/traffic-manager-load-balancing-methods).
+For more information, see [About Traffic Manager Load Balancing Methods](/documentation/articles/traffic-manager-load-balancing-methods/).
 
 The following diagram shows an example of the Round Robin load balancing method for distributing traffic between different cloud services.
 
@@ -45,7 +49,7 @@ The basic process is the following:
 3.	Traffic Manager chooses the next cloud service in the Round Robin list and sends back the DNS name. The Internet client's DNS server resolves the name to an IP address and sends it to the Internet client.
 4.	The Internet client connects with the cloud service chosen by Traffic Manager.
 
-For more information, see [Traffic Manager](/documentation/articles/traffic-manager-overview).
+For more information, see [Traffic Manager](/documentation/articles/traffic-manager-overview/).
 
 ## Azure load balancing for virtual machines ##
 
@@ -56,8 +60,6 @@ The Azure Load Balancer randomly distributes a specific type of incoming traffic
 The following diagram shows a load-balanced endpoint for standard (unencrypted) web traffic that is shared among three virtual machines for the public and private TCP port of 80. These three virtual machines are in a load-balanced set.
 
 ![loadbalancing](./media/virtual-machines-load-balance/LoadBalancing.png)
-
-For more information, see [Azure Load Balancer](/documentation/articles/load-balancer-overview). For the steps to create a load-balanced set, see [Configure a load-balanced set](/documentation/articles/load-balancer-internet-getstarted).
 
 Azure can also load balance within a cloud service or virtual network. This is known as internal load balancing and can be used in the following ways:
 
@@ -71,10 +73,4 @@ The following diagram shows an example of an internal load-balanced endpoint for
 
 ![loadbalancing](./media/virtual-machines-load-balance/LOBServers.png)
 
-## Next steps
 
-For the steps to create a load-balanced set, see [Configure an internal load-balanced set](/documentation/articles/load-balancer-internal-getstarted).
-
-For more information about load balancer, see [Internal load balancing](/documentation/articles/load-balancer-internal-overview).
-
-<!-- LINKS -->

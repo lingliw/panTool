@@ -1,3 +1,5 @@
+<!-- deleted in Global -->
+
 > [AZURE.SELECTOR]
 - [Azure portal](/documentation/articles/virtual-machines-windows-tutorial-classic-portal)
 - [PowerShell: Resource Manager deployment](/documentation/articles/virtual-machines-deploy-rmtemplates-powershell)

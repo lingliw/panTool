@@ -2,7 +2,7 @@ The following steps registers your app with the Windows Store, configure your mo
 
 1. In Visual Studio 2013, open Solution Explorer, right-click the Windows Store app project, click **Add** then **Push Notification...**. 
 
-	![Add Push Notification wizard in Visual Studio 2013](../includes/media/mobile-services-create-new-push-vs2013/mobile-add-push-notifications-vs2013.png)
+	![Add Push Notification wizard in Visual Studio 2013](./media/mobile-services-create-new-push-vs2013/mobile-add-push-notifications-vs2013.png)
 
 	This starts the Add Push Notification Wizard.
 
@@ -25,4 +25,3 @@ The following steps registers your app with the Windows Store, configure your mo
 <!-- URLs. -->
 [Get started with Mobile Services]: /zh-cn/documentation/articles/mobile-services-javascript-backend-windows-store-dotnet-get-started/
 [Get started with data]: /zh-cn/documentation/articles/mobile-services-windows-store-dotnet-get-started-data/
-[Import your publishsettings file in Visual Studio 2013]: /zh-cn/documentation/articles/mobile-services-windows-how-to-import-publishsettings/

@@ -1,3 +1,5 @@
+<!-- deleted in Global -->
+
 <properties
    pageTitle="Deploying a template using the Azure CLI for Mac, Linux, and Windows"
    description="Describes the basic steps to deploy or update any template."
@@ -45,7 +47,7 @@ Open this file with your favorite editor. You'll see that you need to specify a 
         "value": "uniquednsnameforpublicip"
       },
       "vmSourceImageName": {
-        "value": "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB"
+        "value": "b549f4301d0b4295b8e76ceb65df47d4__Ubuntu-14_04_2_LTS-amd64-server-20150309-en-us-30GB"
       },
       "location": {
         "value": "China North"
@@ -97,7 +99,7 @@ Collect the values that you will need
 
 ## Next steps
 
-Vestibul ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam ultricies, ipsum vitae volutpat hendrerit, purus diam pretium eros, vitae tincidunt nulla lorem sed turpis: [Link 3 to another www.windowsazure.cn documentation topic](storage-whatis-account).
+Vestibul ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam ultricies, ipsum vitae volutpat hendrerit, purus diam pretium eros, vitae tincidunt nulla lorem sed turpis: [Link 3 to another www.windowsazure.cn documentation topic](/documentation/articles/storage-whatis-account/).
 
 <!--Image references-->
 [5]: ./media/markdown-template-for-new-articles/octocats.png

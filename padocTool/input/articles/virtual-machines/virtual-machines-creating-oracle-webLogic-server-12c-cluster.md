@@ -1,4 +1,6 @@
-<properties title="Creating an Oracle WebLogic Server 12c cluster in Azure" pageTitle="Creating an Oracle WebLogic Server 12c cluster in Azure" description="Step through an example of creating an Oracle WebLogic Server 12c cluster in Windows Azure." services="virtual-machines" authors="bbenz" documentationCenter=""/>
+<!-- deleted in Global -->
+
+<properties title="Creating an Oracle WebLogic Server 12c cluster in Azure" pageTitle="Creating an Oracle WebLogic Server 12c cluster in Azure" description="Step through an example of creating an Oracle WebLogic Server 12c cluster in Azure." services="virtual-machines" authors="bbenz" documentationCenter=""/>
 <tags ms.service="virtual-machines"  ms.date="06/22/2015" wacn.date="" />
 #Creating an Oracle WebLogic Server 12c cluster in Azure
 The following example shows you how you can create an Oracle WebLogic Server cluster in Azure, based on a Microsoft-provided Oracle WebLogic Server 12c image running on Windows Server 2012.
@@ -6,7 +8,7 @@ The following example shows you how you can create an Oracle WebLogic Server clu
 Each instance in a WebLogic Server cluster must be running the same version of Oracle WebLogic Server. This example uses WebLogic Server 12c Enterprise Edition.
 
 ##Create Virtual Machines to use in the cluster
-You’ll create a Virtual Machine to use as the cluster administration server, and you’ll create additional Virtual Machines to use as part of the cluster.
+You'll create a Virtual Machine to use as the cluster administration server, and you'll create additional Virtual Machines to use as part of the cluster.
 
 ### Create a Virtual Machine to use as the administration server
 
@@ -20,7 +22,7 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 ##Create a domain
 
-1. Log in to the [Azure Portal](https://manage.windowsazure.cn).
+1. Log in to the [Azure Management Portal](https://manage.windowsazure.cn).
 
 2. Click **Virtual Machines**.
 
@@ -32,11 +34,11 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 6. Within **Page 1** of the **Fusion Middleware Configuration Wizard** dialog, click **Create a new domain** and then click **Next**. (If the **Fusion Middleware Configuration Wizard** dialog is not already opened, open it by clicking **Windows Start**, typing **Configuration Wizard**, and then clicking the **Configuration Wizard** icon.)
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image19.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image19.png)
 
 7. Within **Page 2** of the **Fusion Middleware Configuration Wizard** dialog, select the **Basic WebLogic Server Domain** template and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image20.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image20.png)
 
 8. Within **Page 3** of the **Fusion Middleware Configuration Wizard** dialog:
 
@@ -46,27 +48,27 @@ Create additional Virtual Machines, which will be managed by the administration 
 	
 	3. Click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image21.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image21.png)
 
 9. Within **Page 4** of the **Fusion Middleware Configuration Wizard** dialog, select **Production** for the domain mode, select the available JDK (or browse to a JDK if desired), and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image22.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image22.png)
 
 10.  Within **Page 5** of the **Fusion Middleware Configuration Wizard** dialog do not select any options, and then click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image23.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image23.png)
 
 11.  Within **Page 6** of the **Fusion Middleware Configuration Wizard** dialog, click **Create**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image24.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image24.png)
 
 12.  Within **Page 7** of the **Fusion Middleware Configuration Wizard** dialog, after the domain has been created, click **Next**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image25.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image25.png)
 
 13.  Within **Page 8** of the **Fusion Middleware Configuration Wizard** dialog, check Start Admin Server and then click **Finish**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image26.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image26.png)
 
 14.  A command prompt for **startWebLogic.cmd** is started. When prompted, provide your WebLogic user name and password.
 
@@ -86,7 +88,7 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 	2. Select **Unicast** for the **Messaging Mode**.
 
-		![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image001.png)  
+		![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image001.png)  
 
 	
 	3. Click **OK**.
@@ -149,7 +151,7 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 	1. While still logged in to your Virtual Machine, click **Windows Start,** type **Windows Firewall with Advanced Security,** and then click the **Windows Firewall with Advanced Security** icon. This opens the **Windows Firewall with Advanced Security** management console.
 
-	2. Within the firewall management console, click **Inbound Rules** in the left hand pane (if you don’t see **Inbound Rules,** expand the top node in the left hand pane), and then click **New Rule** in the right hand pane.
+	2. Within the firewall management console, click **Inbound Rules** in the left hand pane (if you don't see **Inbound Rules,** expand the top node in the left hand pane), and then click **New Rule** in the right hand pane.
 
 	3. For **Rule Type,** select **Port** and click **Next.**
 
@@ -185,11 +187,11 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 15. On the administration Virtual Machine, open the **WebLogic Server Administration Console,** <http://localhost:7001/console>, and see the servers running.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image003.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image003.png)
 
 16. Create a load-balanced endpoint set for your managed Virtual Machines:
 
-	1. Within the [Azure Portal](https://manage.windowsazure.cn), in the **Virtual Machines **section, select the first managed Virtual Machine (such as **MYVM2-MANAGED)**.
+	1. Within the [Azure Management Portal](https://manage.windowsazure.cn), in the **Virtual Machines **section, select the first managed Virtual Machine (such as **MYVM2-MANAGED)**.
 
 	2. Click **Settings**, Click **Endpoints,** click **Add.**
 
@@ -201,7 +203,7 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 17. Create an endpoint for your Virtual Machine:
 
-	1. Log in to the [Azure Portal](https://manage.windowsazure.cn).
+	1. Log in to the [Azure Management Portal](https://manage.windowsazure.cn).
 
 	2. Click **Browse**
 
@@ -231,11 +233,11 @@ Create additional Virtual Machines, which will be managed by the administration 
 
 	12. Wait for this Virtual Machine to join the Load Balanced Set prior to proceeding to the next step.
 
-18. Within the [Azure Portal](https://manage.windowsazure.cn), in the **Virtual Machines** section, select the second managed Virtual Machine (such as **MYVM3-MANAGED**).  Follow the steps above to join to the load-balanced set that you created for the first managed Virtual Machine.
+18. Within the [Azure Management Portal](https://manage.windowsazure.cn), in the **Virtual Machines** section, select the second managed Virtual Machine (such as **MYVM3-MANAGED**).  Follow the steps above to join to the load-balanced set that you created for the first managed Virtual Machine.
 
 ##Deploying an application to the cluster
 
-At this point, you could deploy your application using the following steps. Let’s assume that you’re deploying the Oracle shoppingcart application, available for download at <http://www.oracle.com/webfolder/technetwork/tutorials/obe/fmw/wls/12c/12-ManageSessions--4478/files/shoppingcart.war>.
+At this point, you could deploy your application using the following steps. Let's assume that you're deploying the Oracle shoppingcart application, available for download at <http://www.oracle.com/webfolder/technetwork/tutorials/obe/fmw/wls/12c/12-ManageSessions--4478/files/shoppingcart.war>.
 
 1. Log in to your Virtual Machine that is serving as the admin for the WebLogic Server cluster (for example, **MYVM1-ADMIN**). 
 
@@ -247,7 +249,7 @@ At this point, you could deploy your application using the following steps. Let�
 
 5. For **Path**, type **c:\\myway\\shoppingcart.war**.
 
-	![](media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image004.png)
+	![](./media/virtual-machines-creating-oracle-webLogic-server-12c-cluster/image004.png)
 
 	Click **Next**.
 
@@ -263,7 +265,7 @@ At this point, you could deploy your application using the following steps. Let�
 
 11.  Click **Deployments**, select **shoppingcart**, click **Start**, and then click **Service All Requests**. When prompted to confirm, click **Yes**.
 
-12.  To see the shopping cart application running on the Internet, open a browser to the URL in the form of `http://<<unique_domain_name>>/shoppingcart`. (You can determine the value for `<<unique_domain_name>>` within the [Azure Portal](https://manage.windowsazure.cn) by clicking Virtual Machines and then selecting the Virtual Machine that you are using to run Oracle WebLogic Server).
+12.  To see the shopping cart application running on the Internet, open a browser to the URL in the form of `http://<<unique_domain_name>>/shoppingcart`. (You can determine the value for `<<unique_domain_name>>` within the [Azure Management Portal](https://manage.windowsazure.cn) by clicking Virtual Machines and then selecting the Virtual Machine that you are using to run Oracle WebLogic Server).
 
 ## Next Steps
 
@@ -290,7 +292,7 @@ For example:
 
 4. Open a browser session and run the shoppingcart application. Add some items to the shopping cart, and observe which machine is servicing the browser session.
 
-5. Within the Azure Portal, in the **Virtual Machines** user interface, select the VM that serviced the browser session and click **Shut down**. Wait until the VM status is **Stopped (Deallocated)** before proceeding.
+5. Within the Azure Management Portal, in the **Virtual Machines** user interface, select the VM that serviced the browser session and click **Shut down**. Wait until the VM status is **Stopped (Deallocated)** before proceeding.
 
 6. Refresh the browser session that is running the shoppingcart application, and see that a different machine is servicing the browser session.
 
@@ -298,10 +300,10 @@ For example:
 
 ## Additional Resources
 
-Now that you’ve set up your cluster running Oracle WebLogic Server, see the following topics for additional information.
+Now that you've set up your cluster running Oracle WebLogic Server, see the following topics for additional information.
 
-- [Oracle Virtual Machine images - Miscellaneous Considerations](/documentation/articles/virtual-machines-miscellaneous-considerations-oracle-virtual-machine-images)
+- [Oracle Virtual Machine images - Miscellaneous Considerations](/documentation/articles/virtual-machines-windows-classic-oracle-considerations/)
 
 - [Oracle WebLogic Server Product Documentation](http://www.oracle.com/technetwork/middleware/weblogic/documentation/index.html)
 
-- [Oracle WebLogic Server 12c using Linux on Windows Azure](http://www.oracle.com/technetwork/middleware/weblogic/learnmore/oracle-weblogic-on-azure-wp-2020930.pdf)
+- [Oracle WebLogic Server 12c using Linux on Azure](http://www.oracle.com/technetwork/middleware/weblogic/learnmore/oracle-weblogic-on-azure-wp-2020930.pdf)

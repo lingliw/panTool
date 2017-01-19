@@ -1,7 +1,9 @@
+<!-- deleted in Global -->
+
 <properties writer="kathydav" editor="tysonn" manager="jeffreyg" /> 
 
 **Note**: This article creates a virtual machine that is not connected to a virtual network. If you want your virtual machine to use a virtual network so you can connect to your virtual machines directly by hostname or set up
-cross-premises connections, use the **From Gallery** method instead and specify the virtual network when you create the virtual machine. For more information about virtual networks, see [Azure Virtual Network Overview](http://go.microsoft.com/fwlink/p/?LinkID=294063).
+cross-premises connections, use the **From Gallery** method instead and specify the virtual network when you create the virtual machine. For more information about virtual networks, see [Azure Virtual Network Overview](https://msdn.microsoft.com/zh-cn/library/azure/jj156007.aspx).
 
 1. Sign in to the Azure Management Portal using your Azure account.
 2. In the Management Portal, at the bottom left of the web page, click **+New**, click **Virtual Machine**, and then click **From Gallery**.
@@ -13,7 +15,7 @@ cross-premises connections, use the **From Gallery** method instead and specify 
 4. On the **Virtual machine configuration** page, provide the following information:
 	- Provide a **Virtual Machine Name**, such as "testlinuxvm".
 	- Specify a **New User Name**, such as "newuser", which will be added to the Sudoers list file.
-	- In the **New Password** box, type a [strong password](http://msdn.microsoft.com/en-us/library/ms161962.aspx).
+	- In the **New Password** box, type a [strong password](http://msdn.microsoft.com/zh-cn/library/ms161962.aspx).
 	- In the **Confirm Password** box, retype the password.
 	- Select the appropriate **Size** from the drop down list.
 
@@ -46,7 +48,7 @@ When the virtual machine has been provisioned and the endpoints configured you c
 ###Connecting Using SSH
 If you are using Linux, connect to the virtual machine using SSH.  At the command prompt, run:
 
-	$ ssh newuser@testlinuxvm.cloudapp.net -o ServerAliveInterval=180
+	$ ssh newuser@testlinuxvm.chinacloudapp.cn -o ServerAliveInterval=180
 
 Enter the user's password.
 
@@ -55,7 +57,7 @@ If you are using a Windows computer, connect to the VM using PuTTY. PuTTY can be
 
 1. Download and save **putty.exe** to a directory on your computer. Open a command prompt, navigate to that folder, and execute **putty.exe**.
 
-2. Enter "testlinuxvm.cloudapp.net" for the **Host Name** and "22" for the **Port**.
+2. Enter "testlinuxvm.chinacloudapp.cn" for the **Host Name** and "22" for the **Port**.
 ![PuTTY Screen][Image6]  
 
 ##Update the Virtual Machine (optional)

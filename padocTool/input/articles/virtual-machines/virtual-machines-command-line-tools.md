@@ -1,5 +1,7 @@
+<!-- deleted in Global -->
+
 <properties
-	pageTitle="Use the Azure CLI with Service Management | Microsoft Azure"
+	pageTitle="Use the Azure CLI with Service Management | Azure"
 	description="Learn about using the command-line tools for Mac, Linux, and Windows to manage Azure using the Azure CLI in classic (Azure Service Management) mode."
 	services="virtual-machines, mobile-services, cloud-services"
 	documentationCenter=""
@@ -15,12 +17,12 @@
 
 # Using the Azure CLI for Mac, Linux, and Windows with Azure Service Management
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating a resource with the classic deployment model. You can also create a resource with the [Resource Manager deployment model](virtual-machines-deploy-rmtemplates-azure-cli).
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the [Resource Manager model](/documentation/articles/azure-cli-arm-commands/).
 
-This article describes how to use the Azure CLI in the Service Management mode (asm mode) to create, manage, and delete services on the command line of Mac, Linux, and Windows computers. You can perform many of the same tasks using the various libraries of the Azure SDKs, with Azure PowerShell, and using the Azure Portal. Using Azure services with the Service Management mode is conceptually similar to creating and managing individual Azure concepts and services like Websites, Virtual Machines, Virtual Networks, Storage, and so on.  
+This article describes how to use the Azure CLI in the Service Management mode (asm mode) to create, manage, and delete services on the command line of Mac, Linux, and Windows computers. You can perform many of the same tasks using the various libraries of the Azure SDKs, with Azure PowerShell, and using the Azure classic portal. Using Azure services with the Service Management mode is conceptually similar to creating and managing individual Azure concepts and services like Websites, Virtual Machines, Virtual Networks, Storage, and so on.  
 
 > [AZURE.NOTE]
-To get started, first [install the Azure CLI](/documentation/articles/xplat-cli-install.md) and [log on to use Azure resources associated with your account](../xplat-cli-connect.md).
+To get started, first [install the Azure CLI](/documentation/articles/xplat-cli-install/) and [log on to use Azure resources associated with your account](/documentation/articles/xplat-cli-connect/).
 
 ## Scope of article
 
@@ -39,11 +41,11 @@ Currently the Service Management mode is enabled by default when you first insta
 >[AZURE.NOTE] The Azure Resource Manager mode and Azure Service Management mode are mutually exclusive. That is, resources created in one mode cannot be managed from the other mode.
 
 ## Manage your account information and publish settings
-Your Azure subscription information is used by the tool to connect to your account. This information can be obtained from the Azure portal in a publish settings file as described here. You can import the publish settings file as a persistent local configuration setting that the tool will use for subsequent operations. You only need to import your publish settings once.
+Your Azure subscription information is used by the tool to connect to your account. This information can be obtained from the Azure classic portal in a publish settings file as described here. You can import the publish settings file as a persistent local configuration setting that the tool will use for subsequent operations. You only need to import your publish settings once.
 
 **account download [options]**
 
-This command launches a browser to download your .publishsettings file from the Azure portal.
+This command launches a browser to download your .publishsettings file from the Azure classic portal.
 
 	~$ azure account download
 	info:   Executing command account download
@@ -59,9 +61,9 @@ This command imports a publishsettings file or certificate so that it can be use
 
 	~$ azure account import publishsettings.publishsettings
 	info:   Importing publish settings file publishsettings.publishsettings
-	info:   Found subscription: 3-Month 1-RMB Trial
+	info:   Found subscription: 3-Month Trial
 	info:   Found subscription: Pay-As-You-Go
-	info:   Setting default subscription to: 3-Month 1-RMB Trial
+	info:   Setting default subscription to: 3-Month Trial
 	warn:   The 'publishsettings.publishsettings' file contains sensitive information.
 	warn:   Remember to delete it now that it has been imported.
 	info:   Account publish settings imported successfully
@@ -107,7 +109,7 @@ Affinity groups can be set when a group of virtual machines spans multiple physi
 	+ Fetching affinity groups
 	data:   Name                                  Label   Location
 	data:   ------------------------------------  ------  --------
-	data:   535EBAED-BF8B-4B18-A2E9-8755FB9D733F  opentec  West US
+	data:   535EBAED-BF8B-4B18-A2E9-8755FB9D733F  opentec  China North
 	info:   account affinity-group list command OK
 
 **account affinity-group create [options] &lt;name&gt;**
@@ -169,8 +171,8 @@ Show account environment details
 	~$ azure account env show
 	info:    Executing command account env show
 	Environment name: AzureCloud
-	data:    Environment publishingProfile  <!--http://go.microsoft.com/fwlink/?LinkId=2544--><!--??????cannot be found -->
-	data:    Environment portal  <!--http://go.microsoft.com/fwlink/?LinkId=2544--><!--??????cannot be found -->
+	data:    Environment publishingProfile  http://go.microsoft.com/fwlink/?LinkId=2544
+	data:    Environment portal  http://go.microsoft.com/fwlink/?LinkId=2544
 	info:    account env show command OK
 
 **account env add [options] [environment]**
@@ -196,7 +198,7 @@ The following diagram shows how Azure virtual machines are hosted in the product
 
 This command creates a new Azure virtual machine. By default, each virtual machine (vm) is created in its own cloud service; however, you can specify that a virtual machine should be added to an existing cloud service through use of the -c option as documented here.
 
-The vm create command, like the Azure portal, only creates virtual machines in the production deployment environment. There is no option to create a virtual machine in the staging deployment environment of a cloud service. If your subscription does not have an existing Azure storage account, the command creates one.
+The vm create command, like the Azure classic portal, only creates virtual machines in the production deployment environment. There is no option to create a virtual machine in the staging deployment environment of a cloud service. If your subscription does not have an existing Azure storage account, the command creates one.
 
 You can specify a location through the --location parameter, or you can specify an affinity group through the --affinity-group parameter. If neither is provided, you are prompted to provide one from a list of valid locations.
 
@@ -219,14 +221,14 @@ The following optional parameters are supported for this command:
 **-s** The subscription <br />
 **-o, --community** The specified image is a community image <br />
 **-w** The virtual network name <br/>
-**-l, --location** specifies the location (for example, "North Central China"). <br />
+**-l, --location** specifies the location (for example, "China North"). <br />
 **-a, --affinity-group** specifies the affinity group.<br />
-**-w, --virtual-network-name** Specify the virtual network on which to add the new virtual machine. Virtual networks can be set up and managed from the Azure portal.<br />
+**-w, --virtual-network-name** Specify the virtual network on which to add the new virtual machine. Virtual networks can be set up and managed from the Azure classic portal.<br />
 **-b, --subnet-names** Specifies the subnet names to assign the virtual machine.
 
 In this example, MSFT__Win2K8R2SP1-120514-1520-141205-01-en-us-30GB is an image provided by the platform. For more information about operating system images, see vm image list.
 
-	~$ azure vm create my-vm-name MSFT__Windows-Server-2008-R2-SP1.11-29-2011 username --location "West US" -r
+	~$ azure vm create my-vm-name MSFT__Windows-Server-2008-R2-SP1.11-29-2011 username --location "China North" -r
 	info:   Executing command vm create
 	Enter VM 'my-vm-name' password: ************
 	info:   vm create command OK
@@ -257,7 +259,7 @@ This command lists all available Azure account locations.
 	info:   Executing command vm location list
 	data:   Name                   Display Name
 	data:   ---------------------  ------------
-	data:   Azure Preview  North US
+	data:   Azure Preview  China North
 	info:   account location list command OK
 
 **vm show [options] &lt;name>**
@@ -271,7 +273,7 @@ This command shows details about an Azure virtual machine. The --json option spe
 	data:       InstanceStatus: 'ReadyRole',
 	data:       DataDisks: [],
 	data:       IPAddress: '10.26.192.206',
-	data:       DNSName: 'my-vm.cloudapp.net',
+	data:       DNSName: 'my-vm.chinacloudapp.cn',
 	data:       InstanceStateDetails: {},
 	data:       VMName: 'my-vm',
 	data:       Network: {
@@ -318,11 +320,9 @@ This command restarts an Azure virtual machine.
 
 This command shuts down an Azure virtual machine. You may use the -p option to specify that the compute resource not be released on shutdown.
 
-```
-~$ azure vm shutdown my-vm
-info:   Executing command vm shutdown
-info:   vm shutdown command OK  
-```
+	~$ azure vm shutdown my-vm
+	info:   Executing command vm shutdown
+	info:   vm shutdown command OK  
 
 **vm capture &lt;vm-name> &lt;target-image-name>**
 
@@ -460,7 +460,7 @@ This command shows the details of a virtual machine image.
 	data:       Label: 'Windows Server 2008 R2 SP1, Nov 2011',
 	data:       Name: 'MSFT__Windows-Server-2008-R2-SP1.11-29-2011',
 	data:       Description: 'Microsoft Windows Server 2008 R2 SP1',
-	data:       @: { xmlns: 'http://schemas.microsoft.cn/windowsazure', xmlns:i: 'http://www.w3.org/2001/XMLSchema-instance' },
+	data:       @: { xmlns: 'http://schemas.microsoft.com/windowsazure', xmlns:i: 'http://www.w3.org/2001/XMLSchema-instance' },
 	data:       Category: 'Microsoft',
 	data:       OS: 'Windows',
 	data:       Eula: 'http://www.microsoft.com',
@@ -492,7 +492,7 @@ Some systems impose per-process file descriptor limits. If this limit is exceede
 	info:   http://myaccount.blob.core.azure.com/vm-images/Sample.vhd is uploaded successfully
 	info:   vm image create command OK
 
-## Commands to manage your Azure virtual machine data disks
+## <a name="commands-to-manage-your-azure-virtual-machine-data-disks"></a> Commands to manage your Azure virtual machine data disks
 
 Data disks are .vhd files in blob storage that can be used by a virtual machine. For more information about how data disks are deployed to blob storage, see the Azure technical diagram shown earlier.
 
@@ -568,7 +568,7 @@ Some systems impose per-process file descriptor limits. If this limit is exceede
 
 This command allows you to upload a vm disk
 
-	~$ azure vm disk upload "http://sourcestorage.blob.core.windows.net/vhds/sample.vhd" "http://destinationstorage.blob.core.windows.net/vhds/sample.vhd" "DESTINATIONSTORAGEACCOUNTKEY"
+	~$ azure vm disk upload "http://sourcestorage.blob.core.chinacloudapi.cn/vhds/sample.vhd" "http://destinationstorage.blob.core.chinacloudapi.cn/vhds/sample.vhd" "DESTINATIONSTORAGEACCOUNTKEY"
 	info:   Executing command vm disk upload
 	info:   Uploading 12351.5 KB
 	info:   vm disk upload command OK
@@ -609,13 +609,9 @@ This command creates a new cloud service
 	info:    Executing command service create
 	+ Getting locations
 	help:    Location:
-	  1) East Asia
-	  2) Southeast Asia
-	  3) North Europe
-	  4) West Europe
-	  5) East US
-	  6) West US
-	  : 6
+	  1) China East
+	  2) China Nort
+	  : 2
 	+ Creating cloud service
 	data:    Cloud service name newservicemsopentech
 	info:    service create command OK
@@ -628,8 +624,8 @@ This command shows the details of an Azure cloud service
 	info:    Executing command service show
 	+ Getting cloud service
 	data:    Name newservicemsopentech
-	data:    Url https://management.core.windows.net/9e672699-1055-41ae-9c36-e85152f2e352/services/hostedservices/newservicemsopentech
-	data:    Properties location West US
+	data:    Url https://management.core.chinacloudapi.cn/9e672699-1055-41ae-9c36-e85152f2e352/services/hostedservices/newservicemsopentech
+	data:    Properties location China North
 	data:    Properties label newservicemsopentech
 	data:    Properties status Created
 	data:    Properties dateCreated
@@ -661,7 +657,7 @@ To force the deletion, use the `-q` parameter.
 
 ## Commands to manage your Azure certificates
 
-Azure service certificates are SSL certificates connected to your Azure account. For more information about Azure certificates, see [Manage Certificates](http://msdn.microsoft.com/library/azure/gg981929.aspx).
+Azure service certificates are SSL certificates connected to your Azure account. For more information about Azure certificates, see [Manage Certificates](http://msdn.microsoft.com/zh-cn/library/azure/gg981929.aspx).
 
 **service cert list [options]**
 
@@ -708,9 +704,9 @@ This command lists your web apps.
 	info:   Executing command site list
 	data:   Name            State    Host names
 	data:   --------------  -------  --------------------------------------------------
-	data:   mongosite       Running  mongosite.antdf0.antares.windows.net
-	data:   myphpsite       Running  myphpsite.antdf0.antares.windows.net
-	data:   mydrupalsite36  Running  mydrupalsite36.antdf0.antares.windows.net
+	data:   mongosite       Running  mongosite.antdf0.antares.chinacloudapi.cn
+	data:   myphpsite       Running  myphpsite.antdf0.antares.chinacloudapi.cn
+	data:   mydrupalsite36  Running  mydrupalsite36.antdf0.antares.chinacloudapi.cn
 	info:   site list command OK
 
 **site set [options] [name]**
@@ -742,7 +738,7 @@ This command creates a new web app and local directory.
 	info:   Executing command site create
 	info:   Using location northeuropewebspace
 	info:   Creating a new web site
-	info:   Created web site at  mysite.antdf0.antares.windows.net
+	info:   Created web site at  mysite.antdf0.antares.chinacloudapi.cn
 	info:   Initializing repository
 	info:   Repository initialized
 	info:   site create command OK
@@ -755,7 +751,7 @@ This command opens your web app in a browser.
 
 	~$ azure site browse mysite
 	info:   Executing command site browse
-	info:   Launching browser to http://mysite.antdf0.antares-test.windows-int.net
+	info:   Launching browser to http://mysite.chinacloudsites.cn
 	info:   site browse command OK
 
 **site show [options] [name]**
@@ -766,11 +762,11 @@ This command shows details for a web app.
 	info:   Executing command site show
 	info:   Showing details for site
 	data:   Site AdminEnabled true
-	data:   Site HostNames mysite.antdf0.antares-test.windows-int.net
+	data:   Site HostNames mysite.chinacloudsites.cn
 	data:   Site Name mysite
 	data:   Site Owner 00060000814EDDEE
 	data:   Site RepositorySiteName mysite
-	data:   Site SelfLink https://s1.api.antdf0.antares.windows.net:454/subscriptions/444e62ff-4c5f-4116-a695-5c803ed584a5/webspaces/northeuropewebspace/sites/mysite
+	data:   Site SelfLink https://s1.api.antdf0.antares.chinacloudapi.cn:454/subscriptions/444e62ff-4c5f-4116-a695-5c803ed584a5/webspaces/northeuropewebspace/sites/mysite
 	data:   Site State Running
 	data:   Site UsageState Normal
 	data:   Site WebSpace northeuropewebspace
@@ -785,7 +781,7 @@ This command shows details for a web app.
 	data:   Config PhpVersion 5.3
 	data:   Config PublishingPassword rJ}[Er2v[Y]q16B6vTD]n$[C2z}Z.pvgLfRcLnAp%ax]xstiLny};o@vmMAote@d
 	data:   Config RequestTracingEnabled false
-	data:   Repository https://mysite.scm.antdf0.antares-test.windows-int.net/
+	data:   Repository https://mysite.scm.chinacloudsites.cn/
 	info:   site show command OK
 
 **site delete [options] [name]**
@@ -845,12 +841,8 @@ This command lists your web app locations.
 	+ Getting locations
 	data:    Name
 	data:    ----------------
-	data:    West Europe
 	data:    China North
-	data:    North Central China
-	data:    North Europe
-	data:    East Asia
-	data:    ChinaEast
+	data:    China East
 	info:    site location list command OK
 
 ###Commands to manage your web app application settings
@@ -921,7 +913,7 @@ This command displays a list of the web app certs.
 	data:    ----------------------------  -----------------------------------------
 	----------------  ----------------------------------------
 	data:    *.msopentech.com              Fri Nov 28 2014 09:49:57 GMT-0800 (Pacific Standard Time)  A40E82D3DC0286D1F58650E570ECF8224F69A148
-	data:    msopentech.azurewebsites.net  Fri Jun 19 2015 11:57:32 GMT-0700 (Pacific Daylight Time)  CE1CD6538852BF7A5DC32001C2E26A29B541F0E8
+	data:    msopentech.chinacloudsites.cn  Fri Jun 19 2015 11:57:32 GMT-0700 (Pacific Daylight Time)  CE1CD6538852BF7A5DC32001C2E26A29B541F0E8
 	info:    site cert list command OK
 
 **site cert add [options] &lt;certificate-path> [name]**
@@ -937,12 +929,12 @@ This command shows the cert details
 	Web site name: mydemosite
 	+ Getting sites
 	+ Getting site information
-	data:    Certificate hostNames 0=msopentech.azurewebsites.net
+	data:    Certificate hostNames 0=msopentech.chinacloudsites.cn
 	data:    Certificate expirationDate
-	data:    Certificate friendlyName msopentech.azurewebsites.net
+	data:    Certificate friendlyName msopentech.chinacloudsites.cn
 	data:    Certificate issueDate
 	data:    Certificate issuer CN=MSIT Machine Auth CA 2, DC=redmond, DC=corp, DC=microsoft, DC=com
-	data:    Certificate subjectName msopentech.azurewebsites.net
+	data:    Certificate subjectName msopentech.chinacloudsites.cn
 	data:    Certificate thumbprint CE1CD65852B38DC32001C2E0E8F7A526A29B541F
 	info:    site cert show command OK
 
@@ -1161,9 +1153,8 @@ This command lists geographic locations supported by Mobile Services.
 
 	~$ azure mobile locations
 	info:    Executing command mobile locations
-	info:    East US (default)
-	info:    West US
-	info:    North Europe
+	info:    China East (default)
+	info:    China North
 
 **mobile create [options] [servicename] [sqlAdminUsername] [sqlAdminPassword]**
 
@@ -1216,8 +1207,8 @@ This command lists your mobile services.
 	info:    Executing command mobile list
 	data:    Name          State  URL
 	data:    ------------  -----  --------------------------------------
-	data:    todolist      Ready  https://todolist.azure-mobile.net/
-	data:    mymobileapp   Ready  https://mymobileapp.azure-mobile.net/
+	data:    todolist      Ready  https://todolist.azure-mobile.cn/
+	data:    mymobileapp   Ready  https://mymobileapp.azure-mobile.cn/
 	info:    mobile list command OK
 
 **mobile show [options] [servicename]**
@@ -1238,11 +1229,11 @@ This command displays details about a mobile service.
 	info:    Mobile service
 	data:    name todolist
 	data:    state Ready
-	data:    applicationUrl https://todolist.azure-mobile.net/
+	data:    applicationUrl https://todolist.azure-mobile.cn/
 	data:    applicationKey XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	data:    masterKey XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	data:    webspace WESTUSWEBSPACE
-	data:    region West US
+	data:    region China North
 	data:    tables TodoItem
 	info:    mobile show command OK
 
@@ -1462,7 +1453,7 @@ This commands removes all rows of data from the table.
 
 ### <a name="Mobile_Scripts"></a>Commands to manage scripts
 
-Commands in this section are used to manage the server scripts that belong to a mobile service. For more information, see [Work with server scripts in Mobile Services](../mobile-services/mobile-services-how-to-use-server-scripts.md).
+Commands in this section are used to manage the server scripts that belong to a mobile service. For more information, see [Work with server scripts in Mobile Services](/documentation/articles/mobile-services-how-to-use-server-scripts/).
 
 **mobile script list [options] [servicename]**
 
@@ -1521,7 +1512,7 @@ This command removes the existing insert script from the TodoItem table.
 
 ### <a name="Mobile_Jobs"></a>Commands to manage scheduled jobs
 
-Commands in this section are used to manage scheduled jobs that belong to a mobile service. For more information, see [Schedule jobs](http://msdn.microsoft.com/library/windowsazure/jj860528.aspx).
+Commands in this section are used to manage scheduled jobs that belong to a mobile service. For more information, see [Schedule jobs](http://msdn.microsoft.com/zh-cn/library/azure/jj860528.aspx).
 
 **mobile job list [options] [servicename]**
 
@@ -1591,7 +1582,7 @@ This command removes the getUpdates scheduled job from the TodoList server.
 
 ### <a name="Mobile_Scale"></a>Commands to scale a mobile service
 
-Commands in this section are used to scale a mobile service. For more information, see [Scaling a mobile service](http://msdn.microsoft.com/library/windowsazure/jj193178.aspx).
+Commands in this section are used to scale a mobile service. For more information, see [Scaling a mobile service](http://msdn.microsoft.com/zh-cn/library/azure/jj193178.aspx).
 
 **mobile scale show [options] [servicename]**
 
@@ -1770,16 +1761,16 @@ Check that a service bus namespace is legal and available.
 
 Creates a new Service Bus namespace.
 
-	~$ azure sb namespace create mysbnamespacea-test "West US"
+	~$ azure sb namespace create mysbnamespacea-test "China North"
 	info:    Executing command sb namespace create
-	+ Creating namespace mysbnamespacea-test in region West US
+	+ Creating namespace mysbnamespacea-test in region China North
 	data:    Name: mysbnamespacea-test
-	data:    Region: West US
+	data:    Region: China North
 	data:    DefaultKey: fBu8nQ9svPIesFfMFVhCFD+/sY0rRbifWMoRpYy0Ynk=
 	data:    Status: Activating
 	data:    CreatedAt: 2013-11-14T16:23:29.32Z
-	data:    AcsManagementEndpoint: https://mysbnamespacea-test-sb.accesscontrol.windows.net/
-	data:    ServiceBusEndpoint: https://mysbnamespacea-test.servicebus.windows.net/
+	data:    AcsManagementEndpoint: https://mysbnamespacea-test-sb.accesscontrol.chinacloudapi.cn/
+	data:    ServiceBusEndpoint: https://mysbnamespacea-test.servicebus.chinacloudapi.cn/
 
 	data:    ConnectionString: Endpoint=sb://mysbnamespacea-test.servicebus.windows.
 	net/;SharedSecretIssuer=owner;SharedSecretValue=fBu8nQ9svPIesFfMFVhCFD+/sY0rRbif
@@ -1809,7 +1800,7 @@ List all namespaces created for your account.
 	+ Getting namespaces
 	data:    Name                 Region   Status
 	data:    -------------------  -------  ------
-	data:    mysbnamespacea-test  West US  Active
+	data:    mysbnamespacea-test  China North  Active
 	info:    sb namespace list command OK
 
 
@@ -1822,14 +1813,8 @@ Display a list of all available namespace locations.
 	+ Getting locations
 	data:    Name              Code
 	data:    ----------------  ----------------
-	data:    East Asia         East Asia
-	data:    West Europe       West Europe
-	data:    North Europe      North Europe
-	data:    East US           East US
-	data:    Southeast Asia    Southeast Asia
-	data:    North Central US  North Central US
-	data:    West US           West US
-	data:    South Central US  South Central US
+	data:    China East         China East
+	data:    China North  China North
 	info:    sb namespace location list command OK
 
 **sb namespace show &lt;name>**
@@ -1840,12 +1825,12 @@ Display details about a specific namespace.
 	info:    Executing command sb namespace show
 	+ Getting namespace
 	data:    Name: mysbnamespacea-test
-	data:    Region: West US
+	data:    Region: China North
 	data:    DefaultKey: fBu8nQ9svPIesFfMFVhCFD+/sY0rRbifWMoRpYy0Ynk=
 	data:    Status: Active
 	data:    CreatedAt: 2013-11-14T16:23:29.32Z
-	data:    AcsManagementEndpoint: https://mysbnamespacea-test-sb.accesscontrol.windows.net/
-	data:    ServiceBusEndpoint: https://mysbnamespacea-test.servicebus.windows.net/
+	data:    AcsManagementEndpoint: https://mysbnamespacea-test-sb.accesscontrol.chinacloudapi.cn/
+	data:    ServiceBusEndpoint: https://mysbnamespacea-test.servicebus.chinacloudapi.cn/
 
 	data:    ConnectionString: Endpoint=sb://mysbnamespacea-test.servicebus.windows.
 	net/;SharedSecretIssuer=owner;SharedSecretValue=fBu8nQ9svPIesFfMFVhCFD+/sY0rRbif
@@ -1872,7 +1857,7 @@ This command displays the storage accounts on your subscription.
 	+ Getting storage accounts
 	data:    Name             Label  Location
 	data:    ---------------  -----  --------
-	data:    mybasestorage           West US
+	data:    mybasestorage           China North
 	info:    storage account list command OK
 
 **storage account show [options] <name>**
@@ -1883,7 +1868,7 @@ This command displays information about the specified storage account including 
 
 This command creates a storage account based on the supplied options.
 
-	~$ azure storage account create mybasestorage --label PrimaryStorage --location "West US"
+	~$ azure storage account create mybasestorage --label PrimaryStorage --location "China North"
 	info:    Executing command storage account create
 	+ Creating storage account
 	info:    storage account create command OK
@@ -1894,7 +1879,7 @@ This command supports the following additional options:
 + **-d** or **--description** &lt;description>:  The description storage account.
 + **-l** or **--location** &lt;name>: The geographic region in which to create the storage account.
 + **-a** or **--affinity-group** &lt;name>: The affinity group with which to associate the storage account.
-+ **--type**:  Indicates the type of account to create: either Standard Storage with redundancy option (LRS/ZRS/GRS/RAGRS) or Premium Storage (PLRS).
++ **--type**:  Indicates the type of account to create: either Standard Storage with redundancy option (LRS/GRS/RAGRS) or Premium Storage (PLRS).
 
 **storage account set [options] <name>**
 
@@ -1910,7 +1895,7 @@ This command supports the following additional options:
 + **-e** or **--label** &lt;label>: The label for the storage account.
 + **-d** or **--description** &lt;description>:  The description storage account.
 + **-l** or **--location** &lt;name>: The geographic region in which to create the storage account.
-+ **--type**:  Indicates the new type of account: either Standard Storage with redundancy option (LRS/ZRS/GRS/RAGRS) or Premium Storage (PLRS).
++ **--type**:  Indicates the new type of account: either Standard Storage with redundancy option (LRS/GRS/RAGRS) or Premium Storage (PLRS).
 
 **storage account delete [options] <name>**
 
@@ -2069,7 +2054,7 @@ Use these commands to manage your SQL Servers
 
 Create a new database server
 
-	~$ azure sql server create test T3stte$t "West US"
+	~$ azure sql server create test T3stte$t "China North"
 	info:    Executing command sql server create
 	+ Creating SQL Server
 	data:    Server Name i1qwc540ts
@@ -2084,8 +2069,8 @@ Display server details.
 	+ Getting SQL server
 	data:    SQL Server Name xclfgcndfg
 	data:    SQL Server AdministratorLogin msopentechforums
-	data:    SQL Server Location West US
-	data:    SQL Server FullyQualifiedDomainName xclfgcndfg.database.windows.net
+	data:    SQL Server Location China North
+	data:    SQL Server FullyQualifiedDomainName xclfgcndfg.database.chinacloudapi.cn
 	info:    sql server show command OK
 
 **sql server list**
@@ -2097,7 +2082,7 @@ Get the list of servers.
 	+ Getting SQL server
 	data:    Name        Location
 	data:    ----------  --------
-	data:    xclfgcndfg  West US
+	data:    xclfgcndfg  China North
 	info:    sql server list command OK
 
 **sql server delete &lt;name>**
@@ -2133,7 +2118,7 @@ Display database details.
 	Administrator password: ********
 	+ Getting SQL server databases
 	data:    Database _ ContentRootElement=m:properties, id=https://fr8aelne00.datab
-	ase.windows.net/v1/ManagementService.svc/Server2('fr8aelne00')/Databases(4), ter
+	ase.chinacloudapi.cn/v1/ManagementService.svc/Server2('fr8aelne00')/Databases(4), ter
 	m=Microsoft.SqlServer.Management.Server.Domain.Database, scheme=http://schemas.m
 	icrosoft.com/ado/2007/08/dataservices/scheme, link=[rel=edit, title=Database, hr
 	ef=Databases(4), rel=http://schemas.microsoft.com/ado/2007/08/dataservices/relat
@@ -2225,9 +2210,9 @@ Show firewall rule details.
 	data:    Firewall rule Name allowed
 	data:    Firewall rule Type Microsoft.SqlAzure.FirewallRule
 	data:    Firewall rule State Normal
-	data:    Firewall rule SelfLink https://management.core.windows.net/9e672699-105
+	data:    Firewall rule SelfLink https://management.core.chinacloudapi.cn/9e672699-105
 	5-41ae-9c36-e85152f2e352/services/sqlservers/servers/fr8aelne00/firewallrules/allowed
-	data:    Firewall rule ParentLink https://management.core.windows.net/9e672699-1
+	data:    Firewall rule ParentLink https://management.core.chinacloudapi.cn/9e672699-1
 	055-41ae-9c36-e85152f2e352/services/sqlservers/servers/fr8aelne00
 	data:    Firewall rule StartIPAddress 131.107.0.0
 	data:    Firewall rule EndIPAddress 131.107.255.255
@@ -2263,7 +2248,7 @@ Use these commands to manage your Virtual Networks
 
 Create a new Virtual Network.
 
-	~$ azure network vnet create vnet1 --location "West US" -v
+	~$ azure network vnet create vnet1 --location "China North" -v
 	info:    Executing command network vnet create
 	info:    Using default address space start IP: 10.0.0.0
 	info:    Using default address space cidr: 8

@@ -1,7 +1,7 @@
 
 It is always a good practice to validate the length of data that is submitted by users. In this section you will add code to the mobile service that validates the length of string data sent to the mobile service and rejects strings that are too long, in this case longer than 10 characters.
 
-1. Start Visual Studio with the **Run as administrator** option and open the solution that contains the mobile service project that you worked with in the [Getting Started] or [Get started with data](/zh-cn/documentation/articles/mobile-services-dotnet-backend-windows-store-dotnet-get-started-data)  tutorial.
+1. Start Visual Studio with the **Run as administrator** option and open the solution that contains the mobile service project that you worked with in the [Getting Started] or [Get started with data](/zh-cn/documentation/articles/mobile-services-dotnet-backend-windows-store-dotnet-get-started-data/)  tutorial.
 
 2. In the Solution Explorer window expand the todo list service project and expand **Contollers**. Open the TodoItemController.cs file which is part of the mobile service project.  
 

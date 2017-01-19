@@ -1,16 +1,19 @@
-<properties 
-	pageTitle="Backup and Restore for SQL Server in Azure Virtual Machines"
+<!-- rename to virtual-machines-windows-sql-backup-recovery -->
+
+<properties
+	pageTitle="Backup and Restore for SQL Server | Azure"
 	description="Describes backup and restore considerations for SQL Server databases running on Azure Virtual Machines."
 	services="virtual-machines"
 	documentationCenter="na"
 	authors="rothja"
 	manager="jeffreyg"
-	editor="monicar" />
+	editor="monicar"
+	tags="azure-service-management" />
 
-<tags 
+<tags
 	ms.service="virtual-machines"
-	ms.date="08/05/2015"
-	wacn.dater="" />
+	ms.date="02/03/2016"
+	wacn.date=""/>
 
 # Backup and Restore for SQL Server in Azure Virtual Machines
 
@@ -18,50 +21,52 @@
 
 Backing up data in SQL Server databases is an important part of the strategy in protecting against data loss due to application or user errors. This is equally true for SQL Server running on Azure Virtual Machines (VMs).
 
-For SQL Server running in Azure VMs, you can use native backup and restore techniques using attached disks for the destination of the backup files. However, there is a limit to the number of disks you can attach to an Azure virtual machine, based on the [size of the virtual machine](/documentation/articles/virtual-machines-size-specs). There is also the overhead of disk management to consider.
+[AZURE.INCLUDE [learn-about-deployment-models](../../includes/learn-about-deployment-models-both-include.md)]
 
-Beginning with SQL Server 2014, you can backup and restore to Windows Azure Blob storage. SQL Server 2016 also provides enhancements for this option. In addition, for database files stored in Windows Azure Blob storage, SQL Server 2016 provides an option for nearly instantaneous backups and for rapid restores using Azure snapshots. This article provides an overview of these options, and additional information can be found at [SQL Server Backup and Restore with Windows Azure Blob Storage Service](https://msdn.microsoft.com/zh-cn/library/jj919148(v=sql.130).aspx).
+For SQL Server running in Azure VMs, you can use native backup and restore techniques using attached disks for the destination of the backup files. However, there is a limit to the number of disks you can attach to an Azure virtual machine, based on the [size of the virtual machine](/documentation/articles/virtual-machines-linux-sizes/). There is also the overhead of disk management to consider.
+
+Beginning with SQL Server 2014, you can backup and restore to Azure Blob storage. SQL Server 2016 also provides enhancements for this option. In addition, for database files stored in Azure Blob storage, SQL Server 2016 provides an option for nearly instantaneous backups and for rapid restores using Azure snapshots. This article provides an overview of these options, and additional information can be found at [SQL Server Backup and Restore with Azure Blob Storage Service](https://msdn.microsoft.com/zh-cn/library/jj919148.aspx).
 
 >[AZURE.NOTE] For a discussion of the options for backing up very large databases, see [Multi-Terabyte SQL Server Database Backup Strategies for Azure Virtual Machines](http://blogs.msdn.com/b/igorpag/archive/2015/07/28/multi-terabyte-sql-server-database-backup-strategies-for-azure-virtual-machines.aspx).
 
 The sections below include information specific to the different versions of SQL Server supported in an Azure virtual machine.
 
-## Backup Considerations When Database Files are Stored in the Windows Azure Blob service
+## Backup considerations when database files are stored in the Azure Blob service
 
-The reasons for the performing database backups and the underlying backup technology itself changes when your database files are stored in Windows Azure Blob storage. For more information on storing database files in Azure blob storage, see [SQL Server Data Files in Azure](https://msdn.microsoft.com/zh-cn/library/jj919148.aspx).
+The reasons for the performing database backups and the underlying backup technology itself changes when your database files are stored in Azure Blob storage. For more information on storing database files in Azure blob storage, see [SQL Server Data Files in Azure](https://msdn.microsoft.com/zh-cn/library/jj919148.aspx).
 
-- You no longer need to perform database backups to provide protection against hardware or media failure because Windows Azure provides this protection as part of the Windows Azure service.
+- You no longer need to perform database backups to provide protection against hardware or media failure because Azure provides this protection as part of the Azure service.
 
 - You still need to perform database backups to provide protection against user errors, or for archival purposes, regulatory reasons, or administrative purposes.
 
-- You can perform nearly instantaneous backups and rapid restores using the SQL Server File-Snapshot Backup feature in Microsoft SQL Server 2016 Community Technology Preview 2 (CTP2). For more information, see [File-Snapshot Backups for Database Files in Azure](https://msdn.microsoft.com/zh-cn/library/mt169363.aspx).
+- You can perform nearly instantaneous backups and rapid restores using the SQL Server File-Snapshot Backup feature in Microsoft SQL Server 2016 Community Technology Preview 3 (CTP3). For more information, see [File-Snapshot Backups for Database Files in Azure](https://msdn.microsoft.com/zh-cn/library/mt169363.aspx).
 
-## Backup and Restore in Microsoft SQL Server 2016 Community Technology Preview 2 (CTP2)
+## Backup and restore in Microsoft SQL Server 2016 Community Technology Preview 3 (CTP3)
 
-Microsoft SQL Server 2016 Community Technology Preview 2 (CTP2) supports the [backup and restore with Azure blobs](https://msdn.microsoft.com/zh-cn/library/jj919148.aspx) features found in SQL Server 2014 and described below. But it also includes the following enhancements:
+Microsoft SQL Server 2016 Community Technology Preview 3 (CTP3) supports the [backup and restore with Azure blobs](https://msdn.microsoft.com/zh-cn/library/jj919148.aspx) features found in SQL Server 2014 and described below. But it also includes the following enhancements:
 
-- **Striping**: When backing up to Windows Azure blob storage, SQL Server 2016 supports backing up to multiple blobs to enable backing up large databases, up to a maximum of 12.8 TB.
+- **Striping**: When backing up to Azure blob storage, SQL Server 2016 supports backing up to multiple blobs to enable backing up large databases, up to a maximum of 12.8 TB.
 
 - **Snapshot Backup**: Through the use of Azure snapshots, SQL Server File-Snapshot Backup provides nearly instantaneous backups and rapid restores for database files stored using the Azure Blob storage service. This capability enables you to simplify your backup and restore policies. File-snapshot backup also supports point in time restore. For more information, see [Snapshot Backups for Database Files in Azure](https://msdn.microsoft.com/zh-cn/library/mt169363%28v=sql.130%29.aspx).
 
-- **Managed Backup Scheduling**: SQL Server Managed Backup to Azure now supports custom schedules. For more information, see [SQL Server Managed Backup to Windows Azure](https://msdn.microsoft.com/zh-cn/library/dn449496.aspx).
+- **Managed Backup Scheduling**: SQL Server Managed Backup to Azure now supports custom schedules. For more information, see [SQL Server Managed Backup to Azure](https://msdn.microsoft.com/zh-cn/library/dn449496.aspx).
 
->[AZURE.NOTE] For a tutorial of the capabilities of SQL Server 2016 when using Azure Blob storage, see [Tutorial: Using the Windows Azure Blob storage service with SQL Server 2016 databases](https://msdn.microsoft.com/zh-cn/library/dn466438.aspx).
+>[AZURE.NOTE] For a tutorial of the capabilities of SQL Server 2016 when using Azure Blob storage, see [Tutorial: Using the Azure Blob storage service with SQL Server 2016 databases](https://msdn.microsoft.com/zh-cn/library/dn466438.aspx).
 
-## Backup and Restore in SQL Server 2014
+## Backup and restore in SQL Server 2014
 
 SQL Server 2014 includes the following enhancement:
 
 1. **Backup and Restore to Azure**:
 
  - *SQL Server Backup to URL* now has support in SQL Server Management Studio. The option to backup to Azure is now available when using Backup or Restore task, or maintenance plan wizard in SQL Server Management Studio. For more information, see [SQL Server Backup to URL](https://msdn.microsoft.com/zh-cn/library/jj919148%28v=sql.120%29.aspx).
- - *SQL Server Managed Backup to Azure* has new functionality that enables automated backup management. This is especially useful for automating backup management for SQL Server 2014 instances running on an Azure Machine. For more information, see [SQL Server Managed Backup to Windows Azure](https://msdn.microsoft.com/zh-cn/library/dn449496%28v=sql.120%29.aspx).
- - *Automated Backup* provides additional automation to automatically enable *SQL Server Managed Backup to Azure* on all existing and new databases for a SQL Server VM in Azure. For more information, see [Automated Backup for SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-sql-server-automated-backup).
- - For an overview of all the options for SQL Server 2014 Backup to Azure, see [SQL Server Backup and Restore with Windows Azure Blob Storage Service](https://msdn.microsoft.com/zh-cn/library/jj919148%28v=sql.120%29.aspx).
+ - *SQL Server Managed Backup to Azure* has new functionality that enables automated backup management. This is especially useful for automating backup management for SQL Server 2014 instances running on an Azure Machine. For more information, see [SQL Server Managed Backup to Azure](https://msdn.microsoft.com/zh-cn/library/dn449496%28v=sql.120%29.aspx).
+ - *Automated Backup* provides additional automation to automatically enable *SQL Server Managed Backup to Azure* on all existing and new databases for a SQL Server VM in Azure. For more information, see [Automated Backup for SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-windows-classic-sql-automated-backup/).
+ - For an overview of all the options for SQL Server 2014 Backup to Azure, see [SQL Server Backup and Restore with Azure Blob Storage Service](https://msdn.microsoft.com/zh-cn/library/jj919148%28v=sql.120%29.aspx).
 
 1. **Encryption**: SQL Server 2014 supports encrypting data when creating a backup. It supports several encryption algorithms and the use osf a certificate or asymmetric key. For more information, see [Backup Encryption](https://msdn.microsoft.com/zh-cn/library/dn449489%28v=sql.120%29.aspx).
 
-## Backup and Restore in SQL Server 2012
+## Backup and restore in SQL Server 2012
 
 For detailed information on SQL Server Backup and Restore in SQL Server 2012, see [Backup and Restore of SQL Server Databases (SQL Server 2012)](https://msdn.microsoft.com/zh-cn/library/ms187048%28v=sql.110%29.aspx).
 
@@ -71,16 +76,16 @@ Some of the benefits of using the Azure Blob storage service include the ability
 
 For Best Practice recommendations and troubleshooting information, see [Backup and Restore Best Practices (Azure Blob Storage Service)](https://msdn.microsoft.com/zh-cn/library/jj919149%28v=sql.110%29.aspx).
 
-## Backup and Restore in other versions of SQL Server supported in an Azure Virtual Machine
+## Backup and restore in other versions of SQL Server supported in an Azure Virtual Machine
 
 For SQL Server Backup and Restore in SQL Server 2008 R2, see [Backing up and Restoring Databases in SQL Server (SQL Server 2008 R2)](https://msdn.microsoft.com/zh-cn/library/ms187048%28v=sql.105%29.aspx).
 
 For SQL Server Backup and Restore in SQL Server 2008, see [Backing up and Restoring Databases in SQL Server (SQL Server 2008)](https://msdn.microsoft.com/zh-cn/library/ms187048%28v=sql.100%29.aspx).
 
-## Next Steps
+## Next steps
 
-If you are still planning your deployment of SQL Server in an Azure VM, you can find provisioning guidance in the following tutorial: [Provisioning a SQL Server Virtual Machine on Azure](/documentation/articles/virtual-machines-provision-sql-server).
+If you are still planning your deployment of SQL Server in an Azure VM, you can find provisioning guidance in the following tutorial: [Provisioning a SQL Server Virtual Machine on Azure with Azure Resource Manager](/documentation/articles/virtual-machines-sql-server-provision-resource-manager/).
 
-Although backup and restore can be used to migrate your data, there are potentially easier data migration paths to SQL Server on an Azure VM. For a full discussion of migration options and recommendations, see [Migrating a Database to SQL Server on an Azure VM](/documentation/articles/virtual-machines-migrate-onpremises-database).
+Although backup and restore can be used to migrate your data, there are potentially easier data migration paths to SQL Server on an Azure VM. For a full discussion of migration options and recommendations, see [Migrating a Database to SQL Server on an Azure VM](/documentation/articles/virtual-machines-windows-migrate-sql/).
 
-Review other [resources for running SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-sql-server-infrastructure-services).
+Review other [resources for running SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-windows-sql-server-iaas-overview/).

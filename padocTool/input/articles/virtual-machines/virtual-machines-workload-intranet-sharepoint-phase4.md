@@ -1,100 +1,161 @@
+<!-- rename to virtual-machines-windows-ps-sp-intranet-ph4 -->
+
 <properties
-	pageTitle="SharePoint Intranet Farm Workload Phase 4: Configure SharePoint Servers"
-	description="In this fourth phase of deploying an intranet-only SharePoint 2013 farm, you create the SharePoint server virtual machines and a new SharePoint farm."
+	pageTitle="SharePoint Server 2013 farm Phase 4 | Azure"
+	description="Create the SharePoint server virtual machines and a new SharePoint farm in Phase 4 of the SharePoint Server 2013 farm in Azure."
 	documentationCenter=""
 	services="virtual-machines"
 	authors="JoeDavies-MSFT"
 	manager="timlt"
 	editor=""
-	tags="azure-service-management"/>
+	tags="azure-resource-manager"/>
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="07/22/2015"
+	ms.date="12/11/2015"
 	wacn.date=""/>
 
 # SharePoint Intranet Farm Workload Phase 4: Configure SharePoint servers
 
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
+
 In this phase of deploying an intranet-only SharePoint 2013 farm with SQL Server AlwaysOn Availability Groups in Azure infrastructure services, you build out the application and web tiers of the SharePoint farm and create the farm by using the SharePoint Configuration Wizard.
 
-You must complete this phase before moving on to [Phase 5](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase5). See [Deploying SharePoint with SQL Server AlwaysOn Availability Groups in Azure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-overview) for all of the phases.
+You must complete this phase before moving on to [Phase 5](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase5/). See [Deploying SharePoint with SQL Server AlwaysOn Availability Groups in Azure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-overview/) for all of the phases.
 
 ## Create the SharePoint server virtual machines in Azure
 
 There are four SharePoint server virtual machines. Two SharePoint server virtual machines are for the front-end web servers, and two are for administration and hosting SharePoint applications. Two SharePoint servers in each tier provide high availability.
 
-Use the following block of Azure PowerShell commands to create the virtual machines for the four SharePoint servers. Specify the values for the variables, removing the < and > characters. Note that this Azure PowerShell command set uses values from the following tables:
+First, you configure internal load balancing so that Azure distributes the client traffic evenly among the two front end web servers. This requires you to specify an internal load balancing instance consisting of a name and its own IP address, obtained from the subnet address space that you assigned to your Azure virtual network. 
+
+> [AZURE.NOTE] The following command sets use Azure PowerShell 1.0 and later. For more information, see [Azure PowerShell 1.0](https://azure.microsoft.com/blog/azps-1-0/).
+
+Specify the values for the variables, removing the < and > characters. Note that the following Azure PowerShell command sets use values from the following tables:
 
 - Table M, for your virtual machines
 - Table V, for your virtual network settings
 - Table S, for your subnet
+- Table ST, for your storage accounts
 - Table A, for your availability sets
-- Table C, for your cloud services
 
-Recall that you defined Table M in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2) and Tables V, S, A, and C in [Phase 1: Configure Azure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase1).
+Recall that you defined Table M in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2/) and Tables V, S, ST, and A in [Phase 1: Configure Azure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase1/).
 
 When you have supplied all the proper values, run the resulting block at the Azure PowerShell command prompt.
 
-	# Create the first SharePoint application server
-	$vmName="<Table M – Item 6 - Virtual machine name column>"
-	$vmSize="<Table M – Item 6 - Minimum size column, specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
-	$availSet="<Table A – Item 3 – Availability set name column>"
-	$image= Get-AzureVMImage | where { $_.Label -eq "SharePoint Server 2013 Trial" } | sort PublishedDate -Descending | select -ExpandProperty ImageName -First 1
-	$vm1=New-AzureVMConfig -Name $vmName -InstanceSize $vmSize -ImageName $image -AvailabilitySetName $availSet
+	# Set up key variables
+	$rgName="<resource group name>"
+	$locName="<Azure location of your resource group>"
+	$vnetName="<Table V - Item 1 - Value column>"
+	$privIP="<available IP address on the subnet>"
+	$vnet=Get-AzureRMVirtualNetwork -Name $vnetName -ResourceGroupName $rgName
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account for the first SharePoint application server."
-	$cred2=Get-Credential –Message "Now type the name and password of an account that has permissions to add this virtual machine to the domain."
-	$ADDomainName="<name of the AD domain that the server is joining (example CORP)>"
-	$domainDNS="<FQDN of the AD domain that the server is joining (example corp.contoso.com)>"
-	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $ADDomainName -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domainDNS
+	$frontendIP=New-AzureRMLoadBalancerFrontendIpConfig -Name SharePointWebServers-LBFE -PrivateIPAddress $privIP -SubnetId $vnet.Subnets[1].Id
+	$beAddressPool=New-AzureRMLoadBalancerBackendAddressPoolConfig -Name SharePointWebServers-LBBE
 
-	$subnetName="<Table 6 – Item 1 – Subnet name column>"
-	$vm1 | Set-AzureSubnet -SubnetNames $subnetName
+	# This example assumes unsecured (HTTP-based) web traffic to the web servers.
+	$healthProbe=New-AzureRMLoadBalancerProbeConfig -Name WebServersProbe -Protocol "TCP" -Port 80 -IntervalInSeconds 15 -ProbeCount 2
+	$lbrule=New-AzureRMLoadBalancerRuleConfig -Name "WebTraffic" -FrontendIpConfiguration $frontendIP -BackendAddressPool $beAddressPool -Probe $healthProbe -Protocol "TCP" -FrontendPort 80 -BackendPort 80
+	New-AzureRMLoadBalancer -ResourceGroupName $rgName -Name "SharePointWebServersInAzure" -Location $locName -LoadBalancingRule $lbrule -BackendAddressPool $beAddressPool -Probe $healthProbe -FrontendIpConfiguration $frontendIP
 
-	$serviceName="<Table C – Item 3 – Cloud service name column>"
-	$vnetName="<Table V – Item 1 – Value column>"
-	New-AzureVM –ServiceName $serviceName -VMs $vm1 -VNetName $vnetName
+Next, add a DNS address record to your organization's internal DNS infrastructure that resolves the fully qualified domain name of the SharePoint farm (such as spfarm.corp.contoso.com) to the IP address assigned to the internal load balancer (the value of $privIP in the preceding Azure PowerShell command block).
 
-	# Create the second SharePoint application server
-	$vmName="<Table M – Item 7 - Virtual machine name column>"
-	$vmSize="<Table M – Item 7 - Minimum size column, specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
-	$vm1=New-AzureVMConfig -Name $vmName -InstanceSize $vmSize -ImageName $image -AvailabilitySetName $availSet
+Use the following block of Azure PowerShell commands to create the virtual machines for the four SharePoint servers. When you have supplied all the proper values, run the resulting block at the Azure PowerShell command prompt.
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account for the second SharePoint application server."
-	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $ADDomainName -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domainDNS
+	# Set up key variables
+	$rgName="<resource group name>"
+	$locName="<Azure location of your resource group>"
+	$saName="<Table ST - Item 2 - Storage account name column>"
+	$vnetName="<Table V - Item 1 - Value column>"
+	$avName="<Table A - Item 3 - Availability set name column>"
+	
+	# Create the first application server
+	$vmName="<Table M - Item 6 - Virtual machine name column>"
+	$vmSize="<Table M - Item 6 - Minimum size column>"
+	$vnet=Get-AzureRMVirtualNetwork -Name $vnetName -ResourceGroupName $rgName
+	$nic=New-AzureRMNetworkInterface -Name ($vmName +"-NIC") -ResourceGroupName $rgName -Location $locName -SubnetId $vnet.Subnets[1].Id
+	$avSet=Get-AzureRMAvailabilitySet -Name $avName -ResourceGroupName $rgName 
+	$vm=New-AzureRMVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avset.Id
+	$cred=Get-Credential -Message "Type the name and password of the local administrator account for the first application server." 
+	$vm=Set-AzureRMVMOperatingSystem -VM $vm -Windows -ComputerName $vmName -Credential $cred -ProvisionVMAgent -EnableAutoUpdate
+	$vm=Set-AzureRMVMSourceImage -VM $vm -PublisherName MicrosoftSharePoint -Offer MicrosoftSharePointServer -Skus 2013 -Version "latest"
+	$vm=Add-AzureRMVMNetworkInterface -VM $vm -Id $nic.Id
+	$storageAcc=Get-AzureRMStorageAccount -ResourceGroupName $rgName -Name $saName
+	$osDiskUri=$storageAcc.PrimaryEndpoints.Blob.ToString() + "vhds/" + $vmName + "-OSDisk.vhd"
+	$vm=Set-AzureRMVMOSDisk -VM $vm -Name "OSDisk" -VhdUri $osDiskUri -CreateOption fromImage
+	New-AzureRMVM -ResourceGroupName $rgName -Location $locName -VM $vm
 
-	$vm1 | Set-AzureSubnet -SubnetNames $subnetName
+	# Create the second application server
+	$vmName="<Table M - Item 7 - Virtual machine name column>"
+	$vmSize="<Table M - Item 7 - Minimum size column>"
+	$vnet=Get-AzureRMVirtualNetwork -Name $vnetName -ResourceGroupName $rgName
+	$nic=New-AzureRMNetworkInterface -Name ($vmName +"-NIC") -ResourceGroupName $rgName -Location $locName -SubnetId $vnet.Subnets[1].Id
+	$avSet=Get-AzureRMAvailabilitySet -Name $avName -ResourceGroupName $rgName 
+	$vm=New-AzureRMVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avset.Id
+	$cred=Get-Credential -Message "Type the name and password of the local administrator account for the second application server." 
+	$vm=Set-AzureRMVMOperatingSystem -VM $vm -Windows -ComputerName $vmName -Credential $cred -ProvisionVMAgent -EnableAutoUpdate
+	$vm=Set-AzureRMVMSourceImage -VM $vm -PublisherName MicrosoftSharePoint -Offer MicrosoftSharePointServer -Skus 2013 -Version "latest"
+	$vm=Add-AzureRMVMNetworkInterface -VM $vm -Id $nic.Id
+	$storageAcc=Get-AzureRMStorageAccount -ResourceGroupName $rgName -Name $saName
+	$osDiskUri=$storageAcc.PrimaryEndpoints.Blob.ToString() + "vhds/" + $vmName + "-OSDisk.vhd"
+	$vm=Set-AzureRMVMOSDisk -VM $vm -Name "OSDisk" -VhdUri $osDiskUri -CreateOption fromImage
+	New-AzureRMVM -ResourceGroupName $rgName -Location $locName -VM $vm
 
-	New-AzureVM –ServiceName $serviceName -VMs $vm1 -VNetName $vnetName
+	# Change the availability set
+	$avName="<Table A - Item 4 - Availability set name column>"
 
-	# Create the first SharePoint web server
-	$vmName="<Table M – Item 8 - Virtual machine name column>"
-	$vmSize="<Table M – Item 8 - Minimum size column, specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
-	$availSet="<Table A – Item 4 – Availability set name column>"
-	$vm1=New-AzureVMConfig -Name $vmName -InstanceSize $vmSize -ImageName $image -AvailabilitySetName $availSet
+	# Set up key variables
+	$beSubnetName="<Table S - Item 2 - Name column>"
+	$webLB=Get-AzureRMLoadBalancer -ResourceGroupName $rgName -Name "SharePointWebServersInAzure"	
+	$vnet=Get-AzureRMVirtualNetwork -Name $vnetName -ResourceGroupName $rgName
+	$backendSubnet=Get-AzureRMVirtualNetworkSubnetConfig -Name $beSubnetName -VirtualNetwork $vnet
+	
+	# Create the first front end web server virtual machine
+	$vmName="<Table M - Item 8 - Virtual machine name column>"
+	$vmSize="<Table M - Item 8 - Minimum size column>"
+	$nic=New-AzureRMNetworkInterface -Name ($vmName + "-NIC") -ResourceGroupName $rgName -Location $locName -Subnet $backendSubnet -LoadBalancerBackendAddressPool $webLB.BackendAddressPools[0]
+	$avSet=Get-AzureRMAvailabilitySet -Name $avName -ResourceGroupName $rgName 
+	$vm=New-AzureRMVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avset.Id
+	$cred=Get-Credential -Message "Type the name and password of the local administrator account for the first front end web server." 
+	$vm=Set-AzureRMVMOperatingSystem -VM $vm -Windows -ComputerName $vmName -Credential $cred -ProvisionVMAgent -EnableAutoUpdate
+	$vm=Set-AzureRMVMSourceImage -VM $vm -PublisherName MicrosoftSharePoint -Offer MicrosoftSharePointServer -Skus 2013 -Version "latest"
+	$vm=Add-AzureRMVMNetworkInterface -VM $vm -Id $nic.Id
+	$storageAcc=Get-AzureRMStorageAccount -ResourceGroupName $rgName -Name $saName
+	$osDiskUri=$storageAcc.PrimaryEndpoints.Blob.ToString() + "vhds/" + $vmName + "-OSDisk.vhd"
+	$vm=Set-AzureRMVMOSDisk -VM $vm -Name "OSDisk" -VhdUri $osDiskUri -CreateOption fromImage
+	New-AzureRMVM -ResourceGroupName $rgName -Location $locName -VM $vm
+	
+	# Create the second front end web server virtual machine
+	$vmName="<Table M - Item 9 - Virtual machine name column>"
+	$vmSize="<Table M - Item 9 - Minimum size column>"
+	$nic=New-AzureRMNetworkInterface -Name ($vmName + "-NIC") -ResourceGroupName $rgName -Location $locName -Subnet $backendSubnet -LoadBalancerBackendAddressPool $webLB.BackendAddressPools[0]
+	$vm=New-AzureRMVMConfig -VMName $vmName -VMSize $vmSize -AvailabilitySetId $avset.Id
+	$cred=Get-Credential -Message "Type the name and password of the local administrator account for the second front end web server." 
+	$vm=Set-AzureRMVMOperatingSystem -VM $vm -Windows -ComputerName $vmName -Credential $cred -ProvisionVMAgent -EnableAutoUpdate
+	$vm=Set-AzureRMVMSourceImage -VM $vm -PublisherName MicrosoftSharePoint -Offer MicrosoftSharePointServer -Skus 2013 -Version "latest"
+	$vm=Add-AzureRMVMNetworkInterface -VM $vm -Id $nic.Id
+	$storageAcc=Get-AzureRMStorageAccount -ResourceGroupName $rgName -Name $saName
+	$osDiskUri=$storageAcc.PrimaryEndpoints.Blob.ToString() + "vhds/" + $vmName + "-OSDisk.vhd"
+	$vm=Set-AzureRMVMOSDisk -VM $vm -Name "OSDisk" -VhdUri $osDiskUri -CreateOption fromImage
+	New-AzureRMVM -ResourceGroupName $rgName -Location $locName -VM $vm
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account for the first SharePoint web server."
-	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $ADDomainName -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domainDNS
+> [AZURE.NOTE] Because these virtual machines are for an intranet application, they are not assigned a public IP address or a DNS domain name label and exposed to the Internet. However, this also means that you cannot connect to them from the Azure portal. The **Connect** button will be unavailable when you view the properties of the virtual machine.
 
-	$vm1 | Set-AzureSubnet -SubnetNames $subnetName
+Use the remote desktop client of your choice and create a remote desktop connection to each virtual machine. Use its intranet DNS or computer name and the credentials of the local administrator account.
 
-	New-AzureVM –ServiceName $serviceName -VMs $vm1 -VNetName $vnetName
+Next, for each virtual machine, join them to the appropriate Active Directory domain with these commands at the Windows PowerShell prompt.
 
-	# Create the second SharePoint web server
-	$vmName="<Table M – Item 9 - Virtual machine name column>"
-	$vmSize="<Table M – Item 9 - Minimum size column, specify one: Small, Medium, Large, ExtraLarge, A5, A6, A7, A8, A9>"
-	$vm1=New-AzureVMConfig -Name $vmName -InstanceSize $vmSize -ImageName $image -AvailabilitySetName $availSet
+	$domName="<Active Directory domain name to join, such as corp.contoso.com>"
+	Add-Computer -DomainName $domName
+	Restart-Computer
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account for the second SharePoint web server."
-	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $ADDomainName -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domainDNS
+Note that you must supply domain account credentials after entering the **Add-Computer** command.
 
-	$vm1 | Set-AzureSubnet -SubnetNames $subnetName
+After they restart, use the [Logging on to a virtual machine with a Remote Desktop connection procedure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2/#logon) four times, once for each SharePoint server, to log on by using the [Domain]\sp_farm_db account credentials. You created these credentials in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2/).
 
-	New-AzureVM –ServiceName $serviceName -VMs $vm1 -VNetName $vnetName
+Use the [To test connectivity procedure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2/#testconn) four times, once for each SharePoint server, to test connectivity to locations on your organization network.
 
-Use the [Logging on to a virtual machine with a Remote Desktop connection procedure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2#logon) four times, once for each SharePoint server, to log on by using the [Domain]\sp_farm_db account credentials. You created these credentials in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2).
-
-Use the [To test connectivity procedure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2#testconn) four times, once for each SharePoint server, to test connectivity to locations on your organization network.
+> [AZURE.NOTE] The SharePoint servers are created from the SharePoint Server 2013 Trial image. You need to convert the installation to use a Retail or Volume License key for either the Standard or Enterprise edition of SharePoint Server 2013. 
 
 ## Configure the SharePoint farm
 
@@ -106,7 +167,7 @@ Use these steps to configure the first SharePoint server in the farm:
 4.	On the **Connect to a server farm** page, select **Create a new server farm**, and then click **Next**.
 5.	On the **Specify Configuration Database Settings** page:
  - In **Database server**, type the name of the primary database server.
- - In **Username**, type [Domain]**\sp_farm_db** (created in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2)). Recall that the sp_farm_db account has sysadmin privileges on the database server.
+ - In **Username**, type [Domain]**\sp_farm_db** (created in [Phase 2: Configure domain controllers](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase2/)). Recall that the sp_farm_db account has sysadmin privileges on the database server.
  - In **Password**, type the sp_farm_db account password.
 6.	Click **Next**.
 7.	On the **Specify Farm Security Settings** page, type a passphrase twice. Record the passphrase and store it in a secure location for future reference. Click **Next**.
@@ -128,63 +189,16 @@ Perform the following procedure on the second SharePoint application server and 
 8.	The **Completing the SharePoint Products Configuration Wizard** page appears. Click **Next**.
 9.	On the **Configuration Successful** page, click **Finish**.
 
-When SharePoint creates the farm, it configures a set of server logins on the primary SQL Server virtual machine. SQL Server 2012 introduces the concept of users with passwords for contained databases. The database itself stores all the database metadata and user information, and a user who is defined in this database does not need to have a corresponding login. The information in this database is replicated by the availability group and is available after a failover. For more information, see [Contained databases](http://go.microsoft.com/fwlink/p/?LinkId=262794).
+When SharePoint creates the farm, it configures a set of server logins on the primary SQL Server virtual machine. SQL Server 2012 introduces the concept of users with passwords for contained databases. The database itself stores all the database metadata and user information, and a user who is defined in this database does not need to have a corresponding login. The information in this database is replicated by the availability group and is available after a failover. For more information, see [Contained databases](https://msdn.microsoft.com/zh-cn/library/ff929071(v=SQL.110).aspx).
 
 However, by default, SharePoint databases are not contained databases. Therefore, you will need to manually configure the secondary database server so that it has the same set of logins for SharePoint farm accounts as the primary database server. You can perform this synchronization from SQL Server Management Studio by connecting to both servers at the same time.
 
 After you finish this initial setup, more configuration options for the capabilities of the SharePoint farm are available. For more information, see [Planning for SharePoint 2013 on Azure infrastructure services](http://msdn.microsoft.com/zh-cn/library/dn275958.aspx).
 
-## Configure internal load balancing
-
-You configure internal load balancing so that client traffic to the SharePoint farm is distributed evenly to the two front-end web servers. This requires you to specify an internal load-balancing instance that consists of a name and its own IP address, assigned from the subnet address space. To determine whether an IP address that you choose for the internal load balancer is available, use the following Azure PowerShell commands:
-
-	$vnet="<Table V – Item 1 – Value column>"
-	$testIP="<a chosen IP address from the subnet address space, Table S - Item 1 – Subnet address space column>"
-	Test-AzureStaticVNetIP –VNetName $vnet –IPAddress $testIP
-
-If the **IsAvailable** field in the display of the **Test-AzureStaticVNetIP** command is **True**, you can use the IP address.
-
-From an Azure PowerShell command prompt on your local computer, run the following set of commands:
-
-	$serviceName="<Table C – Item 3 – Cloud service name column>"
-	$ilb="<name of your internal load balancer instance>"
-	$subnet="<Table S – Item 1 – Subnet name column>"
-	$IP="<an available IP address for your ILB instance>"
-	Add-AzureInternalLoadBalancer –ServiceName $serviceName -InternalLoadBalancerName $ilb –SubnetName $subnet –StaticVNetIPAddress $IP
-
-	$prot="tcp"
-	$locport=80
-	$pubport=80
-	# This example assumes unsecured HTTP traffic to the SharePoint farm.
-
-	$epname="SPWeb1"
-	$vmname="<Table M – Item 8 – Virtual machine name column>"
-	Get-AzureVM –ServiceName $serviceName –Name $vmname | Add-AzureEndpoint -Name $epname -LBSetName $ilb -Protocol $prot -LocalPort $locport -PublicPort $pubport –DefaultProbe -InternalLoadBalancerName $ilb | Update-AzureVM
-
-	$epname="SPWeb2"
-	$vmname="<Table M – Item 9 – Virtual machine name column>"
-	Get-AzureVM –ServiceName $serviceName –Name $vmname | Add-AzureEndpoint -Name $epname -LBSetName $ilb -Protocol $prot -LocalPort $locport -PublicPort $pubport –DefaultProbe -InternalLoadBalancerName $ilb | Update-AzureVM
-
-Next, add a DNS address record to your organization's DNS infrastructure that resolves the fully qualified domain name of the SharePoint farm (such as sp.corp.contoso.com) to the IP address assigned to the internal load balancer instance (the value of **$IP** in the preceding Azure PowerShell command block).
-
-This is the configuration that results from the successful completion of this phase:
+This is the configuration that results from the successful completion of this phase. 
 
 ![](./media/virtual-machines-workload-intranet-sharepoint-phase4/workload-spsqlao_04.png)
 
 ## Next step
 
-To continue with the configuration of this workload, go to [Phase 5: Create the availability group and add the SharePoint databases](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase5).
-
-## Additional resources
-
-[Deploying SharePoint with SQL Server AlwaysOn Availability Groups in Azure](/documentation/articles/virtual-machines-workload-intranet-sharepoint-overview)
-
-[SharePoint farms hosted in Azure infrastructure services](/documentation/articles/virtual-machines-sharepoint-infrastructure-services)
-
-[SharePoint with SQL Server AlwaysOn infographic](http://go.microsoft.com/fwlink/?LinkId=394788)
-
-[Windows Azure architectures for SharePoint 2013](https://technet.microsoft.com/zh-cn/library/dn635309.aspx)
-
-[Azure infrastructure services implementation guidelines](/documentation/articles/virtual-machines-infrastructure-services-implementation-guidelines)
-
-[Azure Infrastructure Services Workload: High-availability line of business application](/documentation/articles/virtual-machines-workload-high-availability-lob-application)
+- Use [Phase 5](/documentation/articles/virtual-machines-workload-intranet-sharepoint-phase5/) to continue with the configuration of this workload.

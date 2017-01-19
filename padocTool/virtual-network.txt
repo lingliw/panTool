@@ -1,4 +1,0 @@
-virtual-networks-dmz-nsg-asm.md
-virtual-networks-dmz-nsg-fw-asm.md
-virtual-networks-dmz-nsg-fw-udr-asm.md
-virtual-networks-sample-app.md

@@ -1,82 +1,92 @@
-<properties 
-   pageTitle="How to use Azure Redis Cache with Node.js" 
-   description="Get started with Azure Redis Cache using Node.js and node_redis." 
-   services="redis-cache" 
-   documentationCenter="" 
-   authors="MikeWasson" 
-   manager="wpickett" 
-   editor=""/>
+<properties
+	pageTitle="如何将 Azure Redis 缓存与 Node.js 配合使用 | Microsoft Azure"
+	description="开始将 Azure Redis 缓存与 Node.js 和 node_redis 配合使用。"
+	services="redis-cache"
+	documentationCenter=""
+	authors="steved0x"
+	manager="dwrede"
+	editor="v-lincan"/>
 
 <tags
-   ms.service="cache"
-   ms.date="04/30/2015"
-   wacn.date=""/>
+	ms.service="cache"
+	ms.date="08/17/2015"
+	wacn.date=""/>
 
-# How to use Azure Redis Cache with Node.js 
+# 如何将 Azure Redis 缓存与 Node.js 配合使用
 
-Azure Redis Cache gives you access to a secure, dedicated Redis cache, managed by Microsoft. Your cache is accessible from any application within Microsoft Azure.
+Azure Redis 缓存可让你访问 Microsoft 管理的、专用安全的 Redis 缓存。可从 Microsoft Azure 内部的任何应用程序访问你的缓存。
 
-This topic shows how to get started with Azure Redis Cache using Node.js. For another example of using Azure Redis Cache with Node,js, see [Build a Node.js Chat Application with Socket.IO on an Azure Website][].
+本主题说明如何开始将 Azure Redis 缓存与 Node.js 配合使用。有关将 Azure Redis 缓存与 Node.js 配合使用的另一个示例，请参阅[在 Azure 网站中使用 Socket.IO 生成 Node.js 聊天应用程序][]。
 
 
-## Prerequisites
+## 先决条件
 
-Install [node_redis](https://github.com/mranney/node_redis):
+安装 [node\_redis](https://github.com/mranney/node_redis)：
 
     npm install redis
 
-This tutorial uses [node_redis](https://github.com/mranney/node_redis), but you can use any Node.js client listed at [http://redis.io/clients](http://redis.io/clients).
+本教程使用 [node\_redis](https://github.com/mranney/node_redis)，但你可以使用 [http://redis.io/clients](http://redis.io/clients) 中列出的任何 Node.js 客户端。
 
-## Create a Redis cache on Azure
+## 在 Azure 上创建 Redis 缓存
 
-In the [Azure Management Portal](http://manage.windowsazure.cn), click **New** and select **Redis Cache**. 
+Windows Azure 中国目前只支持 PowerShell 或者 Azure CLI 对 Redis 缓存进行管理。
 
-  ![][1]
-
-Enter a DNS hostname. It will have the form `<name>.redis.cache.chinacloudapi.cn`. Click **Create**.
-
-  ![][2]
-
-
-Once the cache is created, click on it in the portal to view the cache settings. Click the link under **Keys** and copy the primary key. You will need this to authenticate requests.
-
-  ![][4]
+> [AZURE.NOTE]
+若要使用中国云环境，以下 AzureRm PowerShell 命令需要添加**“-Environment”**参数。
+> 
+>	`Add-AzureRmAccount`<br />
+>	`Login-AzureRmAccount`<br />
+>
+>例如，`Login-AzureRmAccount` 应变为 `$china = Get-AzureRmEnvironment -Name AzureChinaCloud; Login-AzureRmAccount -Environment $china` (如果你使用的是 Azure PowerShell 1.0.0 或者 1.0.1)，或者 `Login-AzureRmAccount -EnvironmentName AzureChinaCloud` (如果你使用的是 Azure PowerShell 1.0.2 或者 更高)
+> 
 
 
-## Enable the non-SSL endpoint
+使用以下的 PowerShell 脚本创建缓存：
+
+	$VerbosePreference = "Continue"
+
+	# Create a new cache with date string to make name unique. 
+	$cacheName = "MovieCache" + $(Get-Date -Format ('ddhhmm')) 
+	$location = "China North"
+	$resourceGroupName = "Default-Web-ChinaNorth"
+	
+	$movieCache = New-AzureRmRedisCache -Location $location -Name $cacheName  -ResourceGroupName $resourceGroupName -Size 250MB -Sku Basic
 
 
-Click the link under **Ports**, and click **No** for "Allow access only via SSL". This will enable the non-SSL port for the cache. The node_redis client currently does not support SSL.
-
-  ![][3]
+## 启用非 SSL 终结点
 
 
-## Add something to the cache and retrieve it
+你可以使用以下的 PowerShell 命令行启用非 SSL 终结点
+
+	Set-AzureRmRedisCache -Name "<your cache name>" -ResourceGroupName "<your resource group name>" -EnableNonSslPort $true
+
+
+## 在缓存中添加一些内容并检索此内容
 
 	var redis = require("redis");
-	
-    // Put in your cache name and access key.
-	var client = redis.createClient(6379,'<name>.redis.cache.chinacloudapi.cn', {auth_pass: '<key>' });
-	
+
+    // Add your cache name and access key.
+	var client = redis.createClient(6379,'<name>.redis.cache.windows.net', {auth_pass: '<key>' });
+
 	client.set("foo", "bar", function(err, reply) {
 	    console.log(reply);
 	});
-	
+
 	client.get("foo",  function(err, reply) {
 	    console.log(reply);
 	});
-    
 
-Output:
+
+输出：
 
 	OK
 	bar
 
 
-## Next steps
+## 后续步骤
 
-- [Enable cache diagnostics](https://msdn.microsoft.com/zh-cn/library/azure/dn763945.aspx#EnableDiagnostics) so you can [monitor](https://msdn.microsoft.com/zh-cn/library/azure/dn763945.aspx) the health of your cache. 
-- Read the official [Redis documentation](http://redis.io/documentation).
+- [启用缓存诊断](cache-how-to-monitor.md#enable-cache-diagnostics)，以便可以[监视](cache-how-to-monitor.md)缓存的运行状况。
+- 阅读官方 [Redis 文档](http://redis.io/documentation)。
 
 
 <!--Image references-->
@@ -85,5 +95,6 @@ Output:
 [3]: ./media/cache-nodejs-get-started/cache03.png
 [4]: ./media/cache-nodejs-get-started/cache04.png
 
-[Build a Node.js Chat Application with Socket.IO on an Azure Website]: web-sites-nodejs-chat-app-socketio
+[在 Azure 网站中使用 Socket.IO 生成 Node.js 聊天应用程序]: ../app-service-web/web-sites-nodejs-chat-app-socketio.md
 
+<!---HONumber=71-->

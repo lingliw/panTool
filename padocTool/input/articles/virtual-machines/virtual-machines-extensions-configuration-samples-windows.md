@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-windows-extensions-configuration-samples -->
+
 <properties
-   pageTitle="Sample configuration for Windows VM extensions | Windows Azure"
+   pageTitle="Sample configuration for Windows VM extensions | Azure"
    description="Sample configuration for authoring templates with extensions"
    services="virtual-machines"
    documentationCenter=""
@@ -9,19 +11,29 @@
    tags="azure-resource-manager"/>
 
 <tags
-   ms.service="virtual-machines"
-   ms.date="09/01/2015"
-   wacn.date=""/>
+	ms.service="virtual-machines"
+	ms.date="09/01/2015"
+	wacn.date=""/>
 
-# Azure Windows VM Extension Configuration Samples.
+# Azure Windows VM Extension Configuration Samples
+
+> [AZURE.SELECTOR]
+- [PowerShell - Template](/documentation/articles/virtual-machines-extensions-configuration-samples-windows/)
+- [CLI - Template](/documentation/articles/virtual-machines-extensions-configuration-samples-linux/)
+
+<br> 
+
+
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
+
+
 
 This article provides sample configuration for configuring Azure VM Extensions for Windows VMs.
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] 
 
-To learn more about these extensions click here : [Azure VM Extensions Overview.](https://msdn.microsoft.com/library/azure/dn606311.aspx)
+To learn more about these extensions, see [Azure VM Extensions Overview.](/documentation/articles/virtual-machines-linux-extensions-features/)
 
-To learn more about authoring extension templates click here : [Authoring Extension Templates.](/documentation/articles/virtual-machines-extensions-authoring-templates)
+To learn more about authoring extension templates, see [Authoring Extension Templates.](/documentation/articles/virtual-machines-extensions-authoring-templates/)
 
 This article lists expected configuration values for some of the Windows Extensions.
 
@@ -161,12 +173,12 @@ Before deploying the extension please check the latest extension version and rep
               "type": "MicrosoftMonitoringAgent",
               "typeHandlerVersion": "1.0",
               "settings": {
-                "workspace_name" : "Workspace Name : The Workspace ID is available from within the Direct Agent Configuration section of the Azure Operational Insights portal"
+                "workspaceId" : "The Workspace ID is available from within the Direct Agent Configuration section of the Azure Operational Insights portal"
               }
               "protectedSettings": {
-                "workspace_key"  : "The Workspace Key is a string that is available from within the Direct Agent Configuration section of the Azure Operational Insights portal"
+                "workspaceKey"  : "The Workspace Key is a string that is available from within the Direct Agent Configuration section of the Azure Operational Insights portal"
               }
-          }
+              }
             }
 
 ### McAfee EndpointSecurity
@@ -241,7 +253,7 @@ Before deploying the extension please check the latest extension version and rep
             }
           }
 
-### Barracuda VPN Connectivity Agent for Windows Azure
+### Barracuda VPN Connectivity Agent for Azure
           {
             "publisher": "Barracuda.Azure.ConnectivityAgent",
             "type": "BarracudaConnectivityAgent",
@@ -278,12 +290,13 @@ Before deploying the extension please check the latest extension version and rep
 
 ### Azure Diagnostics
 
-Click here for an overview of [Azure Diagnostics Extension](https://msdn.microsoft.com/library/azure/dn782207.aspx/)
+For more details about how to configure diagnostics, see [Azure Diagnostics Extension](/documentation/articles/virtual-machines-extensions-diagnostics-windows-template/)
 
           {
             "publisher": "Microsoft.Azure.Diagnostics",
             "type": "IaaSDiagnostics",
-            "typeHandlerVersion": "1.4",
+            "typeHandlerVersion": "1.5",
+			"autoUpgradeMinorVersion": true,
             "settings": {
               "xmlCfg": "[base64(variables('wadcfgx'))]",
               "storageAccount": "[parameters('diagnosticsStorageAccount')]"

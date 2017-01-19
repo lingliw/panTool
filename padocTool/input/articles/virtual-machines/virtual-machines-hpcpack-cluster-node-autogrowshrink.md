@@ -1,23 +1,25 @@
+<!-- rename to virtual-machines-windows-classic-hpcpack-cluster-node-autogrowshrink -->
+
 <properties
- pageTitle="Autoscale compute resources in HPC cluster | Windows Azure"
+ pageTitle="Autoscale compute resources in HPC cluster | Azure"
  description="Learn about ways to automatically grow and shrink compute resources in an HPC Pack cluster in Azure"
  services="virtual-machines"
  documentationCenter=""
  authors="dlepow"
  manager="timlt"
  editor=""
- tags="azure-service-management"/>
+ tags="azure-service-management,hpc-pack"/>
 <tags
 	ms.service="virtual-machines"
-	ms.date="09/28/2015"
-	wacn.date="" />
+	ms.date="01/07/2016"
+	wacn.date=""/>
 
 # Automatically scale Azure compute resources up and down in an HPC Pack cluster according to the cluster workload
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-classic-include.md)] Resource Manager model.
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
 
 
-If you deploy Azure “burst” nodes in your HPC Pack cluster, or you
+If you deploy Azure "burst" nodes in your HPC Pack cluster, or you
 create an HPC Pack cluster in Azure VMs, you may want a way to
 automatically grow or shrink the Azure computing resources according to
 the current workload of jobs and tasks on the cluster. This allows you
@@ -29,34 +31,34 @@ HPC Pack.
 >[AZURE.TIP] Starting in HPC Pack 2012 R2 Update 2, HPC Pack includes a built-in
 service to automatically grow and shrink Azure burst nodes or
 Azure VM compute nodes. Configure the service with a setting in the [HPC
-Pack IaaS deployment script](virtual-machines-hpcpack-cluster-powershell-script.md) or manually set the **AutoGrowShrink** cluster
-property. See [What’s New in Microsoft HPC Pack 2012 R2 Update
-2](https://technet.microsoft.com/library/mt269417.aspx).
+Pack IaaS deployment script](/documentation/articles/virtual-machines-linux-classic-hpcpack-cluster-powershell-script/) or manually set the **AutoGrowShrink** cluster
+property. See [What's New in Microsoft HPC Pack 2012 R2 Update
+2](https://technet.microsoft.com/zh-cn/library/mt269417.aspx).
 
 ## Prerequisites
 
-* **HPC Pack 2012 R2 Update 1 or later cluster** - The **AzureAutoGrowShrink.ps1** script is installed in the %CCP_HOME%bin folder. The cluster head node can be deployed either on-premises or in an Azure VM. See [Set up a hybrid cluster with HPC Pack](../cloud-services/cloud-services-setup-hybrid-hpcpack-cluster.md) to get started with an on-premises head node and Azure "burst" nodes. See the [HPC Pack IaaS deployment script](/documentation/articles/virtual-machines-hpcpack-cluster-powershell-script)) to quickly deploy a HPC Pack cluster in Azure VMs.
+* **HPC Pack 2012 R2 Update 1 or later cluster** - The **AzureAutoGrowShrink.ps1** script is installed in the %CCP_HOME%bin folder. The cluster head node can be deployed either on-premises or in an Azure VM. See [Set up a hybrid cluster with HPC Pack](/documentation/articles/cloud-services-setup-hybrid-hpcpack-cluster/) to get started with an on-premises head node and Azure "burst" nodes. See the [HPC Pack IaaS deployment script](/documentation/articles/virtual-machines-linux-classic-hpcpack-cluster-powershell-script/) to quickly deploy a HPC Pack cluster in Azure VMs.
 
-* **For a cluster with Azure burst nodes** - Run the script on a client computer where HPC Pack is installed, or on the head node. If running on a client computer, ensure that you set the variable $env:CCP_SCHEDULER properly to point to the head node. The Azure “burst” nodes must already be added to the cluster, but they may be in the Not-Deployed state.
+* **Azure PowerShell 0.8.12** - The script currently depends on this specific version of Azure PowerShell. If you are running a later version on the head node, you might have to downgrade Azure PowerShell to [version 0.8.12](http://az412849.vo.msecnd.net/downloads03/azure-powershell.0.8.12.msi) to run the script. 
+
+* **For a cluster with Azure burst nodes** - Run the script on a client computer where HPC Pack is installed, or on the head node. If running on a client computer, ensure that you set the variable $env:CCP_SCHEDULER properly to point to the head node. The Azure "burst" nodes must already be added to the cluster, but they may be in the Not-Deployed state.
 
 
-* **For a cluster deployed in Azure VMs** - Run the script on the head node VM, because it depends on the **Start-HpcIaaSNode.ps1** and **Stop-HpcIaaSNode.ps1** scripts that are installed there. Those scripts additionally require an Azure management certificate or publish settings file (see [Manage compute nodes in an HPC Pack cluster in Azure](/documentation/articles/virtual-machines-hpcpack-cluster-node-manage)). Make sure all the compute node VMs you need are already added to the cluster, but they may be in the Stopped state.
+* **For a cluster deployed in Azure VMs** - Run the script on the head node VM, because it depends on the **Start-HpcIaaSNode.ps1** and **Stop-HpcIaaSNode.ps1** scripts that are installed there. Those scripts additionally require an Azure management certificate or publish settings file (see [Manage compute nodes in an HPC Pack cluster in Azure](/documentation/articles/virtual-machines-windows-classic-hpcpack-cluster-node-manage/)). Make sure all the compute node VMs you need are already added to the cluster. They may be in the Stopped state.
 
 ## Syntax
 
-```
-AzureAutoGrowShrink.ps1
-[[-NodeTemplates] <String[]>] [[-JobTemplates] <String[]>] [[-NodeType] <String>]
-[[-NumOfQueuedJobsPerNodeToGrow] <Int32>]
-[[-NumOfQueuedJobsToGrowThreshold] <Int32>]
-[[-NumOfActiveQueuedTasksPerNodeToGrow] <Int32>]
-[[-NumOfActiveQueuedTasksToGrowThreshold] <Int32>]
-[[-NumOfInitialNodesToGrow] <Int32>] [[-GrowCheckIntervalMins] <Int32>]
-[[-ShrinkCheckIntervalMins] <Int32>] [[-ShrinkCheckIdleTimes] <Int32>]
-[-UseLastConfigurations] [[-ArgFile] <String>] [[-LogFilePrefix] <String>]
-[<CommonParameters>]
+	AzureAutoGrowShrink.ps1
+	[[-NodeTemplates] <String[]>] [[-JobTemplates] <String[]>] [[-NodeType] <String>]
+	[[-NumOfQueuedJobsPerNodeToGrow] <Int32>]
+	[[-NumOfQueuedJobsToGrowThreshold] <Int32>]
+	[[-NumOfActiveQueuedTasksPerNodeToGrow] <Int32>]
+	[[-NumOfActiveQueuedTasksToGrowThreshold] <Int32>]
+	[[-NumOfInitialNodesToGrow] <Int32>] [[-GrowCheckIntervalMins] <Int32>]
+	[[-ShrinkCheckIntervalMins] <Int32>] [[-ShrinkCheckIdleTimes] <Int32>]
+	[-UseLastConfigurations] [[-ArgFile] <String>] [[-LogFilePrefix] <String>]
+	[<CommonParameters>]
 
-```
 ## Parameters
 
  * **NodeTemplates** - Names of the node templates to define the scope for the nodes to grow and shrink. If not specified (the default value is @()), all nodes in the **AzureNodes** node group are in scope when **NodeType** has a value of AzureNodes, and all nodes in the **ComputeNodes** node group are in scope when **NodeType** has a value of ComputeNodes.
@@ -65,7 +67,7 @@ AzureAutoGrowShrink.ps1
 
  * **NodeType** - The type of node  to grow and shrink. Supported values are:
 
-     * **AzureNodes** – for Azure PaaS (burst) nodes in an on-premises or Azure IaaS cluster.
+     * **AzureNodes** - for Azure PaaS (burst) nodes in an on-premises or Azure IaaS cluster.
 
      * **ComputeNodes** - for compute node VMs only in an Azure IaaS cluster.
 
@@ -101,12 +103,10 @@ until their number exceeds the ratio of queued jobs to
 **NumOfQueuedJobsPerNodeToGrow**. If a node is found to be idle in 3
 consecutive idle times, it is stopped.
 
-```
-.\AzureAutoGrowShrink.ps1 -NodeTemplates @('Default AzureNode
- Template') -NodeType AzureNodes -NumOfQueuedJobsPerNodeToGrow 5
- -NumOfQueuedJobsToGrowThreshold 8 -NumOfInitialNodesToGrow 3
- -GrowCheckIntervalMins 1 -ShrinkCheckIntervalMins 1 -ShrinkCheckIdleTimes 3
-```
+	.\AzureAutoGrowShrink.ps1 -NodeTemplates @('Default AzureNode Template') `
+				-NodeType AzureNodes -NumOfQueuedJobsPerNodeToGrow 5 `
+	 			-NumOfQueuedJobsToGrowThreshold 8 -NumOfInitialNodesToGrow 3 `
+	 			-GrowCheckIntervalMins 1 -ShrinkCheckIntervalMins 1 -ShrinkCheckIdleTimes 3
 
 ### Example 2
 
@@ -119,6 +119,4 @@ least 5 nodes are started. If the number of active queued tasks exceeds
 active queued tasks to **NumOfActiveQueuedTasksPerNodeToGrow**. If a
 node is found to be idle in 10 consecutive idle times, it is stopped.
 
-```
-.\AzureAutoGrowShrink.ps1 -NodeTemplates 'Default ComputeNode Template' -JobTemplates 'Default' -NodeType ComputeNodes -NumOfActiveQueuedTasksPerNodeToGrow 10 -NumOfActiveQueuedTasksToGrowThreshold 15 -NumOfInitialNodesToGrow 5 -GrowCheckIntervalMins 1 -ShrinkCheckIntervalMins 1 -ShrinkCheckIdleTimes 10 -ArgFile 'IaaSVMComputeNodes_Arg.xml' -LogFilePrefix 'IaaSVMComputeNodes_log'
-```
+	.\AzureAutoGrowShrink.ps1 -NodeTemplates 'Default ComputeNode Template' -JobTemplates 'Default' -NodeType ComputeNodes -NumOfActiveQueuedTasksPerNodeToGrow 10 -NumOfActiveQueuedTasksToGrowThreshold 15 -NumOfInitialNodesToGrow 5 -GrowCheckIntervalMins 1 -ShrinkCheckIntervalMins 1 -ShrinkCheckIdleTimes 10 -ArgFile 'IaaSVMComputeNodes_Arg.xml' -LogFilePrefix 'IaaSVMComputeNodes_log'

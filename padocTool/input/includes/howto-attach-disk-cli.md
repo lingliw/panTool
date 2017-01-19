@@ -1,3 +1,5 @@
+<!-- deleted in Global -->
+
 
 For more information about disks, see [About Virtual Machine Disks in Azure](https://msdn.microsoft.com/zh-cn/library/azure/dn790303.aspx).
 

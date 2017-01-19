@@ -2,11 +2,11 @@
 
 [**Apache Storm**](https://storm.incubator.apache.org) is a distributed real time computation system that simplifies reliable processing of unbounded streams of data. This section shows how to use an Event Hubs Storm spout to receive events from Event Hubs. Using Apache Storm, you can split events across multiple processes hosted in different nodes. The Event Hubs integration with Storm simplifies event consumption by transparently checkpointing its progress using Storm's Zookeeper installation, managing persistent checkpoints and parallel receives from Event Hubs.
 
-For more information about Event Hubs receive patterns, see the [Event Hubs Overview].
+For more information about Event Hubs receive patterns, see the [Event Hubs overview][].
 
-This tutorial uses an [HDInsight Storm] installation, which comes with the Event Hubs spout already available.
+This tutorial uses an [HDInsight Storm][] installation, which comes with the Event Hubs spout already available.
 
-1. Follow the [HDInsight Storm - Get Started](/documentation/articles/hdinsight-storm-getting-started) procedure to create a new HDInsight cluster, and connect to it via Remote Desktop.
+1. Follow the [HDInsight Storm - Get Started](/documentation/articles/hdinsight-storm-overview/) procedure to create a new HDInsight cluster, and connect to it via Remote Desktop.
 
 2. Copy the `%STORM_HOME%\examples\eventhubspout\eventhubs-storm-spout-0.9-jar-with-dependencies.jar` file to your local development environment. This contains the events-storm-spout.
 
@@ -220,12 +220,10 @@ This tutorial uses an [HDInsight Storm] installation, which comes with the Event
 	This class creates a new Event Hubs spout, using the properties in the configuration file to instatiate it. It is important to note that this example creates as many spouts tasks as the number of partitions in the Event Hub, in order to use the maximum parallelism allowed by that Event Hub.
 
 <!-- Links -->
-[Event Hubs Overview]: /documentation/articles/event-hubs-overview
-[HDInsight Storm]: /documentation/articles/hdinsight-storm-overview
-[HDInsight sensor analysis tutorial]: /documentation/articles/hdinsight-storm-sensor-data-analysis
+[Event Hubs overview]: /documentation/articles/event-hubs-overview/
+[HDInsight Storm]: /documentation/articles/hdinsight-storm-overview/
+[HDInsight sensor analysis tutorial]: /documentation/articles/hdinsight-storm-sensor-data-analysis/
 
 <!-- Images -->
 
-[12]: ./media/service-bus-event-hubs-getstarted/create-storm1.png
-[13]: ./media/service-bus-event-hubs-getstarted/create-eph-csharp1.png
-[14]: ./media/service-bus-event-hubs-getstarted/create-sender-csharp1.png
+[12]: ./media/service-bus-event-hubs-get-started-receive-storm/create-storm1.png

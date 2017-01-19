@@ -1,48 +1,58 @@
+<!-- rename to virtual-machines-linux-portal-create -->
+
 <properties
-	pageTitle="Create an Azure virtual machine running Linux in the Azure Portal"
-	description="Use the Azure Portal to create an Azure virtual machine (VM) running Linux with the Azure resource groups."
+	pageTitle="Create an Azure virtual machine running Linux in the Azure classic portal | Azure"
+	description="Use the Azure classic portal to create an Azure virtual machine (VM) running Linux with the Azure resource groups."
 	services="virtual-machines"
 	documentationCenter=""
 	authors="squillace"
 	manager="timlt"
 	editor="tysonn"
-	tags="azure-resource-management"/>
+	tags="azure-resource-manager"/>
 
 <tags
 	ms.service="virtual-machines"
-	
-	ms.date="07/13/2015"
+	ms.date="10/21/2015"
 	wacn.date=""/>
 
-# Create a Virtual Machine Running Linux using the Azure Preview Portal
+# Create a Virtual Machine Running Linux using the Azure portal
 
 > [AZURE.SELECTOR]
-- [Azure CLI](/documentation/articles/virtual-machines-linux-tutorial)
-- [Azure Preview Portal](/documentation/articles/virtual-machines-linux-tutorial-portal-rm)
+- [Portal - Windows](/documentation/articles/virtual-machines-windows-classic-tutorial/)
+- [PowerShell](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-resource-manager-vms/)
+- [PowerShell - Template](/documentation/articles/virtual-machines-create-windows-powershell-resource-manager-template/)
+- [Portal - Linux](/documentation/articles/virtual-machines-linux-portal-create/)
+- [CLI](/documentation/articles/virtual-machines-linux-quick-create-cli/)
 
-Creating an Azure virtual machine (VM) that runs Linux is easy to do. This tutorial shows you how to use the Azure Preview portal to create one quickly, and uses the `~/.ssh/id_rsa.pub` public key file to secure your **SSH** connection to the VM. You can also create Linux VMs using [your own images as templates](/documentation/articles/virtual-machines-linux-create-upload-vhd).
+<br>
 
-> [AZURE.NOTE] This tutorial creates an Azure virtual machine that is managed by the Azure resource group API. For details, see [Azure resource group overview](/documentation/articles/resource-group-overview).
 
-[AZURE.INCLUDE [free-trial-note](../includes/free-trial-note.md)]
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
+
+Creating an Azure virtual machine (VM) that runs Linux is easy to do. This tutorial shows you how to use the Azure portal to create one quickly, and uses the `~/.ssh/id_rsa.pub` public key file to secure your **SSH** connection to the VM. You can also create Linux VMs using [your own images as templates](/documentation/articles/virtual-machines-linux-classic-create-upload-vhd/).
+
+> [AZURE.NOTE] This tutorial creates an Azure virtual machine that is managed by the Azure resource group API. For details, see [Azure resource group overview](/documentation/articles/resource-group-overview/).
+
+
+[AZURE.INCLUDE [free-trial-note](../../includes/free-trial-note.md)]
 
 ## Select the image
 
-Go to the Azure Marketplace in the Preview portal to find the Windows Server VM image you want.
+Go to the Azure gallery in the Preview portal to find the Windows Server VM image you want.
 
-1. Sign in to the [Preview portal](https://manage.windowsazure.cn).
+1. Sign in to the [Preview portal](https://portal.azure.cn).
 
 2. On the Hub menu, click **New** > **Compute** > **Ubuntu Server 14.04 LTS**.
 
-	![choosing a VM image](media/virtual-machines-linux-tutorial-portal-rm/chooseubuntuvm.png)
+	![choosing a VM image](./media/virtual-machines-linux-tutorial-portal-rm/chooseubuntuvm.png)
 
 	> [AZURE.TIP] To find additional images, click **Marketplace** and then search or filter for available items.
 
-3. At the bottom of the **Ubuntu Server 14.04 LTS** page, select **Use the Resource Manager stack** to create the VM in Azure Resource Manager. Note that for most new workloads, we recommend the Resource Manager stack. For considerations, see [Azure Compute, Network and Storage Providers under the Azure Resource Manager](/documentation/articles/virtual-machines-azurerm-versus-azuresm).
+3. At the bottom of the **Ubuntu Server 14.04 LTS** page, select **Use the Resource Manager stack** to create the VM in Azure Resource Manager. Note that for most new workloads, we recommend the Resource Manager stack. For considerations, see [Azure Compute, Network and Storage Providers under the Azure Resource Manager](/documentation/articles/virtual-machines-azurerm-versus-azuresm/).
 
-4. Next, click ![create button](media/virtual-machines-linux-tutorial-portal-rm/createbutton.png).
+4. Next, click ![create button](./media/virtual-machines-linux-tutorial-portal-rm/createbutton.png).
 
-	![change to the resource manager compute stack](media/virtual-machines-linux-tutorial-portal-rm/changetoresourcestack.png)
+	![change to the resource manager compute stack](./media/virtual-machines-linux-tutorial-portal-rm/changetoresourcestack.png)
 
 ## Create the virtual machine
 
@@ -50,21 +60,21 @@ After you select the image, you can use Azure's default settings for most of the
 
 1. On the **Create virtual machine** blade, click **Basics**. Enter a **Name** you want for the VM, and a public key file (in **ssh-rsa** format, in this case from the `~/.ssh/id_rsa.pub` file). If you have more than one subscription, specify the one for the new VM, as well as a new or existing **Resource group** and an Azure datacenter **Location**.
 
-	![](media/virtual-machines-linux-tutorial-portal-rm/step-1-thebasics.png)
+	![](./media/virtual-machines-linux-tutorial-portal-rm/step-1-thebasics.png)
 
 	> [AZURE.NOTE] You may also choose username/password authentication here and enter that information if you do not want to secure your **ssh** session with a public and private key exchange.
 
-2. Click **Size** and select an appropriate VM size for your needs. Each size specifies the number of compute cores, memory, and other features, such as support for Premium Storage, which will affect the price. Azure recommends certain sizes automatically depending on the image you choose. When done, click ![select button](media/virtual-machines-linux-tutorial-portal-rm/selectbutton-size.png).
+2. Click **Size** and select an appropriate VM size for your needs. Each size specifies the number of compute cores, memory, and other features, such as support for Premium Storage, which will affect the price. Azure recommends certain sizes automatically depending on the image you choose. When done, click ![select button](./media/virtual-machines-linux-tutorial-portal-rm/selectbutton-size.png).
 
-	>[AZURE.NOTE] Premium storage is available for DS-series virtual machines in certain regions. Premium storage is the best storage option for data intensive workloads such as a database. For details, see [Premium Storage: High-Performance Storage for Azure Virtual Machine Workloads](/documentation/articles/storage-premium-storage-preview-portal).
+	>[AZURE.NOTE] Premium storage is available for DS-series virtual machines in certain regions. Premium storage is the best storage option for data intensive workloads such as a database. For details, see [Premium Storage: High-Performance Storage for Azure Virtual Machine Workloads](/documentation/articles/storage-premium-storage/).
 
-3. Click **Settings** to see storage and networking settings for the new VM. For a first VM you can generally accept the default settings. If you selected a VM size that supports it, you can try out Premium Storage by selecting **Premium (SSD)** under **Disk type**. When done, click ![OK button](media/virtual-machines-linux-tutorial-portal-rm/okbutton.png).
+3. Click **Settings** to see storage and networking settings for the new VM. For a first VM you can generally accept the default settings. If you selected a VM size that supports it, you can try out Premium Storage by selecting **Premium (SSD)** under **Disk type**. When done, click ![OK button](./media/virtual-machines-linux-tutorial-portal-rm/okbutton.png).
 
-	![](media/virtual-machines-linux-tutorial-portal-rm/step-3-settings.png)
+	![](./media/virtual-machines-linux-tutorial-portal-rm/step-3-settings.png)
 
-6. Click **Summary** to review your configuration choices. When you're done reviewing or updating the settings, click ![OK button](media/virtual-machines-linux-tutorial-portal-rm/createbutton.png) .
+6. Click **Summary** to review your configuration choices. When you're done reviewing or updating the settings, click ![OK button](./media/virtual-machines-linux-tutorial-portal-rm/createbutton.png) .
 
-	![creation summary](media/virtual-machines-linux-tutorial-portal-rm/summarybeforecreation.png)
+	![creation summary](./media/virtual-machines-linux-tutorial-portal-rm/summarybeforecreation.png)
 
 8. While Azure creates the VM, you can track the progress in **Notifications**, in the Hub menu. After Azure creates the VM, you'll see it on your Startboard unless you cleared **Pin to Startboard** in the **Create virtual machine** blade.
 
@@ -74,7 +84,7 @@ After you select the image, you can use Azure's default settings for most of the
 
 Now you can connect to your Ubuntu VM using **ssh** in the standard way. However, you're going to need to discover the IP address allocated to the Azure VM by opening the tile for the VM and its resources. You can either do this by clicking **Browse**, then selecting **Recent** and looking for the VM you created, or clicking the tile created for you on the Startboard. In either case, locate and copy the **Public IP Address** value, shown in the following graphic.
 
-![summary of successful creation](media/virtual-machines-linux-tutorial-portal-rm/successresultwithip.png)
+![summary of successful creation](./media/virtual-machines-linux-tutorial-portal-rm/successresultwithip.png)
 
 Now you can **ssh** into your Azure VM, and you're ready to go.
 
@@ -111,14 +121,16 @@ Now you can **ssh** into your Azure VM, and you're ready to go.
 	ops@ubuntuvm:~$
 
 
+> [AZURE.NOTE] You can also configure a fully qualified domain name (FQDN) for your virtual machine in the portal. Read more about [creating FQDNs in the portal](/documentation/articles/virtual-machines-create-fqdn-on-portal/).
+
 ## Next Steps
 
 To learn more about Linux on Azure, see:
 
-- [Linux and Open-Source Computing on Azure](/documentation/articles/virtual-machines-linux-opensource)
+- [Linux and Open-Source Computing on Azure](/documentation/articles/virtual-machines-linux-opensource-links/)
 
-- [How to use the Azure Command-Line Tools for Mac and Linux](/documentation/articles/virtual-machines-command-line-tools)
+- [How to use the Azure Command-Line Tools for Mac and Linux](/documentation/articles/virtual-machines-command-line-tools/)
 
-- [Deploy a LAMP app using the Azure CustomScript Extension for Linux](/documentation/articles/virtual-machines-linux-script-lamp)
+- [Deploy a LAMP app using the Azure CustomScript Extension for Linux](/documentation/articles/virtual-machines-linux-classic-lamp-script/)
 
-- [The Docker Virtual Machine Extension for Linux on Azure](/documentation/articles/virtual-machines-docker-vm-extension)
+- [The Docker Virtual Machine Extension for Linux on Azure](/documentation/articles/virtual-machines-linux-dockerextension/)

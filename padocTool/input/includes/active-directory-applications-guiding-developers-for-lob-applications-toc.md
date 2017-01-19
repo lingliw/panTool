@@ -1,0 +1,6 @@
+- [Configuring access rules](/documentation/articles/active-directory-conditional-access-azuread-connected-apps/)
+- [Requiring user assignment](/documentation/articles/active-directory-applications-guiding-developers-requiring-user-assignment/)
+- [Assigning users to an application](/documentation/articles/active-directory-applications-guiding-developers-assigning-users/)
+- [Assigning groups to an application](/documentation/articles/active-directory-applications-guiding-developers-assigning-groups/)
+- [Integrating applications with Azure Active Directory](/documentation/articles/active-directory-integrating-applications/)
+- [Article Index for Application Management in Azure Active Directory](/documentation/articles/active-directory-apps-index/)

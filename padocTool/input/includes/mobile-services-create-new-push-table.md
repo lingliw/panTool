@@ -1,5 +1,5 @@
 
-1. Log into the [Azure Management Portal], click **Mobile Services**, and then click your app.
+1. Log into the [Azure classic portal](https://manage.windowsazure.cn/), click **Mobile Services**, and then click your app.
 
 	![](./media/mobile-services-create-new-push-table/mobile-services-selection.png)
 

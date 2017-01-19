@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-windows-ps-create -->
+
 <properties
-	pageTitle="Create a Windows VM | Windows Azure"
+	pageTitle="Create a Windows VM | Azure"
 	description="Use Azure PowerShell and Resource Manager templates to easily create a new Windows virtual machine."
 	services="virtual-machines"
 	documentationCenter=""
@@ -10,12 +12,12 @@
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="10/08/2015"
+	ms.date="01/05/2016"
 	wacn.date=""/>
 
 # Create a Windows VM with Resource Manager and PowerShell
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-rm-include.md)] [classic deployment model](virtual-machines-create-windows-powershell-service-manager.md).
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
 
 This topic describes how to quickly create a Windows-based Azure virtual machine using Azure Resource Manager and PowerShell.
 
@@ -25,13 +27,13 @@ If you have already installed Azure PowerShell, you must have Azure PowerShell v
 
 	Get-Module azure | format-table version
 
-[AZURE.INCLUDE [powershell-preview](../includes/powershell-preview-inline-include.md)]
+[AZURE.INCLUDE [powershell-preview](../../includes/powershell-preview-inline-include.md)]
 
 First, you must logon to Azure with this command.
 
 	Login-AzureRmAccount
 
-Specify the email address of your Azure account and its password in the Windows Azure sign-in dialog.
+Specify the email address of your Azure account and its password in the Azure sign-in dialog.
 
 Next, if you have multiple Azure subscriptions, you need to set your Azure subscription. To see a list of your current subscriptions, run this command.
 
@@ -40,7 +42,7 @@ Next, if you have multiple Azure subscriptions, you need to set your Azure subsc
 Now, replace everything within the quotes, including the < and > characters, with the correct subscription name and run these commands.
 
 	$subscrName="<subscription name>"
-	Select-AzureRmSubscription -SubscriptionName $subscrName –Current
+	Select-AzureRmSubscription -SubscriptionName $subscrName -Current
 
 Next, you need to create a storage account. You must pick a unique name that contains only lowercase letters and numbers. You can test for the uniqueness of the storage account name with this command.
 
@@ -80,11 +82,11 @@ Here is an example of you might see:
 	PS C:\> $locName="China North"
 	PS C:\> $rgName="TestRG"
 	PS C:\> New-AzureRmResourceGroup -Name $rgName -Location $locName
-	VERBOSE: 12:45:15 PM - Created resource group 'TestRG' in location 'westus'
+	VERBOSE: 12:45:15 PM - Created resource group 'TestRG' in location 'chinanorth'
 
 
 	ResourceGroupName : TestRG
-	Location          : westus
+	Location          : chinanorth
 	ProvisioningState : Succeeded
 	Tags              :
 	Permissions       :
@@ -119,16 +121,6 @@ Here is an example of you might see:
 	RequestId           : 98c7b4fb-b26e-4a58-b17a-b0983d896aae
 	StatusCode          : OK
 
-## Additional Resources
+## Next Steps
 
-[Azure Compute, Network and Storage Providers under Azure Resource Manager](/documentation/articles/virtual-machines-azurerm-versus-azuresm)
-
-[Azure Resource Manager Overview](/documentation/articles/resource-group-overview)
-
-[Create a Windows virtual machine with a Resource Manager template and PowerShell](/documentation/articles/virtual-machines-create-windows-powershell-resource-manager-template-simple)
-
-[Create a Windows virtual machine with PowerShell and Azure Service Management](/documentation/articles/virtual-machines-create-windows-powershell-service-manager)
-
-[Virtual machines documentation](http://www.windowsazure.cn/documentation/services/virtual-machines/)
-
-[How to install and configure Azure PowerShell](/documentation/articles/install-configure-powershell)
+Learn how to manage the virtual machine that you just created by reviewing [Manage virtual machines using Azure Resource Manager and PowerShell](/documentation/articles/virtual-machines-deploy-rmtemplates-powershell/).

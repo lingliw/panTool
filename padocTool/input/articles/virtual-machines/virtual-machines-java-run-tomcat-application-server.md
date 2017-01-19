@@ -1,21 +1,24 @@
+<!-- rename to virtual-machines-windows-classic-java-run-tomcat-app-server -->
+
 <properties
-	pageTitle="Tomcat on a virtual machine | Windows Azure"
+	pageTitle="Tomcat on a virtual machine | Azure"
 	description="This tutorial uses resources created with  the classic deployment model, and shows how to create a Windows Virtual machine and configure it to run Apache Tomcat application server."
 	services="virtual-machines"
 	documentationCenter="java"
 	authors="rmcmurray"
 	manager="wpickett"
-	editor="jimbe"
-    	tags="azure-service-management" />
+	editor=""
+    tags="azure-service-management" />
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="06/03/2015"
+	ms.date="03/04/2016"
 	wacn.date=""/>
 
 # How to run a Java application server on a virtual machine created with the classic deployment model
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] This article covers creating a resource with the classic deployment model. 
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
+
 
 With Azure, you can use a virtual machine to provide server capabilities. As an example, a virtual machine running on Azure can be configured to host a Java application server, such as Apache Tomcat. After you complete this guide, you will have an understanding of how to create a virtual machine running on Azure and configure it to run a Java application server.
 
@@ -31,11 +34,11 @@ For the purposes of this tutorial, an Apache Tomcat application server will be i
 
 ![Virtual machine running Apache Tomcat][virtual_machine_tomcat]
 
-[AZURE.INCLUDE [create-account-and-vms-note](../includes/create-account-and-vms-note.md)]
+[AZURE.INCLUDE [create-account-and-vms-note](../../includes/create-account-and-vms-note.md)]
 
 ## To create a virtual machine
 
-1. Sign in to the [Azure portal](https://manage.windowsazure.cn).
+1. Sign in to the [Azure classic portal](https://manage.windowsazure.cn).
 2. Click **New**, click **Compute**, click **Virtual machine**, and then click **From Gallery**.
 3. In the **Virtual machine image select** dialog box, select **JDK 7 Windows Server 2012**.
 Note that **JDK 6 Windows Server 2012** is available if you have legacy applications that are not ready to run in JDK 7.
@@ -48,8 +51,8 @@ Note that **JDK 6 Windows Server 2012** is available if you have legacy applicat
     5. Click **Next**.
 6. In the next **Virtual machine configuration** dialog box:
     1. For **Cloud service**, use the default **Create a new cloud service**.
-    2. The value for **Cloud service DNS name** must be unique across cloudapp.net. If needed, modify this value so that Azure indicates it is unique.
-    2. Specify a region, affinity group, or virtual network. For the purposes of this tutorial, specify a region such as **West US**.
+    2. The value for **Cloud service DNS name** must be unique across chinacloudapp.cn. If needed, modify this value so that Azure indicates it is unique.
+    2. Specify a region, affinity group, or virtual network. For the purposes of this tutorial, specify a region such as **China North**.
     2. For **Storage Account**, select **Use an automatically generated storage account**.
     3. For **Availability Set**, select **(None)**.
     4. Click **Next**.
@@ -59,7 +62,7 @@ Note that **JDK 6 Windows Server 2012** is available if you have legacy applicat
 
 ## To remotely sign in to your virtual machine
 
-1. Log on to the [Management portal](https://manage.windowsazure.cn).
+1. Log on to the [Azure classic portal](https://manage.windowsazure.cn).
 2. Click **Virtual machines**.
 3. Click the name of the virtual machine that you want to sign in to.
 4. After the virtual machine has started, a pop-up menu at the bottom of the page allows connections.
@@ -85,7 +88,7 @@ You should now see Tomcat running if you run the virtual machine's browser and o
 To see Tomcat running from external machines, you need to create an endpoint and open a port.
 
 ## To create an endpoint for your virtual machine
-1. Sign in to the [Management portal](https://manage.windowsazure.cn).
+1. Sign in to the [Azure classic portal](https://manage.windowsazure.cn).
 2. Click **Virtual machines**.
 3. Click the name of the virtual machine that is running your Java application server.
 4. Click **Endpoints**.
@@ -116,7 +119,7 @@ To see Tomcat running from external machines, you need to create an endpoint and
 10. On the **Name** screen, specify a name for the rule, such as **HttpIn** (the rule name is not required to match the endpoint name, however), and then click **Finish**.  
  ![New inbound rule name][NewRuleName]
 
-At this point, your Tomcat website should be viewable from an external browser by using a URL of the form **http://*your\_DNS\_name*.cloudapp.net**, where ***your\_DNS\_name*** is the DNS name you specified when you created the virtual machine.
+At this point, your Tomcat website should be viewable from an external browser by using a URL of the form **http://*your\_DNS\_name*.chinacloudapp.cn**, where ***your\_DNS\_name*** is the DNS name you specified when you created the virtual machine.
 
 ## Application lifecycle considerations
 * You could create your own web application archive (WAR) and add it to the **webapps** folder. For example, create a basic Java Service Page (JSP) dynamic web project and export it as a WAR file, copy the WAR to the Apache Tomcat **webapps** folder on the virtual machine, then run it in a browser.
@@ -127,7 +130,7 @@ At this point, your Tomcat website should be viewable from an external browser b
     The benefit of having Tomcat start automatically is that it will start if the virtual machine is rebooted (for example, after software updates that require a reboot are installed).
 
 ## Next steps
-Learn about other services (such as Azure Storage, service bus, and SQL Database) that you may want to include with your Java applications by viewing the information available at the [Java Developer Center](http://azure.microsoft.com/develop/java/).
+Learn about other services (such as Azure Storage, service bus, and SQL Database) that you may want to include with your Java applications by viewing the information available at the [Java Developer Center](/develop/java/).
 
 [virtual_machine_tomcat]: ./media/virtual-machines-java-run-tomcat-application-server/WA_VirtualMachineRunningApacheTomcat.png
 

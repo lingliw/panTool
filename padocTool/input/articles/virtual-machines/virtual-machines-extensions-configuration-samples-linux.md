@@ -1,5 +1,7 @@
+<!-- rename to virtual-machines-linux-extensions-configuration-samples -->
+
 <properties
-   pageTitle="Sample configuration for Linux VM extensions | Windows Azure"
+   pageTitle="Sample configuration for Linux VM extensions | Azure"
    description="Sample configuration for authoring templates with extensions for Linux VMs"
    services="virtual-machines"
    documentationCenter=""
@@ -9,19 +11,27 @@
    tags="azure-resource-manager"/>
 
 <tags
-   ms.service="virtual-machines"
-   ms.date="09/01/2015"
-   wacn.date=""/>
+	ms.service="virtual-machines"
+	ms.date="09/01/2015"
+	wacn.date=""/>
 
 # Linux VM extension configuration samples
 
+> [AZURE.SELECTOR]
+- [PowerShell - Template](/documentation/articles/virtual-machines-extensions-configuration-samples-windows/)
+- [CLI - Template](/documentation/articles/virtual-machines-extensions-configuration-samples-linux/)
+
+<br> 
+
+
 This article provides sample configuration for configuring Azure VM extensions for Linux VMs.
 
-[AZURE.INCLUDE [learn-about-deployment-models](../includes/learn-about-deployment-models-include.md)] 
+> [AZURE.NOTE] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the Resource Manager deployment model, which Azure recommends for most new deployments instead of the classic deployment model.
 
-To learn more about these extensions click here : [Azure VM Extensions Overview.](https://msdn.microsoft.com/library/azure/dn606311.aspx)
 
-To learn more about authoring extension templates click here : [Authoring Extension Templates.](/documentation/articles/virtual-machines-extensions-authoring-templates)
+To learn more about these extensions click here : [Azure VM Extensions Overview.](/documentation/articles/virtual-machines-linux-extensions-features/)
+
+To learn more about authoring extension templates click here : [Authoring Extension Templates.](/documentation/articles/virtual-machines-extensions-authoring-templates/)
 
 This article lists expected configuration values for some of the Linux Extensions.
 

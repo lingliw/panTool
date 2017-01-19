@@ -1,7 +1,7 @@
-import re
-mooncake_path = "C:/Users/Administrator/Documents/GitHub/azure-content-mooncake-pr"
+﻿import re
+mooncake_path = "E:/GitHub/azure-content-mooncake-pr"
 
-include_reg = r"(?P<includeText>\s*\[AZURE\.INCLUDE\s\[[^\[|^\]]*\]\(\.\./includes/(?P<fileName>[\w|\-]+\.md)\)\])\s*"
+include_reg = r"(?P<includeText>\[AZURE\.INCLUDE\s\[[^\[|^\]]*\]\(\.\./\.\./includes/(?P<fileName>[\w|\-]+(\.md)?)\)\])"
 
 def replaceInclude(fileRelativePath, filename):
     input = open(mooncake_path + "/" + fileRelativePath+"/"+filename, "r")
@@ -12,6 +12,8 @@ def replaceInclude(fileRelativePath, filename):
         includeText = include[0]
         includeFile = include[1]
         try:
+            if includeFile[len(includeFile)-3:]!=".md":
+                includeFile += ".md"
             input = open(mooncake_path + "/includes/" + includeFile, "r")
             replacement = input.read().replace("./media", "../../includes/media")
             input.close()

@@ -1,39 +1,43 @@
+<!-- rename to virtual-machines-windows-classic-create-powershell -->
+
 <properties
-	pageTitle="Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines"
-	description="Learn how to use Azure PowerShell to create and preconfigure Windows-based virtual machines in Azure."
+	pageTitle="Create a Windows VM with Powershell | Azure"
+	description="Create Windows virtual machines using Azure PowerShell and the classic deploment model."
 	services="virtual-machines"
 	documentationCenter=""
-	authors="KBDAzure"
+	authors="cynthn"
 	manager="timlt"
 	editor=""
 	tags="azure-service-management"/>
 
 <tags
 	ms.service="virtual-machines"
-	ms.date="06/10/2015"
+	ms.date="10/13/2015"
 	wacn.date=""/>
 
-# Use Azure PowerShell to create and preconfigure Windows-based Virtual Machines
+# Create Windows virtual machines with Powershell and the classic deployment model 
 
 > [AZURE.SELECTOR]
-- [Azure preview portal](/documentation/articles/virtual-machines-windows-tutorial)
-- [Azure portal](/documentation/articles/virtual-machines-windows-tutorial-classic-portal)
-- [PowerShell: Resource Manager deployment](/documentation/articles/virtual-machines-deploy-rmtemplates-powershell)
-- [PowerShell: Classic deployment](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-vms)
+- [Azure classic portal - Windows](/documentation/articles/virtual-machines-windows-classic-tutorial/)
+- [Powershell - Windows](/documentation/articles/virtual-machines-windows-classic-create-powershell/)
+- [PowerShell - Linux](/documentation/articles/virtual-machines-linux-classic-createpowershell/)
+
+<br>
+
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the [Resource Manager model](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-resource-manager-vms/).
+
 
 These steps show you how to customize a set of Azure PowerShell commands that create and preconfigure a Windows-based Azure virtual machine by using a building block approach. You can use this process to quickly create a command set for a new Windows-based virtual machine and expand an existing deployment or to create multiple command sets that quickly build out a custom dev/test or IT pro environment.
 
 These steps follow a fill-in-the-blanks approach for creating Azure PowerShell command sets. This approach can be useful if you are new to PowerShell or you just want to know what values to specify for successful configuration. Advanced PowerShell users can take the commands and substitute their own values for the variables (the lines beginning with "$").
 
-For the companion topic to configure Linux-based virtual machines, see [Use Azure PowerShell to create and preconfigure Linux-based Virtual Machines](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-resource-manager-vms).
+For the companion topic to configure Linux-based virtual machines, see [Use Azure PowerShell to create and preconfigure Linux-based Virtual Machines](/documentation/articles/virtual-machines-linux-classic-createpowershell/).
 
-[AZURE.INCLUDE [service-management-pointer-to-resource-manager](../includes/service-management-pointer-to-resource-manager.md)]
-
-- [Create and preconfigure a Windows Virtual Machine with Resource Manager and Azure PowerShell](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-resource-manager-vms)
 
 ## Step 1: Install Azure PowerShell
 
-If you haven't done so already, use the instructions in [How to install and configure Azure PowerShell](/documentation/articles/install-configure-powershell) to install Azure PowerShell on your local computer. Then, open an Azure PowerShell command prompt.
+If you haven't done so already, use the instructions in [How to install and configure Azure PowerShell](/documentation/articles/powershell-install-configure/) to install Azure PowerShell on your local computer. Then, open an Azure PowerShell command prompt.
 
 ## Step 2: Set your subscription and storage account
 
@@ -41,18 +45,14 @@ Set your Azure subscription and storage account by running these commands at the
 
 	$subscr="<subscription name>"
 	$staccount="<storage account name>"
-	Select-AzureSubscription -SubscriptionName $subscr –Current
-	Set-AzureSubscription -SubscriptionName $subscr -CurrentStorageAccountName $staccount
+	Select-AzureSubscription -SubscriptionName $subscr -Current
+	Set-AzureSubscription -Environment AzureChinaCloud -SubscriptionName $subscr -CurrentStorageAccountName $staccount
 
 You can get the correct subscription name from the SubscriptionName property of the output of the **Get-AzureSubscription** command. You can get the correct storage account name from the Label property of the output of the **Get-AzureStorageAccount** command after you run the **Select-AzureSubscription** command.
 
 ## Step 3: Determine the ImageFamily
 
-Next, you need to determine the ImageFamily or Label value for the specific image corresponding to the Azure virtual machine you want to create. Here are some examples from the Gallery in the Azure Management Portal.
-
-![](./media/virtual-machines-ps-create-preconfigure-windows-vms/PSPreconfigWindowsVMs_1.png)
-
-You can get the list of available ImageFamily values with this command.
+Next, you need to determine the ImageFamily or Label value for the specific image corresponding to the Azure virtual machine you want to create. You can get the list of available ImageFamily values with this command.
 
 	Get-AzureVMImage | select ImageFamily -Unique
 
@@ -107,13 +107,13 @@ Optionally, for a standalone Windows computer, specify the local administrator a
 
 Optionally, to add the Windows computer to an existing Active Directory domain, specify the local administrator account and password, the domain, and the name and password of a domain account.
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account."
-	$cred2=Get-Credential –Message "Now type the name (not including the domain) and password of an account that has permission to add the machine to the domain."
+	$cred1=Get-Credential -Message "Type the name and password of the local administrator account."
+	$cred2=Get-Credential -Message "Now type the name (not including the domain) and password of an account that has permission to add the machine to the domain."
 	$domaindns="<FQDN of the domain that the machine is joining>"
 	$domacctdomain="<domain of the account that has permission to add the machine to the domain>"
 	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $domacctdomain -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domaindns
 
-For additional pre-configuration options for Windows-based virtual machines, see the syntax for the **Windows** and **WindowsDomain** parameter sets in [Add-AzureProvisioningConfig](https://msdn.microsoft.com/zh-CN/library/azure/dn495299.aspx).
+For additional pre-configuration options for Windows-based virtual machines, see the syntax for the **Windows** and **WindowsDomain** parameter sets in [Add-AzureProvisioningConfig](https://msdn.microsoft.com/zh-cn/library/azure/dn495299.aspx).
 
 Optionally, assign the virtual machine a specific IP address, known as a static DIP.
 
@@ -121,7 +121,7 @@ Optionally, assign the virtual machine a specific IP address, known as a static 
 
 You can verify that a specific IP address is available with:
 
-	Test-AzureStaticVNetIP –VNetName <VNet name> –IPAddress <IP address>
+	Test-AzureStaticVNetIP -VNetName <VNet name> -IPAddress <IP address>
 
 Optionally, assign the virtual machine to a specific subnet in an Azure virtual network.
 
@@ -144,8 +144,8 @@ Optionally, add the virtual machine to an existing load-balanced set for externa
 	$pubport=<port number of the external port>
 	$endpointname="<name of the endpoint>"
 	$lbsetname="<name of the existing load-balanced set>"
-	$probeprotocol="<Specify one: tcp, udp>"
-	$probeport=<TCP or UDP port number of probe traffic>
+	$probeprotocol="<Specify one: tcp, http>"
+	$probeport=<TCP or HTTP port number of probe traffic>
 	$probepath="<URL path for probe traffic>"
 	$vm1 | Add-AzureEndpoint -Name $endpointname -Protocol $prot -LocalPort $localport -PublicPort $pubport -LBSetName $lbsetname -ProbeProtocol $probeprotocol -ProbePort $probeport -ProbePath $probepath
 
@@ -153,15 +153,15 @@ Finally, choose one of these required command blocks for creating the virtual ma
 
 Option 1: Create the virtual machine in an existing cloud service.
 
-	New-AzureVM –ServiceName "<short name of the cloud service>" -VMs $vm1
+	New-AzureVM -ServiceName "<short name of the cloud service>" -VMs $vm1
 
-The short name of the cloud service is the name that appears in the list of Cloud Services in the Azure Management Portal or in the list of Resource Groups in the Azure Preview Portal.
+The short name of the cloud service is the name that appears in the list of Cloud Services in the Azure classic portal or in the list of Resource Groups in the Azure portal.
 
 Option 2: Create the virtual machine in an existing cloud service and virtual network.
 
 	$svcname="<short name of the cloud service>"
 	$vnetname="<name of the virtual network>"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
 ## Step 5: Run your command set
 
@@ -172,7 +172,7 @@ If you are using a text editor, copy the command set to the clipboard and then r
 If you will be creating this virtual machine again or a similar one, you can:
 
 - Save this command set as a PowerShell script file (*.ps1).
-- Save this command set as an Azure automation runbook in the **Automation** section of the Azure Management Portal.
+- Save this command set as an Azure automation runbook in the **Automation** section of the Azure classic portal.
 
 ## <a id="examples"></a>Examples
 
@@ -213,7 +213,7 @@ Here is the corresponding Azure PowerShell command set to create this virtual ma
 
 	$svcname="Azure-TailspinToys"
 	$vnetname="AZDatacenter"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
 ### Example 2
 
@@ -234,8 +234,8 @@ Here is the corresponding Azure PowerShell command set to create this virtual ma
 	$vmsize="Large"
 	$vm1=New-AzureVMConfig -Name $vmname -InstanceSize $vmsize -ImageName $image
 
-	$cred1=Get-Credential –Message "Type the name and password of the local administrator account."
-	$cred2=Get-Credential –Message "Now type the name (not including the domain) and password of an account that has permission to add the machine to the domain."
+	$cred1=Get-Credential -Message "Type the name and password of the local administrator account."
+	$cred2=Get-Credential -Message "Now type the name (not including the domain) and password of an account that has permission to add the machine to the domain."
 	$domaindns="corp.contoso.com"
 	$domacctdomain="CORP"
 	$vm1 | Add-AzureProvisioningConfig -AdminUsername $cred1.GetNetworkCredential().Username -Password $cred1.GetNetworkCredential().Password -WindowsDomain -Domain $domacctdomain -DomainUserName $cred2.GetNetworkCredential().Username -DomainPassword $cred2.GetNetworkCredential().Password -JoinDomain $domaindns
@@ -250,19 +250,19 @@ Here is the corresponding Azure PowerShell command set to create this virtual ma
 
 	$svcname="Azure-TailspinToys"
 	$vnetname="AZDatacenter"
-	New-AzureVM –ServiceName $svcname -VMs $vm1 -VNetName $vnetname
+	New-AzureVM -ServiceName $svcname -VMs $vm1 -VNetName $vnetname
 
 
 ## Additional resources
 
 [Virtual machines documentation](/documentation/services/virtual-machines/)
 
-[Azure virtual machines FAQ](https://msdn.microsoft.com/zh-CN/library/azure/dn683781.aspx)
+[Azure virtual machines FAQ](/documentation/articles/virtual-machines-linux-classic-faq/)
 
-[Overview of Azure Virtual Machines](https://msdn.microsoft.com/zh-CN/library/azure/jj156143.aspx)
+[Overview of Azure Virtual Machines](/documentation/articles/virtual-machines-linux-about/)
 
-[How to install and configure Azure PowerShell](/documentation/articles/install-configure-powershell)
+[How to install and configure Azure PowerShell](/documentation/articles/powershell-install-configure/)
 
-[Use Azure PowerShell to create and preconfigure Linux-based Virtual Machines](/documentation/articles/virtual-machines-ps-create-preconfigure-linux-vms)
 
-[Create and preconfigure a Windows Virtual Machine with Resource Manager and Azure PowerShell](/documentation/articles/virtual-machines-ps-create-preconfigure-windows-resource-manager-vms)
+
+

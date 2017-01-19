@@ -1,40 +1,45 @@
-<properties 
-	pageTitle="SQL Server on Azure Virtual Machines" 
-	description="Describes the SQL Server agent extension, which enables virtual machines running SQL Server in the cloud on Azure to use automation features, and how to install the agent if it isn't already installed automatically." 
-	services="virtual-machines" 
-	documentationCenter="" 
-	authors="jeffgoll" 
+<!-- rename to virtual-machines-windows-classic-sql-server-agent-extension -->
+
+<properties
+	pageTitle="SQL Server IaaS Agent Extension | Azure"
+	description="This topic uses resources created with the classic deployment model, and describes the SQL Server agent extension, which enables a VM running SQL Server on Azure to use automation features."
+	services="virtual-machines"
+	documentationCenter=""
+	authors="jeffgoll"
 	manager="jeffreyg"
-	editor=""/>
+   editor="monicar"    
+   tags="azure-service-management"/>
 
 <tags
 	ms.service="virtual-machines"
-
-	ms.date="06/17/2015"
+	ms.date="10/02/2015"
 	wacn.date=""/>
 
 # SQL Server IaaS Agent Extension
 
-This extension enables SQL Server in Azure Virtual Machines to use certain services, listed in this article, which can only be used with this extension installed. This extension is automatically installed for SQL Server Gallery Images in the Azure Preview Portal. It can be installed on any SQL Server VM in Azure which has the Azure VM Guest Agent installed.
- 
+This extension enables SQL Server in Azure Virtual Machines to use certain services, listed in this article, which can only be used with this extension installed. This extension is automatically installed for SQL Server Gallery Images in the Azure portal. It can be installed on any SQL Server VM in Azure which has the Azure VM Guest Agent installed.
+
+> [AZURE.IMPORTANT] Azure has two different deployment models for creating and working with resources:  [Resource Manager and classic](/documentation/articles/resource-manager-deployment-model/).  This article covers using the classic deployment model. Azure recommends that most new deployments use the Resource Manager model.
+
+
 ## Prerequisites
 Requirements for using Powershell cmdlets:
 
-- Latest Azure command-line SDK [available here](http://www.windowsazure.cn/downloads/)
+- Latest Azure command-line SDK [available here](/downloads/)
 
 Requirements to use the extension on your VM:
 
 - Azure VM Guest Agent
 - Windows Server 2012, Windows Server 2012 R2, or later
 - SQL Server 2012, SQL Server 2014, or later
- 
+
 ## Services available with the extension
 
-- **SQL automated backup**: This service automates the scheduling of backups for all databases for the default instance of SQL Server in the VM. To see more information about this service, see [Automated backup for SQL Server in Azure Virtual Machines](https://msdn.microsoft.com/zh-cn/library/azure/dn906091.aspx).
-- **SQL automated patching**: This service lets you configure a maintenance window during which updates to your VM can take place, so  you can avoid updates during peak times for your workload. To see more information about this service, see [Automated patching for SQL Server in Azure Virtual Machines](https://msdn.microsoft.com/zh-cn/library/azure/dn961166.aspx).
+- **SQL automated backup**: This service automates the scheduling of backups for all databases for the default instance of SQL Server in the VM. To see more information about this service, see [Automated backup for SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-windows-classic-sql-automated-backup/).
+- **SQL automated patching**: This service lets you configure a maintenance window during which updates to your VM can take place, so  you can avoid updates during peak times for your workload. To see more information about this service, see [Automated patching for SQL Server in Azure Virtual Machines](/documentation/articles/virtual-machines-windows-classic-sql-automated-patching/).
 
 ## Add the extension with Powershell
-If you provision your SQL Server VM using the [Azure Preview Portal](https://manage.windowsazure.cn), the extension will be automatically installed. For SQL Server VMs provisioned with the [Azure Management Portal](https://manage.windowsazure.cn), or for VMs which you bring your own SQL license to, you can add this extension to an existing VM using the following Azure PowerShell cmdlet.
+If you provision your SQL Server VM using the [Azure portal](https://portal.azure.cn/), the extension will be automatically installed. For SQL Server VMs provisioned with the [Azure classic portal](https://manage.windowsazure.cn), or for VMs which you bring your own SQL license to, you can add this extension to an existing VM using the following Azure PowerShell cmdlet.
 
 **Set-AzureVMSqlServerExtension**
 
@@ -42,13 +47,13 @@ If you provision your SQL Server VM using the [Azure Preview Portal](https://man
 
 Set-AzureVMSqlServerExtension [-VM] <IPersistentVM> [[-Version] <string>] [-AutoBackupSettings <AutoBackupSettings>] [-AutoPatchingSetttings <AutoPatchingSetttings>] [-Confirm] [-WhatIf] [<CommonParameters>]
 
-> [AZURE.NOTE] Omitting the –Version parameter is recommended. Without it, the default is the latest version of the extension.
+> [AZURE.NOTE] Omitting the -Version parameter is recommended. Without it, the default is the latest version of the extension.
 
 ### Example
-	Get-AzureVM –ServiceName serviceName –Name vmName | Set-AzureVMSqlServerExtension –AutoBackupSettings $abs | Update-AzureVM**
+	Get-AzureVM -ServiceName serviceName -Name vmName | Set-AzureVMSqlServerExtension -AutoBackupSettings $abs | Update-AzureVM**
 
 ## Check the status of the extension
-If you want to check the status of this extension and the services associated with it, you can use either portal. In the details of your existing VM, find **Extensions** under **Settings**. 
+If you want to check the status of this extension and the services associated with it, you can use either portal. In the details of your existing VM, find **Extensions** under **Settings**.
 
 You can also use the following Azure Powershell cmdlet.
 
@@ -58,10 +63,10 @@ You can also use the following Azure Powershell cmdlet.
 
 Get-AzureVMSqlServerExtension [[-VM] <IPersistentVM>] [[-Version] <string>] [<CommonParameters>]
 
-> [AZURE.NOTE] You can omit the –Version parameter. Without it, the default is the latest version of the extension.
+> [AZURE.NOTE] You can omit the -Version parameter. Without it, the default is the latest version of the extension.
 
 ### Example
-	Get-AzureVM –ServiceName "service" –Name "vmname" | Get-AzureVMSqlServerExtension
+	Get-AzureVM -ServiceName "service" -Name "vmname" | Get-AzureVMSqlServerExtension
 
 ## Remove the extension with Powershell   
 If you want to remove this extension from your VM, you can use the following Azure Powershell cmdlet.
@@ -69,4 +74,4 @@ If you want to remove this extension from your VM, you can use the following Azu
 **Remove-AzureVMSqlServerExtension**
 
 ### Syntax
-Remove-AzureVMSqlServerExtension -VM <IPersistentVM> [<CommonParameters>] 
+Remove-AzureVMSqlServerExtension -VM <IPersistentVM> [<CommonParameters>]
